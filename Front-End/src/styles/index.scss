@@ -1,0 +1,16 @@
+// import styles communs
+@import "./settings";
+
+// import component
+@import "./components/navbar";
+@import "./components/footer";
+@import "./components/carousel";
+
+// import pages
+@import "./pages/home";
+@import "./pages/login";
+@import "./pages/register";
+@import "./pages/productList";
+@import "./pages/productPage";
+@import "./pages/cart";
+@import "./pages/pagenotfound";
