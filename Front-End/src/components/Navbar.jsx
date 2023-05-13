@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 
 // Le component de la Navbnar
 const Navbar = () => {
@@ -59,12 +59,12 @@ const Navbar = () => {
 
       <div class="nav-links">
         <ul>
-          <li><a href="">Home</a></li>
+          <li><Link to={"/"}>Home</Link></li>
           <li>
-            <a href="" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>Products</a>
+          <Link to={"/"} onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>Products</Link>
           </li>
-          <li><a href="">About</a></li>
-          <li><a href="">Contact</a></li>
+          <li><Link to={"/"}>About</Link></li>
+          <li><Link to={"/"}>Contact</Link></li>
         </ul>
       </div>
       <div class="cart">
@@ -77,25 +77,25 @@ const Navbar = () => {
   <div class={submenuClass}  onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
 
               <div className="item">
-                <h3><a href="">Robes</a></h3>
+                <h3><Link to={"/"}>Robes</Link></h3>
               </div>
 
               <div className="item">
-                <h3><a href="">Tops</a></h3>
+                <h3><Link to={"/"}>Tops</Link></h3>
                 <ul>
-                  <li><a href="">Tshirt</a></li>
-                  <li><a href="">Blouses</a></li>
-                  <li><a href="">Tops et Débardeurs</a></li>
+                  <li><Link to={"/"}>Tshirt</Link></li>
+                  <li><Link to={"/"}>Blouses</Link></li>
+                  <li><Link to={"/"}>Tops et Débardeurs</Link></li>
                 </ul>
               </div>
 
               <div className="item">
-                <h3><a href="">Pantalons & Jupes</a></h3>
+                <h3><Link to={"/"}>Pantalons & Jupes</Link></h3>
                 <ul>
-                  <li><a href="">Shorts</a></li>
-                  <li><a href="">Pantalons</a></li>
-                  <li><a href="">Jupes</a></li>
-                  <li><a href="">Jeans</a></li>
+                  <li><Link to={"/"}>Shorts</Link></li>
+                  <li><Link to={"/"}>Pantalons</Link></li>
+                  <li><Link to={"/"}>Jupes</Link></li>
+                  <li><Link to={"/"}>Jeans</Link></li>
                 </ul>
               </div>
 
