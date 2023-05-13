@@ -25,7 +25,7 @@
     box-sizing: border-box;
     font-family: 'Quicksand';
     font-weight: 700;
-    font-size: 3vw;
+    font-size: 2rem;
 }
 
 .cart{
@@ -35,7 +35,7 @@
     gap: 10px;
     border-radius: 50px;
     margin-right: 20px;
-    font-size: 1vw;
+    font-size: 1rem;
 }
 
 .cart-icon{
@@ -70,6 +70,42 @@
     display: none;
 }
 
+.sub-menu-display{
+    background: rgba(240, 236, 236, 0.233);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.sub-menu-display a{
+    text-decoration: none;
+    font-family: 'Quicksand';
+    color: black;
+}
+
+.sub-menu-display a:hover{
+    text-decoration: underline;
+}
+
+.sub-menu-display .item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sub-menu-display .item:hover{
+    background: rgba(240, 236, 236, 0.433);
+    backdrop-filter: blur(15px);
+}
+
+
+
+.sub-menu-hide{
+    display:none;
+}
+
 @media screen and (max-width:600px){
 
 
@@ -85,6 +121,10 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .sub-menu-display{
+       display: none;
     }
 
     .logo{
@@ -104,7 +144,7 @@
     .navbar a{
         color: black;
         font-family: 'Quicksand';
-        font-size: 17vw;
+        font-size: 5rem;
     }
 
 
