@@ -1,0 +1,52 @@
+.homepage_bottom {
+  padding: 40px 25px;
+  margin-top: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+
+  .left {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+    }
+  }
+
+  .right {
+    width: 50%;
+    padding: 0px 20px;
+    letter-spacing: 1px;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    .top {
+      font-family: "Russo One", Arial, sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+    }
+
+    .center {
+      font-size: 18px;
+    }
+
+    .bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      div {
+        display: flex;
+        gap: 20px;
+      }
+    }
+  }
+}
