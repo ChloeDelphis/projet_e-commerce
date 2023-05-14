@@ -137,3 +137,31 @@
         text-decoration: underline;
     }
 }
+
+@media screen and (max-width:600px){
+
+    .loginpage{
+        display: flex;
+        flex-direction: column;
+        margin-top: 15vh;
+        margin-bottom: 15vh;
+        gap: 20px;
+
+    
+        .login{
+            width: 90%;
+        }
+
+        .signup{
+            padding-top: 20px;
+            width: 90%;
+            border-top: solid;
+            border-left: none;
+            border-width: 1px;
+        }
+
+        .form-box{
+            width: 100%;
+        }
+    }
+}
