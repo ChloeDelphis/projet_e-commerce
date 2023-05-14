@@ -43,63 +43,65 @@ const Navbar = () => {
 <head>
 <link rel="stylesheet" href="../styles/components/navbar.css"></link>
 </head>
-  <header class="header">
+  <div className="container-header">
+    <header class="header">
 
-    <div class="top">
-      <img src="" alt="LOGO" class="logo"/>
-      <div class="cart-mobile">
-          <img src="../../../assets/components/navbar/shopping-cart.png" alt="cart-icon" class="cart-icon" />
+      <div class="top">
+        <img src="../../../assets/components/footer/logo.png" alt="LOGO" class="logo"/>
+        <div class="cart-mobile">
+            <img src="../../../assets/components/navbar/shopping-cart.png" alt="cart-icon" class="cart-icon" />
 
-          <h2>0</h2>
-      </div>
-      <img src="../../../assets/components/navbar/liste.png" alt="menu Hamburger_icon" class="menu-hamburger" />
-    </div>
-
-    <nav class="navbar">
-
-      <div class="nav-links">
-        <ul>
-          <li><Link to={"/"}>Home</Link></li>
-          <li>
-          <Link to={"/"} onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>Products</Link>
-          </li>
-          <li><Link to={"/"}>About</Link></li>
-          <li><Link to={"/"}>Contact</Link></li>
-        </ul>
-      </div>
-      <div class="cart">
-          <img src="../../../assets/components/navbar/shopping-cart.png" alt="cart-icon" class="cart-icon" />
-
-          <h2>0</h2>
+            <h2>0</h2>
         </div>
-    </nav>
-  </header>
-  <div class={submenuClass}  onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
+        <img src="../../../assets/components/navbar/liste.png" alt="menu Hamburger_icon" class="menu-hamburger" />
+      </div>
 
-              <div className="item">
-                <h3><Link to={"/"}>Robes</Link></h3>
-              </div>
+      <nav class="navbar">
 
-              <div className="item">
-                <h3><Link to={"/"}>Tops</Link></h3>
-                <ul>
-                  <li><Link to={"/"}>Tshirt</Link></li>
-                  <li><Link to={"/"}>Blouses</Link></li>
-                  <li><Link to={"/"}>Tops et Débardeurs</Link></li>
-                </ul>
-              </div>
+        <div class="nav-links">
+          <ul>
+            <li><Link to={"/"}>Home</Link></li>
+            <li>
+            <Link to={"/"} onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>Products</Link>
+            </li>
+            <li><Link to={"/"}>About</Link></li>
+            <li><Link to={"/"}>Contact</Link></li>
+          </ul>
+        </div>
+        <div class="cart">
+            <img src="../../../assets/components/navbar/shopping-cart.png" alt="cart-icon" class="cart-icon" />
 
-              <div className="item">
-                <h3><Link to={"/"}>Pantalons & Jupes</Link></h3>
-                <ul>
-                  <li><Link to={"/"}>Shorts</Link></li>
-                  <li><Link to={"/"}>Pantalons</Link></li>
-                  <li><Link to={"/"}>Jupes</Link></li>
-                  <li><Link to={"/"}>Jeans</Link></li>
-                </ul>
-              </div>
+            <h2>0</h2>
+          </div>
+      </nav>
+    </header>
+    <div class={submenuClass}  onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
 
-            </div>
+                <div className="item">
+                  <h3><Link to={"/"}>Robes</Link></h3>
+                </div>
+
+                <div className="item">
+                  <h3><Link to={"/"}>Tops</Link></h3>
+                  <ul>
+                    <li><Link to={"/"}>Tshirt</Link></li>
+                    <li><Link to={"/"}>Blouses</Link></li>
+                    <li><Link to={"/"}>Tops et Débardeurs</Link></li>
+                  </ul>
+                </div>
+
+                <div className="item">
+                  <h3><Link to={"/"}>Pantalons & Jupes</Link></h3>
+                  <ul>
+                    <li><Link to={"/"}>Shorts</Link></li>
+                    <li><Link to={"/"}>Pantalons</Link></li>
+                    <li><Link to={"/"}>Jupes</Link></li>
+                    <li><Link to={"/"}>Jeans</Link></li>
+                  </ul>
+                </div>
+
+    </div>
+  </div>
 </>  
   )
 };
