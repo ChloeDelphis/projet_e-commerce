@@ -17,6 +17,10 @@
         align-items: center;
     }
 
+    .icons-mobile{
+        display: none;
+    }
+
     .navbar{
 
         display: flex;
@@ -28,137 +32,201 @@
         font-family: 'Quicksand';
         font-weight: 700;
         font-size: 2rem;
+
+        .icons{
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            gap:5px;
+        
+            .icon:hover{
+                color:white;
+                background: rgba(7, 7, 7, 0.233);
+                backdrop-filter: blur(10px);
+                border-radius: 50%;
+                padding: 10px;
+            }
+
+            .icon{
+    
+                display: flex;
+                align-items: center;
+
+                a{
+                    display: flex;
+                    align-items: center;
+                }
+    
+                h2{
+                    font-size: 1.5rem;
+                }
+
+                .sub-menu-account{
+                    position: absolute;
+                    top: 100%; /* positionner la sous-menu juste en dessous de l'élément parent */
+                    left: -50%;
+                    width: 120px;
+                    background: white;
+                    border-radius: 0.5vw;
+                    padding: 30%;
+
+                    ul{
+                        display: flex;
+                        flex-direction: column;
+
+                            a{
+                                font-size: 50%;
+                                padding-bottom: 5px;
+                            }
+                    }
+                }
+            }             
+        }
+
+        a{
+            text-decoration: none;
+            color:black;
+        }
+
+        .nav-links {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+
+            ul{
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+
+            a:hover{
+                text-decoration: underline;
+            }
+        }
+
     }
 
-    .cart{
-        width: 10%;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-radius: 50px;
-        margin-right: 20px;
-        font-size: 1rem;
-    }
-
-    .cart-icon{
-        width: 50px;
-    }
-
-    .navbar a{
-        text-decoration: none;
-        color:black;
-    }
-
-    .nav-links {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .navbar .nav-links ul{
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-    }
-
-    .nav-links a:hover{
-        text-decoration: underline;
-    }
 
     .menu-hamburger{
         display: none;
     }
 
-    .cart-mobile{
+    .mobile-icon{
         display: none;
     }
 
-    .sub-menu-display{
+    .sub-menu-hide{
+        display:none;
+    }
+
+
+    .sub-menu-products{
         background: rgba(240, 236, 236, 0.233);
         backdrop-filter: blur(10px);
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
-    }
 
-    .sub-menu-display a{
-        text-decoration: none;
-        font-family: 'Quicksand';
-        color: black;
-    }
-
-    .sub-menu-display a:hover{
-        text-decoration: underline;
-    }
-
-    .sub-menu-display .item{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .sub-menu-display .item:hover{
-        background: rgba(240, 236, 236, 0.433);
-        backdrop-filter: blur(15px);
-    }
-
-
-
-    .sub-menu-hide{
-        display:none;
+        a{
+            text-decoration: none;
+            font-family: 'Quicksand';
+            color: black;
+        }
+    
+        a:hover{
+            text-decoration: underline;
+        }
+    
+        .item{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .item:hover{
+            background: rgba(240, 236, 236, 0.433);
+            backdrop-filter: blur(15px);
+        }
     }
 
     @media screen and (max-width:600px){
 
 
         .header{
-            clip-path: none;
+             clip-path: none;
             display: flex;
             flex-direction: column;
             align-items: normal;
-            position:fixed;
-            top: 0;
+            position: absolute;
+            
+            .icons{
+                display: none;
+            }
 
-            z-index: 1;
+
+            .top{
+                position:fixed;
+                top:0;
+                background-color: white;
+                z-index: 5;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                
+
+                .icons-mobile{
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    font-size: 50px;
+                    
+        
+                    a{
+                        text-decoration: none;
+                        color: black;
+                    }     
+        
+                    .mobile-icon:hover{
+                        color:white;
+                        background: rgba(7, 7, 7, 0.233);
+                        backdrop-filter: blur(10px);
+                        border-radius: 50%;
+                        padding: 10px;
+                    }
+
+                    .mobile-icon{
+        
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        width: 50%;
+        
+                        h2{
+                            font-size: 1.5rem;
+                        }
+                    }
+                }
+            }
+
         }
 
-        .header .top{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            background-color: white;
-        }
-
-        .sub-menu-display{
-        display: none;
-        }
-
-        .logo{
-            display:none;
-        }
-
-        .cart{
-        display: none;
-        }
-
-        .cart-mobile{
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
+        .sub-menu-products{
+            display: none;
+            }
+    
+            .logo{
+                display:none;
+            }
 
         .navbar a{
             color: black;
             font-family: 'Quicksand';
             font-size: 5rem;
         }
-
 
         .menu-hamburger{
             display: block;
@@ -180,6 +248,8 @@
             transition: all 0.5s ease;
             z-index: 1;
             gap: 3vh;
+            position:fixed;
+            top:0;
         }
 
         .nav-links.mobile-menu {
