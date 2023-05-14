@@ -8,6 +8,7 @@ import ProductList from "./pages/ProductList";
 import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
 import PageNotFound from "./pages/PageNotFound";
+import ProductCategories from "./pages/ProductCategories";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/productcategories" element={<ProductCategories />} />
           <Route path="/productlist" element={<ProductList />} />
           <Route path="/productpage/:id" element={<ProductPage />} />
           <Route path="/cart" element={<Cart />} />

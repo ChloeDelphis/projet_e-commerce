@@ -1,0 +1,127 @@
+// Le CSS de la page listant les catégories de produits
+.product_categories {
+  padding: 40px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  color: $darkGray;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 16px;
+    margin: 30px 0px;
+
+    .top {
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-family: "Russo One", Arial, sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+    }
+  }
+
+  .main {
+    margin: 30px;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+
+    .main_left {
+      width: 50%;
+
+      .card {
+        width: 640px;
+        height: 742px;
+
+        .card_header {
+          padding: 38px;
+          gap: 25px !important;
+        }
+      }
+    }
+
+    .main_right {
+      width: 50%;
+      display: grid;
+      grid-template-columns: 304px 304px;
+      grid-row: 405px 405px;
+      grid-column-gap: 20px;
+      grid-row-gap: 20px;
+
+      .card {
+        // width: 304px;
+        // height: 405px;
+
+        .card_header {
+          padding: 20px;
+
+          h2 {
+            font-size: 24px !important;
+          }
+        }
+      }
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: $white;
+      box-shadow: 0px 24px 28px rgba(0, 0, 0, 0.15);
+
+      .card_header {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        letter-spacing: 1px;
+        font-size: 16px;
+        margin: 30px 0px;
+
+        .top {
+          text-transform: uppercase;
+        }
+
+        h2 {
+          font-family: "Russo One", Arial, sans-serif;
+          font-size: 48px;
+          font-weight: 700;
+        }
+
+        button {
+          margin-top: 10px;
+          margin-bottom: -20px;
+          cursor: pointer;
+          width: 150px;
+          height: 45px;
+          border: 2px solid $darkGray;
+          border-radius: 100px;
+          background-color: transparent;
+          font-weight: 600;
+          font-size: 16px;
+          letter-spacing: 1px;
+
+          .card_btn {
+            color: $darkGray !important;
+          }
+        }
+      }
+
+      .card_img {
+        width: fit-content;
+        height: auto;
+
+        img {
+          display: block;
+        }
+      }
+    }
+  }
+}
