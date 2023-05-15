@@ -13,7 +13,6 @@ import javax.persistence.Version;
 public class Client {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String email;
 	private String mdp;
 	private String prenom;
