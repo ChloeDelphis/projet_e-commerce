@@ -1,6 +1,5 @@
 package ecommerce.backend.model;
 
-<<<<<<< HEAD
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -105,10 +104,7 @@ public class Client {
 	public Client() {
 		super();
 	}
-=======
-public class Client {
->>>>>>> bd8ac818f7d9daa931cb43c6fd65fd040a663b34
-
+	
 	@Override
 	public String toString() {
 		return "Client [email=" + email + ", mdp=" + mdp + ", prenom=" + prenom + ", nom=" + nom + ", tel=" + tel
