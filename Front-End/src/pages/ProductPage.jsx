@@ -9,8 +9,10 @@ const ProductPage = () => {
   return (
     <div className="productPage">
       <Nav data={dataOne} />
-      <ProductPhoto data={dataOne} />
-      <Shopping data={dataOne} />
+      <div className="shop">
+        <ProductPhoto data={dataOne} />
+        <Shopping data={dataOne} />
+      </div>
     </div>
   );
 };
@@ -55,7 +57,7 @@ const ProductDetails = ({ data }) => {
   return (
     <section className="shopping__details">
       <h1 className="shopping__details__name">{data.product.name}</h1>
-      <h2 className="shopping__details__price">{data.product.price}</h2>
+      <h2 className="shopping__details__price">${data.product.price}</h2>
       <p className="shopping__details__description">
         {data.product.description}
       </p>
@@ -67,18 +69,41 @@ const Buy = ({ data }) => {
   return (
     <>
       <form className="shopping__buy" action="">
-        <label className="shopping__buy__quantitylabel" htmlFor="quantity">
-          Quantity
-        </label>
-        <input
-          className="shopping__buy__quantityinput"
-          type="number"
-          value="1"
-        />
+        <div className="shopping__buy__size">
+          <label className="shopping__buy__size__label" htmlFor="size">
+            Size
+          </label>
+          <br />
+          <select
+            name="size"
+            id="size"
+            className="shopping__buy__size__choices"
+          >
+            <option value="s">S</option>
+            <option value="m" selected>
+              M
+            </option>
+            <option value="l">L</option>
+          </select>
+        </div>
+        <div className="shopping__buy__quantity">
+          <label className="shopping__buy__quantity__label" htmlFor="quantity">
+            Quantity
+          </label>
+          <br />
+          <input
+            className="shopping__buy__quantity__input"
+            type="number"
+            value="1"
+            min="1"
+          />
+        </div>
+
         <button className="shopping__buy__cart">Add to Cart</button>
+        <br />
         <button className="shopping__buy__buynow">Buy now</button>
         <div className="shopping__buy__shipping">
-          Free shipping over $ {data.shipping.freeShipping}
+          Free shipping over ${data.shipping.freeShipping}
         </div>
       </form>
     </>
@@ -87,25 +112,30 @@ const Buy = ({ data }) => {
 
 const BuyingDetails = ({ data }) => {
   return (
-    <>
+    <div className="buyingdetails">
       {data.shoppingInfo.list.map((item, index) => (
-        <details className="shopping__details" key={index}>
-          <summary className="shopping__details__summary">{item.name}</summary>
+        <details className="buyingdetails__details" key={index}>
+          <summary className="buyingdetails__details__summary">
+            <span className="buyingdetails__details__summary__name">
+              {item.name}{" "}
+            </span>{" "}
+            <span className="buyingdetails__details__summary__v">V</span>
+          </summary>
           <p>{item.details}</p>
         </details>
       ))}
-    </>
+    </div>
   );
 };
 
 const dataOne = {
   product: {
     img: "../assets/products/1_t-shirts/1.jpg",
-    name: "Product name",
+    name: "Led Zeppelin",
     price: 55.0,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
-    category: "dresses",
+    category: "T-shirts",
   },
 
   shipping: {
