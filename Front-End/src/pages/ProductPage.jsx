@@ -8,7 +8,6 @@ const ProductPage = () => {
 
   return (
     <div className="productPage">
-      Je suis la page du détail du produit {id}
       <Nav data={dataOne} />
       <ProductPhoto data={dataOne} />
       <Shopping data={dataOne} />
@@ -18,13 +17,13 @@ const ProductPage = () => {
 
 const Nav = ({ data }) => {
   return (
-    <nav className="productPage__nav">
-      <a className="productPage__nav__category" href="">
-        Category
+    <nav className=" nav">
+      <a className=" nav__category" href="">
+        {data.product.category}
       </a>
-      <div className="productPage__nav__link">&amp;gt;</div>
-      <a className="productPage__nav__product" href="">
-        Product name
+      <div className=" nav__link">></div>
+      <a className=" nav__product" href="">
+        {data.product.name}
       </a>
     </nav>
   );
@@ -32,7 +31,7 @@ const Nav = ({ data }) => {
 
 const ProductPhoto = ({ data }) => {
   return (
-    <section className="productPage__photo">
+    <section className="photo">
       <img src={data.product.img} alt="" />
     </section>
   );
@@ -40,7 +39,7 @@ const ProductPhoto = ({ data }) => {
 
 const Shopping = ({ data }) => {
   return (
-    <section className="productPage__shopping">
+    <section className="shopping">
       <ProductDetails data={dataOne} />
       <Buy data={dataOne} />
       <BuyingDetails data={dataOne} />
@@ -50,14 +49,10 @@ const Shopping = ({ data }) => {
 
 const ProductDetails = ({ data }) => {
   return (
-    <section className="productPage__shopping__details">
-      <h1 className="productPage__shopping__details__name">
-        {data.product.name}
-      </h1>
-      <h2 className="productPage__shopping__details__price">
-        {data.product.price}
-      </h2>
-      <p className="productPage__shopping__details__description">
+    <section className="shopping__details">
+      <h1 className="shopping__details__name">{data.product.name}</h1>
+      <h2 className="shopping__details__price">{data.product.price}</h2>
+      <p className="shopping__details__description">
         {data.product.description}
       </p>
     </section>
@@ -67,23 +62,18 @@ const ProductDetails = ({ data }) => {
 const Buy = ({ data }) => {
   return (
     <>
-      <form className="productPage__shopping__buy" action="">
-        <label
-          className="productPage__shopping__buy__quantitylabel"
-          htmlFor="quantity"
-        >
+      <form className="shopping__buy" action="">
+        <label className="shopping__buy__quantitylabel" htmlFor="quantity">
           Quantity
         </label>
         <input
-          className="productPage__shopping__buy__quantityinput"
+          className="shopping__buy__quantityinput"
           type="number"
           value="1"
         />
-        <button className="productPage__shopping__buy__cart">
-          Add to Cart
-        </button>
-        <button className="productPage__shopping__buy__buynow">Buy now</button>
-        <div className="productPage__shopping__buy__shipping">
+        <button className="shopping__buy__cart">Add to Cart</button>
+        <button className="shopping__buy__buynow">Buy now</button>
+        <div className="shopping__buy__shipping">
           Free shipping over $ {data.shipping.freeShipping}
         </div>
       </form>
@@ -95,10 +85,8 @@ const BuyingDetails = ({ data }) => {
   return (
     <>
       {data.shoppingInfo.list.map((item, index) => (
-        <details className="productPage__shopping__details" key={index}>
-          <summary className="productPage__shopping__details__summary">
-            {item.name}
-          </summary>
+        <details className="shopping__details" key={index}>
+          <summary className="shopping__details__summary">{item.name}</summary>
           <p>{item.details}</p>
         </details>
       ))}
