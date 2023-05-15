@@ -135,13 +135,14 @@
     .shop {
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
 
       .photo {
-        width: 50%;
+        width: 45%;
       }
 
       .shopping {
-        width: 50%;
+        width: 45%;
       }
     }
   }
