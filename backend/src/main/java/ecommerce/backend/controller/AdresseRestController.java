@@ -13,31 +13,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ecommerce.backend.model.Adresse;
 import ecommerce.backend.model.Client;
-import ecommerce.backend.repo.ClientRepository;
+import ecommerce.backend.repo.AdresseRepository;
 
 @RestController
-@RequestMapping("/client")
-public class ClientRestController {
+@RequestMapping("/adresse")
+public class AdresseRestController {
 
 	@Autowired
-	private ClientRepository repo;
+	private AdresseRepository repo;
 
 	@CrossOrigin
 	@GetMapping("")
-	public List<Client> findall() {
+	public List<Adresse> findall() {
 		return repo.findAll();
 	}
-
+	
 	@CrossOrigin
-	@GetMapping("/findbyemail/{email}")
-	public Client findbynom(@PathVariable(name = "email") String email) {
-		return repo.findByEmail(email);
+	@GetMapping("{id}")
+	public Adresse findbyid(@PathVariable(name = "id") int id) {
+		return repo.findById(id).get();
 	}
 
 	@CrossOrigin
 	@PostMapping("")
-	public void create(@RequestBody Client p) {
+	public void create(@RequestBody Adresse p) {
 		repo.save(p);
 	}
 
@@ -49,10 +50,10 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@PutMapping("")
-	public void update(@RequestBody Client p) {
+	public void update(@RequestBody Adresse p) {
 
-		p.setVersion(repo.findByEmail(p.getEmail()).getVersion());
+		p.setVersion(repo.findById(p.getId()).get().getVersion());
 		repo.save(p);
 	}
-
+	
 }

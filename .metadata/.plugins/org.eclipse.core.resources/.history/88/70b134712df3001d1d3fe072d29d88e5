@@ -31,7 +31,7 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@GetMapping("/findbyemail/{email}")
-	public Client findbynom(@PathVariable(name = "email") String email) {
+	public List<Client> findbynom(@PathVariable(name = "email") String email) {
 		return repo.findByEmail(email);
 	}
 
@@ -51,7 +51,7 @@ public class ClientRestController {
 	@PutMapping("")
 	public void update(@RequestBody Client p) {
 
-		p.setVersion(repo.findByEmail(p.getEmail()).getVersion());
+		p.setVersion(repo.findById(p.getEmail()).get().getVersion());
 		repo.save(p);
 	}
 
