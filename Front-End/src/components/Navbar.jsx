@@ -1,31 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { IonIcon } from '@ionic/react';
+import { personOutline, cartOutline } from 'ionicons/icons';
 
 // Le component de la Navbnar
 const Navbar = () => {
 
 
-  const [submenuClass, setSubmenuClass] = useState("sub-menu-hide");
+  const [submenuProducts, setsubmenuProducts] = useState("sub-menu-hide");
+  const [submenuAccount, setsubmenuAccount] = useState("sub-menu-hide");
   const [submenuTimeout, setSubmenuTimeout] = useState(null);
 
 
-  function handleMouseOver() {
+  function handleMouseOver(currentDiv) {
     if (submenuTimeout !== null) {
       clearTimeout(submenuTimeout);
       setSubmenuTimeout(null);
     }
-    setSubmenuClass("sub-menu-display");
+    if (currentDiv === "products") {
+      setsubmenuProducts("sub-menu-products");
+    } else if (currentDiv === "account") {
+      setsubmenuAccount("sub-menu-account");
+    }
   }
   
 
-  function handleMouseLeave() {
-    const timeoutId = setTimeout(() => {
-      setSubmenuClass("sub-menu-hide");
-    }, 250); // ajustez la durée du délai selon vos besoins
-    setSubmenuTimeout(timeoutId);
+  // function handleMouseLeave() {
+  //   const timeoutId = setTimeout(() => {
+  //     setsubmenuProducts("sub-menu-hide");
+  //     setsubmenuAccount("sub-menu-hide");
+  //   }, 250); // ajustez la durée du délai selon vos besoins
+  //   setSubmenuTimeout(timeoutId);
+  // }
+
+  function handleMouseLeave(currentDiv) {
+    if (currentDiv === "products") {
+      const timeoutId = setTimeout(() => {
+            setsubmenuProducts("sub-menu-hide");
+          }, 250); 
+          setSubmenuTimeout(timeoutId);
+    } else if (currentDiv === "account") {
+      const timeoutId = setTimeout(() => {
+        setsubmenuAccount("sub-menu-hide");
+      }, 0);
+      setSubmenuTimeout(timeoutId);
+    }
   }
-  
-  
 
   const navLinks = document.querySelector(".nav-links");
   
@@ -33,49 +53,59 @@ const Navbar = () => {
   useEffect(() => {
     const menuHamburger = document.querySelector(".menu-hamburger");
     const navLinks = document.querySelector(".nav-links");
+    const header = document.querySelector(".header");
     menuHamburger.addEventListener("click", () => {
-      navLinks.classList.toggle("mobile-menu");
+      navLinks.classList .toggle("mobile-menu");
+      header.classList .toggle("mobile-header");
     });
   }, []);
 
   return (
 <>
-<head>
-<link rel="stylesheet" href="../styles/components/navbar.css"></link>
-</head>
-  <div className="container-header">
-    <header class="header">
+<div className="container-header">
+    <header className="header">
 
-      <div class="top">
-        <img src="../../../assets/components/footer/logo.png" alt="LOGO" class="logo"/>
-        <div class="cart-mobile">
-            <img src="../../../assets/components/navbar/shopping-cart.png" alt="cart-icon" class="cart-icon" />
-
-            <h2>0</h2>
+      <div className="top">
+        <img src="../../../assets/components/footer/logo.png" alt="LOGO" className="logo"/>
+        <div className="icons-mobile">
+          
+          <div className="mobile-icon account">
+          <Link to={"/"}><IonIcon icon={personOutline} /></Link>
+          </div>
+          <div className="mobile-icon cart">
+            <Link to={"/"}><IonIcon icon={cartOutline} /></Link><h2>0</h2>
+          </div>
         </div>
-        <img src="../../../assets/components/navbar/liste.png" alt="menu Hamburger_icon" class="menu-hamburger" />
+        <img src="../../../assets/components/navbar/liste.png" alt="menu Hamburger_icon" className="menu-hamburger" />
       </div>
 
-      <nav class="navbar">
+      <nav className="navbar">
 
-        <div class="nav-links">
+        <div className="nav-links">
           <ul>
             <li><Link to={"/"}>Home</Link></li>
             <li>
-            <Link to={"/"} onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>Products</Link>
+            <Link to={"/"} onMouseOver={() => handleMouseOver("products")} onMouseLeave={() => handleMouseLeave("products")} >Products</Link>
             </li>
             <li><Link to={"/"}>About</Link></li>
             <li><Link to={"/"}>Contact</Link></li>
+            <div className="icons">
+              <li className="icon account" onMouseOver={() => handleMouseOver("account")} onMouseLeave={() => handleMouseLeave("account")} ><Link to={"/"}><IonIcon icon={personOutline} /></Link>
+                <div className={submenuAccount}>
+                    <ul>
+                      <li><Link to={"/"}>Connexion</Link></li>
+                      <li><Link to={"/"}>Mon compte</Link></li>
+                      <li><Link to={"/"}>Mes commandes</Link></li>
+                    </ul>
+                </div>
+              </li>
+              <li className="icon cart"><Link to={"/"}><IonIcon icon={cartOutline} /></Link><h2>0</h2></li>
+            </div>
           </ul>
         </div>
-        <div class="cart">
-            <img src="../../../assets/components/navbar/shopping-cart.png" alt="cart-icon" class="cart-icon" />
-
-            <h2>0</h2>
-          </div>
       </nav>
     </header>
-    <div class={submenuClass}  onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
+    <div className={submenuProducts}  onMouseOver={() => handleMouseOver("products")} onMouseLeave={() => handleMouseLeave("products")}>
 
                 <div className="item">
                   <h3><Link to={"/"}>Robes</Link></h3>
@@ -101,6 +131,8 @@ const Navbar = () => {
                 </div>
 
     </div>
+
+    
   </div>
 </>  
   )
