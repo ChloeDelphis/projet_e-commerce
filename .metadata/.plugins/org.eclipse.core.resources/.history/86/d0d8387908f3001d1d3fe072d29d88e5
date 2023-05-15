@@ -1,0 +1,8 @@
+package ecommerce.backend.model;
+
+import javax.persistence.Entity;
+
+@Entity
+public class Adresse {
+
+}
