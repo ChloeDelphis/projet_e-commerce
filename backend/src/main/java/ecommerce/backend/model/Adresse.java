@@ -13,7 +13,7 @@ import javax.persistence.Version;
 public class Adresse {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int numero;
 	private String rue;

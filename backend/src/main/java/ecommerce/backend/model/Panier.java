@@ -1,6 +1,7 @@
 package ecommerce.backend.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,14 +12,14 @@ import javax.persistence.Version;
 @Entity
 public class Panier {
 
-//	@OneToOne
-//	@JoinColumn(name = "client_id", referencedColumnName = "id")
-//	private Client client;
+	// @OneToOne
+	// @JoinColumn(name = "client_id", referencedColumnName = "id")
+	// private Client client;
 
 	@Id
 	private int id;
-	private String mailClient;
-	private String date;
+	private String email;
+	private Date date;
 	private double total;
 	private ArrayList<Ligne> lignes;
 
@@ -33,19 +34,19 @@ public class Panier {
 		this.id = id;
 	}
 
-	public String getMailClient() {
-		return mailClient;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setMailClient(String mailClient) {
-		this.mailClient = mailClient;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -73,23 +74,23 @@ public class Panier {
 		this.version = version;
 	}
 
-	public Panier(int id, String mailClient, String date, double total, ArrayList<Ligne> lignes) {
+	public Panier() {
+		super();
+	}
+
+	public Panier(int id, String email, Date date, double total, ArrayList<Ligne> lignes) {
 		super();
 		this.id = id;
-		this.mailClient = mailClient;
+		this.email = email;
 		this.date = date;
 		this.total = total;
 		this.lignes = lignes;
 	}
 
-	public Panier() {
-		super();
-	}
-
 	@Override
 	public String toString() {
-		return "Panier [id=" + id + ", mailClient=" + mailClient + ", date=" + date + ", total="
-				+ total + ", lignes=" + lignes + "]";
+		return "Panier [id=" + id + ", email=" + email + ", date=" + date + ", total=" + total + ", lignes=" + lignes
+				+ ", version=" + version + "]";
 	}
 
 }
