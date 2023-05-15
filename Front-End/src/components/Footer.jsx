@@ -3,12 +3,8 @@ import { Link } from 'react-router-dom';
 // Le component du Footer
 const Footer = () => {
   return (
-    <>
-    <head>
-    <link rel="stylesheet" href="../styles/components/footer.css"></link>
-    </head>
-    
-    <footer class="footer">
+    <>    
+    <footer className="footer">
 
       <div className="newsletter">
         <h2>Subscribe to our Newsletter</h2>
