@@ -1,3 +1,27 @@
 // Le CSS Page du détail d'un produit
 .productPage {
+  margin-top: 15vh;
+  padding: 2vmin;
+
+  .nav {
+    display: flex;
+    flex-direction: row;
+
+    font-size: 15px;
+
+    a {
+      color: black;
+    }
+
+    &__link {
+      margin: 0 2vmin;
+      color: $orange;
+    }
+  }
+
+  .photo {
+    img {
+      width: 100%;
+    }
+  }
 }

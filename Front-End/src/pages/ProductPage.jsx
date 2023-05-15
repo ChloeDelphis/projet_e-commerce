@@ -32,7 +32,11 @@ const Nav = ({ data }) => {
 const ProductPhoto = ({ data }) => {
   return (
     <section className="photo">
-      <img src={data.product.img} alt="" />
+      <img
+        className="photo__produit"
+        src={data.product.img}
+        alt="image product"
+      />
     </section>
   );
 };
@@ -96,7 +100,7 @@ const BuyingDetails = ({ data }) => {
 
 const dataOne = {
   product: {
-    img: "./assets/components/homecenter/product_01.png",
+    img: "../assets/products/1_t-shirts/1.jpg",
     name: "Product name",
     price: 55.0,
     description:
