@@ -48,9 +48,11 @@ const OrderandFilter = ({ data }) => {
           id="orderby"
           className="shopping__buy__filter__choices"
         >
-          <option value="priceasc">Marque 1</option>
-          <option value="pricedesc">Marque 1</option>
-          <option value="newtoold">Marque 1</option>
+          {data.categorie.articles.map((item, index) => (
+            <option key={index} value="priceasc">
+              {item.marque}
+            </option>
+          ))}
         </select>
       </div>
     </form>

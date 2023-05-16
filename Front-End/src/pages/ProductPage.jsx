@@ -8,6 +8,7 @@ const ProductPage = () => {
   const { id } = useParams();
 
   const [article, setArticle] = useState();
+
   useEffect(() => {
     console.log(id);
 
