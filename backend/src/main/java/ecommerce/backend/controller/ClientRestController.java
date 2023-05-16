@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce.backend.model.Client;
-import ecommerce.backend.repo.ClientRepository;
+import ecommerce.backend.repository.ClientRepository;
 
 @RestController
 @RequestMapping("/client")

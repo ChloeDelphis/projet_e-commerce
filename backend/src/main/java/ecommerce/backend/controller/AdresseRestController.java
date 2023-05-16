@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce.backend.model.Adresse;
-import ecommerce.backend.model.Client;
-import ecommerce.backend.repo.AdresseRepository;
+import ecommerce.backend.repository.AdresseRepository;
 
 @RestController
 @RequestMapping("/adresse")
@@ -29,7 +28,7 @@ public class AdresseRestController {
 	public List<Adresse> findall() {
 		return repo.findAll();
 	}
-	
+
 	@CrossOrigin
 	@GetMapping("{id}")
 	public Adresse findbyid(@PathVariable(name = "id") int id) {
@@ -55,5 +54,17 @@ public class AdresseRestController {
 		p.setVersion(repo.findById(p.getId()).get().getVersion());
 		repo.save(p);
 	}
-	
+
+	// @CrossOrigin
+	// @GetMapping("")
+	// public int findlast() {
+	// return repo.findLast().getId();
+	// }
+
+	@CrossOrigin
+	@PostMapping("/findbynumeroandrueandcpandville")
+	public Adresse findbynumeroandrueandcpandville(@RequestBody Adresse p) {
+		return repo.findByNumeroAndRueAndCpAndVille(p.getNumero(), p.getRue(), p.getCp(), p.getVille());
+	}
+
 }

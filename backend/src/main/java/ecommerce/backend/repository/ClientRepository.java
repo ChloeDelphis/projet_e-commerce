@@ -1,4 +1,4 @@
-package ecommerce.backend.repo;
+package ecommerce.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ecommerce.backend.model.Client;
