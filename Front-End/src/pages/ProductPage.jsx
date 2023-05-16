@@ -57,7 +57,7 @@ const ProductDetails = ({ data }) => {
   return (
     <section className="shopping__details">
       <h1 className="shopping__details__name">{data.product.name}</h1>
-      <h2 className="shopping__details__price">${data.product.price}</h2>
+      <h2 className="shopping__details__price">{data.product.price} €</h2>
       <p className="shopping__details__description">
         {data.product.description}
       </p>
@@ -103,7 +103,7 @@ const Buy = ({ data }) => {
         <br />
         <button className="shopping__buy__buynow">Buy now</button>
         <div className="shopping__buy__shipping">
-          Free shipping over ${data.shipping.freeShipping}
+          Livraison gratuite à partir de {data.shipping.freeShipping} € d'achat.
         </div>
       </form>
     </>
