@@ -40,11 +40,19 @@ public class AdresseRestController {
 		return repo.findById(id).get();
 	}
 
+//	@CrossOrigin
+//	@PostMapping("")
+//	public void create(@RequestBody Adresse p) {
+//		repo.save(p);
+//	}
+	
 	@CrossOrigin
 	@PostMapping("")
-	public void create(@RequestBody Adresse p) {
-		repo.save(p);
+	public int create(@RequestBody Adresse a) {
+		Adresse newAdresse = repo.save(a);
+	    return newAdresse.getId();
 	}
+
 
 	@CrossOrigin
 	@DeleteMapping("{id}")
@@ -67,10 +75,21 @@ public class AdresseRestController {
 	// return repo.findLast().getId();
 	// }
 
+//	@CrossOrigin
+//	@GetMapping("/findbynumeroandrueandcpandville")
+//	@JsonView(JsonViews.Common.class)
+//	public Adresse findbynumeroandrueandcpandville(@RequestBody Adresse p) {
+//		return repo.findByNumeroAndRueAndCpAndVille(p.getNumero(), p.getRue(), p.getCp(), p.getVille());
+//	}
+	
 	@CrossOrigin
-	@PostMapping("/findbynumeroandrueandcpandville")
-	public Adresse findbynumeroandrueandcpandville(@RequestBody Adresse p) {
-		return repo.findByNumeroAndRueAndCpAndVille(p.getNumero(), p.getRue(), p.getCp(), p.getVille());
+	@GetMapping("/findbynumeroandrueandcpandville/{numero}/{rue}/{cp}/{ville}")
+	@JsonView(JsonViews.Common.class)
+	public Adresse findbynumeroandrueandcpandville(@PathVariable(name = "numero") int numero, 
+			@PathVariable(name = "rue") String rue, @PathVariable(name = "cp") String cp, 
+			@PathVariable(name = "ville") String ville) {
+		
+		return repo.findByNumeroAndRueAndCpAndVille(numero, rue, cp, ville);
 	}
 
 }

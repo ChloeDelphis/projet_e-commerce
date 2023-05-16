@@ -42,6 +42,7 @@ public class ClientRestController {
 	
 	@CrossOrigin
 	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
+	@JsonView(JsonViews.ClientWithAdresse.class)
 	public Client findbyemailandmdp(@PathVariable(name = "email") String email, @PathVariable(name="mdp") String mdp) {
 		return repo.findByEmailAndMdp(email, mdp);
 	}
@@ -53,9 +54,9 @@ public class ClientRestController {
 	}
 
 	@CrossOrigin
-	@DeleteMapping("{id}")
-	public void delete(@PathVariable(name = "id") int id) {
-		repo.deleteById(id);
+	@DeleteMapping("{email}")
+	public void delete(@PathVariable(name = "email") String email) {
+		repo.deleteById(email);
 	}
 
 	@CrossOrigin
