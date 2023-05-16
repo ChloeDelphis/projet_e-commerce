@@ -9,6 +9,7 @@ import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
 import PageNotFound from "./pages/PageNotFound";
 import ProductCategories from "./pages/ProductCategories";
+import Profil from "./pages/Profil";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/productlist" element={<ProductList />} />
           <Route path="/productpage/:id" element={<ProductPage />} />
           <Route path="/cart/:id" element={<Cart />} />
+          <Route path="/profil" element={<Profil />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/navbar" element={<Navbar />} />
         </Routes>
