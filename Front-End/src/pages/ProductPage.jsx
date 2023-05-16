@@ -69,6 +69,7 @@ const ProductDetails = ({ data }) => {
       <h1 className="shopping__details__name">{data && data.nom}</h1>
       <br></br>
       <h2 className="shopping__details__brand">{data && data.marque} </h2>
+      <br></br>
       <h3 className="shopping__details__price">{data && data.prix} €</h3>
       <p className="shopping__details__description">
         {data && data.description}
