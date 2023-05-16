@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // La page du detail d'un produit
@@ -6,12 +7,21 @@ const ProductPage = () => {
   // id du produit à afficher
   const { id } = useParams();
 
+  const [article, setArticle] = useState();
+  useEffect(() => {
+    console.log(id);
+
+    fetch(`http://localhost:8080/site/articles/${id}`)
+      .then((res) => res.json())
+      .then((data) => setArticle(data));
+  }, []);
+
   return (
     <div className="productPage">
-      <Nav data={dataOne} />
+      <Nav data={article} />
       <div className="shop">
-        <ProductPhoto data={dataOne} />
-        <Shopping data={dataOne} />
+        <ProductPhoto data={article} />
+        <Shopping data={article} />
       </div>
     </div>
   );
@@ -21,11 +31,11 @@ const Nav = ({ data }) => {
   return (
     <nav className=" nav">
       <a className=" nav__category" href="">
-        {data.product.category}
+        {data && data.categorie.name}
       </a>
       <div className=" nav__link">></div>
       <a className=" nav__product" href="">
-        {data.product.name}
+        {data && data.nom}
       </a>
     </nav>
   );
@@ -36,7 +46,7 @@ const ProductPhoto = ({ data }) => {
     <section className="photo">
       <img
         className="photo__produit"
-        src={data.product.img}
+        src={data && data.img}
         alt="image product"
       />
     </section>
@@ -46,7 +56,7 @@ const ProductPhoto = ({ data }) => {
 const Shopping = ({ data }) => {
   return (
     <section className="shopping">
-      <ProductDetails data={dataOne} />
+      <ProductDetails data={data} />
       <Buy data={dataOne} />
       <BuyingDetails data={dataOne} />
     </section>
@@ -56,10 +66,13 @@ const Shopping = ({ data }) => {
 const ProductDetails = ({ data }) => {
   return (
     <section className="shopping__details">
-      <h1 className="shopping__details__name">{data.product.name}</h1>
-      <h2 className="shopping__details__price">${data.product.price}</h2>
+      <h1 className="shopping__details__name">{data && data.nom}</h1>
+      <br></br>
+      <h2 className="shopping__details__brand">{data && data.marque} </h2>
+      <br></br>
+      <h3 className="shopping__details__price">{data && data.prix} €</h3>
       <p className="shopping__details__description">
-        {data.product.description}
+        {data && data.description}
       </p>
     </section>
   );
@@ -93,17 +106,18 @@ const Buy = ({ data }) => {
           <br />
           <input
             className="shopping__buy__quantity__input"
+            name="quantity"
             type="number"
-            value="1"
-            min="1"
+            min="0"
+            placeholder="1"
           />
         </div>
 
-        <button className="shopping__buy__cart">Add to Cart</button>
+        <button className="shopping__buy__cart">Ajouter au panier</button>
         <br />
-        <button className="shopping__buy__buynow">Buy now</button>
+        <button className="shopping__buy__buynow">Acheter maintenant</button>
         <div className="shopping__buy__shipping">
-          Free shipping over ${data.shipping.freeShipping}
+          Livraison gratuite à partir de {data.shipping.freeShipping} € d'achat.
         </div>
       </form>
     </>
@@ -129,15 +143,6 @@ const BuyingDetails = ({ data }) => {
 };
 
 const dataOne = {
-  product: {
-    img: "../assets/products/1_t-shirts/1.jpg",
-    name: "Led Zeppelin",
-    price: 55.0,
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
-    category: "T-shirts",
-  },
-
   shipping: {
     freeShipping: 50,
   },
@@ -145,17 +150,17 @@ const dataOne = {
   shoppingInfo: {
     list: [
       {
-        name: "Details",
+        name: "Détails",
         details:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
       },
       {
-        name: "Shipping",
+        name: "Livraison",
         details:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
       },
       {
-        name: "Returns",
+        name: "Retours",
         details:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
       },

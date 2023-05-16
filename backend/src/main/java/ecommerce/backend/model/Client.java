@@ -1,8 +1,7 @@
 package ecommerce.backend.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,18 +20,18 @@ public class Client {
 	@ManyToOne
 	@JoinColumn(name = "adresse")
 	private Adresse adresse;
-	// @OneToOne(mappedBy = "mailCient")
-	// private Panier panier;
+	@OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+	private Panier panier;
 	@Version
 	private int version;
 
-	/*
-	 * public Panier getPanier(){ return panier; }
-	 */
+	public Panier getPanier() {
+		return panier;
+	}
 
-	/*
-	 * public void setPanier(Panier panier){ this.panier = panier; }
-	 */
+	public void setPanier(Panier panier) {
+		this.panier = panier;
+	}
 
 	public String getMdp() {
 		return mdp;
@@ -90,7 +89,7 @@ public class Client {
 		this.nom = nom;
 	}
 
-	public Client(String email, String mdp, String prenom, String nom, String tel, Adresse adresse) {
+	public Client(String email, String mdp, String prenom, String nom, String tel, Adresse adresse, Panier panier) {
 		super();
 		this.email = email;
 		this.mdp = mdp;
@@ -98,6 +97,7 @@ public class Client {
 		this.nom = nom;
 		this.tel = tel;
 		this.adresse = adresse;
+		this.panier = panier;
 	}
 
 	public Client() {
@@ -107,7 +107,7 @@ public class Client {
 	@Override
 	public String toString() {
 		return "Client [email=" + email + ", mdp=" + mdp + ", prenom=" + prenom + ", nom=" + nom + ", tel=" + tel
-				+ ", adresse=" + adresse + "]";
+				+ ", adresse=" + adresse + ", panier=" + panier + ", version=" + version + "]";
 	}
 
 }
