@@ -14,6 +14,9 @@ const Login = () => {
   const [adresse2, setAdresse2] = useState({});
   const [client, setClient] = useState({});
 
+  const [email, setEmail] = useState("");
+  const [mdp, setMdp] = useState("");
+
   const requestOptionsAdresse = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -26,30 +29,29 @@ const Login = () => {
     body: JSON.stringify(client)
 };
 
-  /* const CreateClient = (event) => {
+/*    const CreateClient = (event) => {
     event.preventDefault();
     //fetch('http://localhost:8080/site/adresse/2').then((res) => res.json()).then(data => console.log(data));
-     fetch('http://localhost:8080/site/adresse', requestOptionsAdresse)
+     console.log(fetch('http://localhost:8080/site/adresse', requestOptionsAdresse))
+     console.log(fetch('http://localhost:8080/site/adresse/findbynumeroandrueandcpandville', requestOptionsAdresse))
      fetch('http://localhost:8080/site/adresse/findbynumeroandrueandcpandville', requestOptionsAdresse).then((res) => res.json()).then(data => setAdresse2(data));
      console.log(JSON.stringify(adresse2));
    // fetch('http://localhost:8080/site/client', requestOptionsClient);
-  } */
+  } */ 
 
-  async function CreateClient(){
+  const CreateClient = async() =>{
     try {
       const res = await  fetch('http://localhost:8080/site/adresse', requestOptionsAdresse);
-    if(res.ok){
-      const res2 = await res.json();
-      setClient({...client, ['adresse']: res2.id})
-      fetch('http://localhost:8080/site/client', requestOptionsClient);
-/*       const getRes = await fetch(`http://localhost:8080/site/adresse/${res2.id}`, requestOptionsAdresse);
-      if (getRes.ok){
-        const getRes2 = await getRes.json();
-      } */
-    }
-    } catch(error) {
+      return await fetch('http://localhost:8080/site/adresse/findbynumeroandrueandcpandville', requestOptionsAdresse).then((res) => res.json()).then(data => setAdresse2(data));
+      console.log(adresse2);
+    } catch(e) {
       console.error("marche pas");
     }
+  }
+
+  const connexion =(event) => {
+    event.preventDefault();
+    fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => setClient(data));
   }
 
   return (
@@ -58,19 +60,19 @@ const Login = () => {
 
         <div className="login">
           <div className="form-box">
-            <form>
+            <form onSubmit={connexion}>
 
               <h2>Login</h2>
 
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required></input>
+                <input type="email" required onChange={(e) => setEmail(e.target.value)}></input>
                 <label for="">Email</label>
               </div>
 
               <div className="inputbox">
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required></input>
+                <input type="password" required onChange={(e) => setMdp(e.target.value)}></input>
                 <label for="">Password</label>
               </div>
 

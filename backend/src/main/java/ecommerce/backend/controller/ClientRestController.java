@@ -31,8 +31,14 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@GetMapping("/findbyemail/{email}")
-	public Client findbynom(@PathVariable(name = "email") String email) {
+	public Client findbyemail(@PathVariable(name = "email") String email) {
 		return repo.findByEmail(email);
+	}
+	
+	@CrossOrigin
+	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
+	public Client findbyemailandmdp(@PathVariable(name = "email") String email, @PathVariable(name="mdp") String mdp) {
+		return repo.findByEmailAndMdp(email, mdp);
 	}
 
 	@CrossOrigin
