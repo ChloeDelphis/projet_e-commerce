@@ -14,5 +14,13 @@ public class JsonViews {
 	public static class CategorieWithArticle extends Common {
 
 	}
+	
+	public static class ClientWithAdresse extends Common {
+		
+	}
+	
+	public static class AdresseWithClient extends Common{
+		
+	}
 }
 

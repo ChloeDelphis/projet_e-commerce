@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import ecommerce.backend.model.Adresse;
+import ecommerce.backend.model.JsonViews;
 import ecommerce.backend.repository.AdresseRepository;
 
 @RestController
@@ -25,12 +28,14 @@ public class AdresseRestController {
 
 	@CrossOrigin
 	@GetMapping("")
+	@JsonView(JsonViews.Common.class)
 	public List<Adresse> findall() {
 		return repo.findAll();
 	}
 
 	@CrossOrigin
 	@GetMapping("{id}")
+	@JsonView(JsonViews.AdresseWithClient.class)
 	public Adresse findbyid(@PathVariable(name = "id") int id) {
 		return repo.findById(id).get();
 	}
@@ -49,6 +54,7 @@ public class AdresseRestController {
 
 	@CrossOrigin
 	@PutMapping("")
+	@JsonView(JsonViews.Common.class)
 	public void update(@RequestBody Adresse p) {
 
 		p.setVersion(repo.findById(p.getId()).get().getVersion());
