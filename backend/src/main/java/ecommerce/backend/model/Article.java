@@ -26,6 +26,7 @@ public class Article {
 	@JoinColumn(name = "categorie")
 	@JsonView(JsonViews.ArticleWithCategorie.class)
 	private Categorie categorie;
+	
 	@JsonView(JsonViews.Common.class)
 	private double prix;
 	@JsonView(JsonViews.Common.class)
@@ -42,7 +43,7 @@ public class Article {
 	}
 
 	public Article(int ref, String nom, String marque, String description, Categorie categorie, double prix, String img,
-			int s, int m, int l, int mea, Date date) {
+			int mea, Date date) {
 		super();
 		this.ref = ref;
 		this.nom = nom;
@@ -53,7 +54,6 @@ public class Article {
 		this.prix = prix;
 		this.mea = mea;
 		this.date = date;
-
 	}
 
 	public int getRef() {
