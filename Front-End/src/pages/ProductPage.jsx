@@ -68,7 +68,8 @@ const ProductDetails = ({ data }) => {
     <section className="shopping__details">
       <h1 className="shopping__details__name">{data && data.nom}</h1>
       <br></br>
-      <h2 className="shopping__details__price">{data && data.prix} €</h2>
+      <h2 className="shopping__details__brand">{data && data.marque} </h2>
+      <h3 className="shopping__details__price">{data && data.prix} €</h3>
       <p className="shopping__details__description">
         {data && data.description}
       </p>
