@@ -104,7 +104,7 @@ public class Client {
 	public Client() {
 		super();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Client [email=" + email + ", mdp=" + mdp + ", prenom=" + prenom + ", nom=" + nom + ", tel=" + tel
