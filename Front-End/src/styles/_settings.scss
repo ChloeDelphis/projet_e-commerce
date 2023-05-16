@@ -8,9 +8,9 @@ $phone: 780px;
 $orange: #f47726;
 $darkGray: #252525;
 $lightGray: #d9d9d9;
-$lightGrayTwo: #F9FAFC;
-$policeGray: #B7BCC2;
-$borderGray: #E6E9ED;
+$lightGrayTwo: #f9fafc;
+$policeGray: #b7bcc2;
+$borderGray: #e6e9ed;
 $white: #ffffff;
 $beige: #f6e6cd;
 
@@ -44,3 +44,6 @@ a {
 .app {
   min-height: 100vh;
 }
+
+// Import police
+@import url("https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap");
