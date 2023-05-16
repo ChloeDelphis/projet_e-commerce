@@ -18,6 +18,7 @@ public class Article {
 	private int ref;
 	@JsonView(JsonViews.Common.class)
 	private String nom;
+	@JsonView(JsonViews.Common.class)
 	private String marque = "";
 	@JsonView(JsonViews.Common.class)
 	private String description;
