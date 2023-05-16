@@ -8,7 +8,7 @@ export class Article {
   description: string;
   categorie: Categorie;
   prix: number;
-  image: string;
+  img: string;
   mea: number;
   date: String;
   version?: number;
