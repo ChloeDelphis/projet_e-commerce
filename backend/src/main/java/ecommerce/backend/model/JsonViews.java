@@ -22,5 +22,13 @@ public class JsonViews {
 	public static class AdresseWithClient extends Common{
 		
 	}
+	
+	public static class ClientWithPanier extends Common {
+		
+	}
+	
+	public static class PanierWithClient extends Common {
+		
+	}
 }
 
