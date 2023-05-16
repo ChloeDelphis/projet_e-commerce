@@ -10,6 +10,7 @@ import Cart from "./pages/Cart";
 import PageNotFound from "./pages/PageNotFound";
 import ProductCategories from "./pages/ProductCategories";
 import Profil from "./pages/Profil";
+import ProductsByCategory from "./pages/ProductsByCategory";
 
 const App = () => {
   return (
@@ -21,7 +22,10 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route path="/productcategories" element={<ProductCategories />} />
+          {/* Ajouté : liste des paroduits par catégorie */}
+          <Route path="/category/:id" element={<ProductsByCategory />} />
           <Route path="/productlist" element={<ProductList />} />
           <Route path="/productpage/:id" element={<ProductPage />} />
           <Route path="/cart/:id" element={<Cart />} />
