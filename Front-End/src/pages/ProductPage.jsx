@@ -113,9 +113,9 @@ const Buy = ({ data }) => {
           />
         </div>
 
-        <button className="shopping__buy__cart">Add to Cart</button>
+        <button className="shopping__buy__cart">Ajouter au panier</button>
         <br />
-        <button className="shopping__buy__buynow">Buy now</button>
+        <button className="shopping__buy__buynow">Acheter maintenant</button>
         <div className="shopping__buy__shipping">
           Livraison gratuite à partir de {data.shipping.freeShipping} € d'achat.
         </div>
@@ -150,17 +150,17 @@ const dataOne = {
   shoppingInfo: {
     list: [
       {
-        name: "Details",
+        name: "Détails",
         details:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
       },
       {
-        name: "Shipping",
+        name: "Livraison",
         details:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
       },
       {
-        name: "Returns",
+        name: "Retours",
         details:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
       },
