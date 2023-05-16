@@ -2,10 +2,12 @@ package ecommerce.backend.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
@@ -16,7 +18,8 @@ public class Panier {
 	private int id;
 	private Date date;
 	private double total;
-	private ArrayList<Ligne> lignes;
+	@OneToMany(mappedBy = "panier")
+	private List<Ligne> lignes;
 	@OneToOne
 	@JoinColumn(name = "email_client")
 	private Client client;
@@ -56,7 +59,7 @@ public class Panier {
 		this.total = total;
 	}
 
-	public ArrayList<Ligne> getLignes() {
+	public List<Ligne> getLignes() {
 		return lignes;
 	}
 
@@ -76,7 +79,7 @@ public class Panier {
 		super();
 	}
 
-	public Panier(Client client, int id, Date date, double total, ArrayList<Ligne> lignes) {
+	public Panier(Client client, int id, Date date, double total, List<Ligne> lignes) {
 		super();
 		this.client = client;
 		this.id = id;
