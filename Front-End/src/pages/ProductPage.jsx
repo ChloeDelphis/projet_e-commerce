@@ -84,7 +84,7 @@ const Buy = ({ data }) => {
       <form className="shopping__buy" action="">
         <div className="shopping__buy__size">
           <label className="shopping__buy__size__label" htmlFor="size">
-            Size
+            Taille
           </label>
           <br />
           <select
@@ -101,7 +101,7 @@ const Buy = ({ data }) => {
         </div>
         <div className="shopping__buy__quantity">
           <label className="shopping__buy__quantity__label" htmlFor="quantity">
-            Quantity
+            Quantité
           </label>
           <br />
           <input

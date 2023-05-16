@@ -22,6 +22,24 @@
     }
   }
 
+  .orderandfilter {
+    font-size: 12px;
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
+
+    select {
+      width: 200px;
+      height: 5vh;
+      border: solid black 1px;
+      border-radius: 2vmin;
+      align-self: flex-end;
+      margin: 2vmin 0;
+    }
+  }
+
   .list {
     display: flex;
     flex-wrap: wrap;
@@ -74,6 +92,17 @@
       }
       &__description {
         font-size: 25px;
+      }
+    }
+
+    .orderandfilter {
+      margin-top: 10vh;
+      display: flex;
+      flex-direction: row;
+      font-size: 17px;
+
+      select {
+        margin-right: 5vmin;
       }
     }
 
