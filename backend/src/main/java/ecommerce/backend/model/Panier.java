@@ -12,19 +12,25 @@ import javax.persistence.Version;
 @Entity
 public class Panier {
 
-	// @OneToOne
-	// @JoinColumn(name = "client_id", referencedColumnName = "id")
-	// private Client client;
-
 	@Id
 	private int id;
-	private String email;
 	private Date date;
 	private double total;
 	private ArrayList<Ligne> lignes;
-
+	@OneToOne
+	@JoinColumn(name = "email_client")
+	private Client client;
+	
 	@Version
 	private int version;
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
 	public int getId() {
 		return id;
@@ -32,14 +38,6 @@ public class Panier {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public Date getDate() {
@@ -78,10 +76,10 @@ public class Panier {
 		super();
 	}
 
-	public Panier(int id, String email, Date date, double total, ArrayList<Ligne> lignes) {
+	public Panier(Client client, int id, Date date, double total, ArrayList<Ligne> lignes) {
 		super();
+		this.client = client;
 		this.id = id;
-		this.email = email;
 		this.date = date;
 		this.total = total;
 		this.lignes = lignes;
@@ -89,8 +87,8 @@ public class Panier {
 
 	@Override
 	public String toString() {
-		return "Panier [id=" + id + ", email=" + email + ", date=" + date + ", total=" + total + ", lignes=" + lignes
-				+ ", version=" + version + "]";
+		return "Panier [client=" + client + ", id=" + id + ", date=" + date + ", total="
+				+ total + ", lignes=" + lignes + ", version=" + version + "]";
 	}
 
 }

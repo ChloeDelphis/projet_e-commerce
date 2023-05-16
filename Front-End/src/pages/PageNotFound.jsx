@@ -11,7 +11,7 @@ const PageNotFound = () => {
     </h1>
     <div className="button_wrap">
       <button onClick={() => navigate(-1)}>Page Précédente</button>
-      <button><Link to={"/"}>Page Principale</Link></button>
+      <button><Link to={"/"} className="btn-link">Page Principale</Link></button>
     </div>
   </div>;
 };
