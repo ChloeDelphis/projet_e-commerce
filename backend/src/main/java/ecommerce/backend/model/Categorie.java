@@ -37,7 +37,7 @@ public class Categorie {
 	public Categorie() {
 		super();
 	}
-
+	
 	public Categorie(int id, String name, String description, String image, int mea, Collection<Article> articles) {
 		super();
 		this.id=id;
