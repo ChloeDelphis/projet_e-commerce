@@ -17,11 +17,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import ecommerce.backend.model.Client;
 import ecommerce.backend.model.JsonViews;
-<<<<<<< HEAD
+
 import ecommerce.backend.repository.ClientRepository;
-=======
-import ecommerce.backend.repo.ClientRepository;
->>>>>>> dev
 
 @RestController
 @RequestMapping("/client")
@@ -32,30 +29,31 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@GetMapping("")
-<<<<<<< HEAD
 	@JsonView(JsonViews.Common.class)
 	public List<Client> findall() {
 		return repo.findAll();
 	}
 
-	@CrossOrigin
-	@GetMapping("/findbyemail/{email}")
-	@JsonView(JsonViews.ClientWithAdresse.class)
-	public Client findbyemail(@PathVariable(name = "email") String email) {
-		return repo.findByEmail(email);
-	}
+//	@CrossOrigin
+//	@GetMapping("/findbyemail/{email}")
+//	@JsonView(JsonViews.ClientWithAdresse.class)
+//	public Client findbyemail(@PathVariable(name = "email") String email) {
+//		return repo.findByEmail(email);
+//	}
 	
 	@CrossOrigin
-	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
-	@JsonView(JsonViews.ClientWithAdresse.class)
-	public Client findbyemailandmdp(@PathVariable(name = "email") String email, @PathVariable(name="mdp") String mdp) {
-		return repo.findByEmailAndMdp(email, mdp);
+	@GetMapping("/findbyemail/{email}")
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
+	public Client findByEmail(@PathVariable(name = "email") String email) {
+		return repo.findByEmail(email);
 	}
 
 	@CrossOrigin
-	@PostMapping("")
-	public void create(@RequestBody Client p) {
-		repo.save(p);
+	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
+	@JsonView(JsonViews.ClientWithAdresse.class)
+	public Client findbyemailandmdp(@PathVariable(name = "email") String email,
+			@PathVariable(name = "mdp") String mdp) {
+		return repo.findByEmailAndMdp(email, mdp);
 	}
 
 	@CrossOrigin
@@ -71,19 +69,16 @@ public class ClientRestController {
 
 		p.setVersion(repo.findByEmail(p.getEmail()).getVersion());
 		repo.save(p);
-=======
-	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
-	public List<Client> findall() {
-		return repo.findAll();
->>>>>>> dev
 	}
 
-	@CrossOrigin
-	@GetMapping("/findbyemail/{email}")
-	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
-	public Client findByEmail(@PathVariable(name = "email") String email) {
-		return repo.findByEmail(email);
-	}
+//	@GetMapping("")
+//	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
+//	public List<Client> findall() {
+//		return repo.findAll();
+//
+//	}
+
+
 
 	@CrossOrigin
 	@PostMapping("")
@@ -91,19 +86,10 @@ public class ClientRestController {
 		repo.save(p);
 	}
 
-	@CrossOrigin
-	@DeleteMapping("{id}")
-	public void delete(@PathVariable(name = "id") int id) {
-		repo.deleteById(id);
-	}
-
-	@CrossOrigin
-	@PutMapping("")
-	@JsonView(JsonViews.Common.class)
-	public void update(@RequestBody Client p) {
-
-		p.setVersion(repo.findByEmail(p.getEmail()).getVersion());
-		repo.save(p);
-	}
+//	@CrossOrigin
+//	@DeleteMapping("{id}")
+//	public void delete(@PathVariable(name = "id") int id) {
+//		repo.deleteById(id);
+//	}
 
 }
