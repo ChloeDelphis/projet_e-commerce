@@ -12,8 +12,11 @@ const ProductsByCategory = () => {
   // On stocke les infos sur la catégorie récupérées depuis la bdd
   const [categorie, setCategorie] = useState(null);
 
-  // On récupère les infos de brandSearchTerm (définie dans le composant OrderandFilter)
-  const [brandSearchTerm, setbrandSearchTerm] = useState("");
+  // Info de brandSearchTerm (définie dans le composant OrderandFilter)
+  const [brandSearchTerm, setBrandSearchTerm] = useState("");
+
+  // Info de tri (définie dans le composant OrderandFilter)
+  const [sortBy, setSortBy] = useState("newtoold");
 
   useEffect(() => {
     fetch(`http://localhost:8080/site/categories/${id}`)
@@ -24,12 +27,18 @@ const ProductsByCategory = () => {
   return (
     <div className="productsbycategory">
       {/* <div>La valeur de brandSearchTerm est : {brandSearchTerm}</div> */}
+      {/* <div>La valeur de sortBy est : {sortBy}</div> */}
       <CategoryHeader data={categorie} />
       <OrderandFilter
         data={categorie}
-        modifyBrandSearchTerm={setbrandSearchTerm}
+        modifyBrandSearchTerm={setBrandSearchTerm}
+        modifySortBy={setSortBy}
       />
-      <CategoryDetail data={categorie} brandSearchTerm={brandSearchTerm} />
+      <CategoryDetail
+        data={categorie}
+        brandSearchTerm={brandSearchTerm}
+        sortBy={sortBy}
+      />
     </div>
   );
 };
@@ -43,7 +52,7 @@ const CategoryHeader = ({ data }) => {
   );
 };
 
-const OrderandFilter = ({ data, modifyBrandSearchTerm }) => {
+const OrderandFilter = ({ data, modifyBrandSearchTerm, modifySortBy }) => {
   // Quand data est là on demande de remplir le tableau des marques sans doublon
   useEffect(() => {
     if (data) {
@@ -84,6 +93,14 @@ const OrderandFilter = ({ data, modifyBrandSearchTerm }) => {
     modifyBrandSearchTerm(value);
   };
 
+  const handleSortBy = (e) => {
+    // On récupère la valeur du tri cliqué
+    // console.log(e.target.value);
+    let value = e.target.value;
+    // On l'assigne à brandSearchTerm (useState du parent)
+    modifySortBy(value);
+  };
+
   return (
     <form className="orderandfilter">
       <div className="orderandfilter__order">
@@ -93,10 +110,11 @@ const OrderandFilter = ({ data, modifyBrandSearchTerm }) => {
           name="orderby"
           id="orderby"
           className="orderandfilter__order__choices"
+          onChange={handleSortBy}
         >
-          <option value="priceasc">prix croissants</option>
-          <option value="pricedesc">prix décroissants</option>
-          <option value="newtoold">nouveautés en premier</option>
+          <option value="newtoold">Nouveautés en premier</option>
+          <option value="priceasc">Prix croissants</option>
+          <option value="pricedesc">Prix décroissants</option>
         </select>
       </div>
       <div className="orderandfilter__filter">
@@ -120,23 +138,35 @@ const OrderandFilter = ({ data, modifyBrandSearchTerm }) => {
 };
 
 // Component qui affiche une catégorie en dynamique
-const CategoryDetail = ({ data, brandSearchTerm }) => {
+const CategoryDetail = ({ data, brandSearchTerm, sortBy }) => {
   const navigate = useNavigate();
 
-  // redirect to the item page
+  // Methode qui gère les liens vers le détail produit
   const handleClick = (ref) => {
     // console.log(ref);
     // console.log(typeof ref);
     navigate(`/productpage/${ref}`);
   };
 
+  // On prend les données des articles dans un tableau sortedArticles
+  const sortedArticles = data && [...data.articles];
+
+  // Quand sortedArticles est rempli on le trie selon ce qu'on veut
+  if (sortedArticles) {
+    if (sortBy === "newtoold") {
+      sortedArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (sortBy === "priceasc") {
+      sortedArticles.sort((a, b) => a.prix - b.prix);
+    } else if (sortBy === "pricedesc") {
+      sortedArticles.sort((a, b) => b.prix - a.prix);
+    }
+  }
+
   return (
     <div className="list">
-      {data &&
-        data.articles
-          .filter((val) => {
-            return val.marque.includes(brandSearchTerm);
-          })
+      {sortedArticles &&
+        sortedArticles
+          .filter((val) => val.marque.includes(brandSearchTerm))
           .map((val, index) => (
             <div
               className="list__item"
