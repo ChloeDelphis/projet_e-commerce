@@ -155,7 +155,7 @@ const BuyingDetails = ({ data }) => {
 
 const dataOne = {
   shipping: {
-    freeShipping: 50,
+    freeShipping: 70,
   },
 
   shoppingInfo: {
@@ -163,17 +163,15 @@ const dataOne = {
       {
         name: "Détails",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Tous nos produits dont élaborés avec le plus grand soin et confectionnés dans nos ateliers situés à Laval, en Mayenne.",
       },
       {
         name: "Livraison",
-        details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+        details: "Nos livraisons sont garanties sous 3 jours ouvrés",
       },
       {
         name: "Retours",
-        details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+        details: "Les retours sont gratuits sous 30 jours !",
       },
     ],
   },

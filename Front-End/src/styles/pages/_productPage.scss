@@ -8,11 +8,11 @@
   .nav {
     display: flex;
     flex-direction: row;
-
     font-size: 15px;
 
     a {
       color: black;
+      cursor: pointer;
     }
 
     &__link {
@@ -104,6 +104,10 @@
       padding: 1vh 0;
 
       margin: 2vh 0;
+
+      p {
+        padding-right: 6vw;
+      }
 
       &__summary {
         display: flex;
