@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { IonIcon } from '@ionic/react';
+import { useNavigate } from "react-router-dom";
 import { mailOutline, lockClosedOutline, personOutline, locationOutline, callOutline } from 'ionicons/icons';
 
 // La page de Login (connexion)
 const Login = () => {
+  const navigate = useNavigate();
   const [client, setClient] = useState({});
   const [isNewClient, setIsNewClient] = useState(false);
+  const [isClientLogged, setIsClientLogged] = useState(false);
 
   const [adresse, setAdresse] = useState({});
 
@@ -68,10 +71,24 @@ const Login = () => {
     })
   }
 
+  useEffect(() => {
+    if (isClientLogged){
+      sessionStorage.setItem("client", client);
+      console.log("ok");
+      navigate("/");
+    }
+  }, [isClientLogged])
+  
   const connexion = (event) => {
     event.preventDefault();
-    fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => setClient(data));
-  }
+    fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
+      
+      setClient(JSON.stringify(data))
+      setIsClientLogged(true);
+    }
+    
+  );
+}
 
   return (
     <>
