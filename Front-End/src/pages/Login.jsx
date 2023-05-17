@@ -15,18 +15,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
-  const inputEmailC = useRef(null);
-  const inputEmailI = useRef(null);
-
-  const [msgErrorMailC, setMsgErrorMailC] = useState("");
-  const [msgErrorMailI, setMsgErrorMailI] = useState("");
-
-  const inputMdpC = useRef(null);
-  const inputMdpI = useRef(null);
-
-  const [msgErrorMdpC, setMsgErrorMdpC] = useState("");
-  const [msgErrorMdpI, setMsgErrorMdpI] = useState("");
-
   const requestOptionsAdresse = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -93,69 +81,13 @@ const Login = () => {
   
   const connexion = (event) => {
     event.preventDefault();
-    if(msgErrorMailC == "" && msgErrorMdpC ==""){
-    fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
+
+      fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
+
     });
-  }
-  }
-
-  const checkEmail = (event) => {
-
-    event.preventDefault();
-    setEmail(event.target.value)
-    var emailReg = new RegExp(/^(([^<>()\[\]\\.,;:\s@']+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i);
-   
-    if(event.target.name=="emailI"){
-
-    if(emailReg.test(event.target.value)){
-      setClient({ ...client, ['email']: event.target.value })
-      setMsgErrorMailI("")
-    } else {
-      setMsgErrorMailI("Saisie incorrect.")
-      inputEmailI.current.focus()
-    }
-
-  } else {
-
-    if(emailReg.test(event.target.value)){
-      setMsgErrorMailC("")
-    } else {
-      setMsgErrorMailC("Saisie incorrect.")
-      inputEmailC.current.focus()
-    }
-  }
-    
-  }
-
-  const checkMdp = (event) => {
-
-    event.preventDefault();
-    setMdp(event.target.value)
-    var mdpReg = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
-
-    if(event.target.name=="mdpI"){
-
-      if(mdpReg.test(event.target.value)){
-        setClient({ ...client, ['mdp']: event.target.value })
-        setMsgErrorMdpI("")
-      } else {
-        setMsgErrorMdpI("Saisie incorrect.")
-        inputMdpI.current.focus()
-      }
-
-    } else {
-
-      if(mdpReg.test(event.target.value)){
-        setMsgErrorMdpC("")
-      } else {
-        setMsgErrorMdpC("Saisie incorrect.")
-        inputMdpC.current.focus()
-      }
-    }
-    
   }
 
   return (
@@ -169,16 +101,14 @@ const Login = () => {
               <h2>Login</h2>
 
               <div className="inputbox">
-              <p className="msgError">{msgErrorMailC}</p>
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onBlur={checkEmail} ref={inputEmailC} name="emailC"></input>
+                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"></input>
                 <label htmlFor="">Email</label>
               </div>
 
               <div className="inputbox">
-              <p className="msgError">{msgErrorMdpC}</p>
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required onBlur={checkMdp} ref={inputMdpC} name="mdpC"></input>
+                <input type="password" required onChange={(e) => setMdp(e.target.value)} pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" title="minimum 8 caractères (minuscule, majuscule, chiffre)"></input>
                 <label htmlFor="">Password</label>
               </div>
 
@@ -199,58 +129,56 @@ const Login = () => {
               <h2>Sign in</h2>
 
               <div className="inputbox">
-                <p className="msgError">{msgErrorMailI}</p>
                 <IonIcon icon={mailOutline} />
-                <input type="email" onBlur={checkEmail} ref={inputEmailI} name="emailI"></input>
+                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"></input>
                 <label htmlFor="">Email</label>
               </div>
 
               <div className="inputbox">
-              <p className="msgError">{msgErrorMdpI}</p>
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required onBlur={checkMdp} ref={inputMdpI} name="mdpI"></input>
+                <input type="password" required onChange={(e) => setMdp(e.target.value)} pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" title="minimum 8 caractères (minuscule, majuscule, chiffre)"></input>
                 <label htmlFor="">Password</label>
               </div>
 
               <div className="ligne">
                 <div className="inputbox">
                   <IonIcon icon={personOutline} />
-                  <input type="text" required onChange={(e) => setClient({ ...client, ['nom']: e.target.value })}></input>
+                  <input type="text" required onChange={(e) => setClient({ ...client, ['nom']: e.target.value })} pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Nom</label>
                 </div>
                 <div className="inputbox">
                   <IonIcon icon={personOutline} />
-                  <input type="text" required onChange={(e) => setClient({ ...client, ['prenom']: e.target.value })}></input>
+                  <input type="text" required onChange={(e) => setClient({ ...client, ['prenom']: e.target.value })} pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Prenom</label>
                 </div>
               </div>
               <div className="ligne">
                 <div className="inputbox">
                   <IonIcon icon={locationOutline} />
-                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['numero']: e.target.value })}></input>
+                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['numero']: e.target.value })} pattern="^[0-9]+$" title=""></input>
                   <label htmlFor="">Numéro</label>
                 </div>
                 <div className="inputbox">
                   <IonIcon icon={locationOutline} />
-                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['rue']: e.target.value })}></input>
+                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['rue']: e.target.value })} pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Rue</label>
                 </div>
               </div>
               <div className="ligne">
                 <div className="inputbox">
                   <IonIcon icon={locationOutline} />
-                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['cp']: e.target.value })}></input>
+                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['cp']: e.target.value })} pattern="^[0-9]+$" title=""></input>
                   <label htmlFor="">Code Postal</label>
                 </div>
                 <div className="inputbox">
                   <IonIcon icon={locationOutline} />
-                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['ville']: e.target.value })}></input>
+                  <input type="text" required onChange={(e) => setAdresse({ ...adresse, ['ville']: e.target.value })} pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Ville</label>
                 </div>
               </div>
               <div className="inputbox">
                 <IonIcon icon={callOutline} />
-                <input type="text" required onChange={(e) => setClient({ ...client, ['tel']: e.target.value })}></input>
+                <input type="text" required onChange={(e) => setClient({ ...client, ['tel']: e.target.value })} pattern="^[0-9\-\.]+$" title=""></input>
                 <label htmlFor="">Telephone</label>
               </div>
 
