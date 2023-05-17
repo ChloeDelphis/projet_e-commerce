@@ -18,7 +18,8 @@ const Login = () => {
   const inputEmailC = useRef(null);
   const inputEmailI = useRef(null);
 
-  const [msgErrorMail, setMsgErrorMail] = useState("");
+  const [msgErrorMailC, setMsgErrorMailC] = useState("");
+  const [msgErrorMailI, setMsgErrorMailI] = useState("");
 
   const requestOptionsAdresse = {
     method: 'POST',
@@ -97,13 +98,23 @@ const Login = () => {
     event.preventDefault();
     setEmail(event.target.value)
     var emailReg = new RegExp(/^(([^<>()\[\]\\.,;:\s@']+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i);
+   console.log(event.target.name)
+   if(event.target.name=="emailI"){
     if(emailReg.test(event.target.value)){
       setClient({ ...client, ['email']: event.target.value })
-      setMsgErrorMail("")
+      setMsgErrorMailI("")
     } else {
-      setMsgErrorMail("Saisie incorrect.")
+      setMsgErrorMailI("Saisie incorrect.")
       inputEmailI.current.focus()
     }
+  } else {
+    if(emailReg.test(event.target.value)){
+      setMsgErrorMailC("")
+    } else {
+      setMsgErrorMailC("Saisie incorrect.")
+      inputEmailC.current.focus()
+    }
+  }
     
   }
 
@@ -118,8 +129,9 @@ const Login = () => {
               <h2>Login</h2>
 
               <div className="inputbox">
+              <p className="msgError">{msgErrorMailC}</p>
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onBlur={checkEmail} ref={inputEmailC}></input>
+                <input type="email" required onBlur={checkEmail} ref={inputEmailC} name="emailC"></input>
                 <label htmlFor="">Email</label>
               </div>
 
@@ -146,9 +158,9 @@ const Login = () => {
               <h2>Sign in</h2>
 
               <div className="inputbox">
-                <p className="msgError">{msgErrorMail}</p>
+                <p className="msgError">{msgErrorMailI}</p>
                 <IonIcon icon={mailOutline} />
-                <input type="email" onBlur={checkEmail} ref={inputEmailI}></input>
+                <input type="email" onBlur={checkEmail} ref={inputEmailI} name="emailI"></input>
                 <label htmlFor="">Email</label>
               </div>
 
