@@ -21,6 +21,12 @@ const Login = () => {
   const [msgErrorMailC, setMsgErrorMailC] = useState("");
   const [msgErrorMailI, setMsgErrorMailI] = useState("");
 
+  const inputMdpC = useRef(null);
+  const inputMdpI = useRef(null);
+
+  const [msgErrorMdpC, setMsgErrorMdpC] = useState("");
+  const [msgErrorMdpI, setMsgErrorMdpI] = useState("");
+
   const requestOptionsAdresse = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -87,19 +93,23 @@ const Login = () => {
   
   const connexion = (event) => {
     event.preventDefault();
+    if(msgErrorMailC == "" && msgErrorMdpC ==""){
     fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
     });
   }
+  }
 
   const checkEmail = (event) => {
+
     event.preventDefault();
     setEmail(event.target.value)
     var emailReg = new RegExp(/^(([^<>()\[\]\\.,;:\s@']+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i);
-   console.log(event.target.name)
-   if(event.target.name=="emailI"){
+   
+    if(event.target.name=="emailI"){
+
     if(emailReg.test(event.target.value)){
       setClient({ ...client, ['email']: event.target.value })
       setMsgErrorMailI("")
@@ -107,7 +117,9 @@ const Login = () => {
       setMsgErrorMailI("Saisie incorrect.")
       inputEmailI.current.focus()
     }
+
   } else {
+
     if(emailReg.test(event.target.value)){
       setMsgErrorMailC("")
     } else {
@@ -115,6 +127,34 @@ const Login = () => {
       inputEmailC.current.focus()
     }
   }
+    
+  }
+
+  const checkMdp = (event) => {
+
+    event.preventDefault();
+    setMdp(event.target.value)
+    var mdpReg = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
+
+    if(event.target.name=="mdpI"){
+
+      if(mdpReg.test(event.target.value)){
+        setClient({ ...client, ['mdp']: event.target.value })
+        setMsgErrorMdpI("")
+      } else {
+        setMsgErrorMdpI("Saisie incorrect.")
+        inputMdpI.current.focus()
+      }
+
+    } else {
+
+      if(mdpReg.test(event.target.value)){
+        setMsgErrorMdpC("")
+      } else {
+        setMsgErrorMdpC("Saisie incorrect.")
+        inputMdpC.current.focus()
+      }
+    }
     
   }
 
@@ -136,8 +176,9 @@ const Login = () => {
               </div>
 
               <div className="inputbox">
+              <p className="msgError">{msgErrorMdpC}</p>
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required onChange={(e) => setMdp(e.target.value)}></input>
+                <input type="password" required onBlur={checkMdp} ref={inputMdpC} name="mdpC"></input>
                 <label htmlFor="">Password</label>
               </div>
 
@@ -165,8 +206,9 @@ const Login = () => {
               </div>
 
               <div className="inputbox">
+              <p className="msgError">{msgErrorMdpI}</p>
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required onChange={(e) => setClient({ ...client, ['mdp']: e.target.value })}></input>
+                <input type="password" required onBlur={checkMdp} ref={inputMdpI} name="mdpI"></input>
                 <label htmlFor="">Password</label>
               </div>
 
