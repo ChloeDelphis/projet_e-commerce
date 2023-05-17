@@ -36,13 +36,18 @@ const DisplayHomeCenter = ({ articles, mea }) => {
           <div className="header_center">{mea.titre}</div>
         </div>
       </div>
-      <div className="items_display">
+      <div className="list">
         {sortedArticles &&
           sortedArticles.map((article, index) => (
-            <div className="item" key={index}>
-              <img src={article.img} alt="product_image" />
-              <p className="item_name">{article.nom}</p>
-              <p className="item_price">{article.prix},00€</p>
+            <div className="list__item" key={index}>
+              <img
+                className="list__item__img"
+                src={article.img}
+                alt="product_image"
+              />
+              <h3 className="list__item__name">{article.nom}</h3>
+              <h4 className="list__item__brand"> {article.marque}</h4>
+              <p className="list__item__price">{article.prix},00€</p>
             </div>
           ))}
       </div>
