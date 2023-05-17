@@ -1,33 +1,62 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// Affiche les produits mis en avant selo
 const HomeCenter = () => {
+  const [articles, setArticles] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/site/articles`)
+      .then((res) => res.json())
+      .then((data) => setArticles(data));
+  }, []);
+
   return (
     <div className="homepage_center">
-      <DisplayHomeCenter data={dataTrending} />
+      <DisplayHomeCenter articles={articles} mea={dataMea.nouveautes} />
     </div>
   );
 };
 
-const DisplayHomeCenter = ({ data }) => {
+const DisplayHomeCenter = ({ articles, mea }) => {
+  let sortedArticles = null;
+
+  if (articles) {
+    sortedArticles = [...articles].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+    sortedArticles = sortedArticles.slice(0, 4);
+  }
+
   return (
     <div className="container">
       <div className="header">
         <div className="header_container">
-          <div className="header_center">Nos petits prix</div>
+          <div className="header_center">{mea.titre}</div>
         </div>
       </div>
       <div className="items_display">
-        {data.products.list.map((item, index) => (
-          <div className="item" key={index}>
-            <img src={item.img} alt="product_image" />
-            <p className="item_name">{item.name}</p>
-            <p className="item_price">${item.price}.00</p>
-          </div>
-        ))}
+        {sortedArticles &&
+          sortedArticles.map((article, index) => (
+            <div className="item" key={index}>
+              <img src={article.img} alt="product_image" />
+              <p className="item_name">{article.nom}</p>
+              <p className="item_price">{article.prix},00€</p>
+            </div>
+          ))}
       </div>
     </div>
   );
+};
+
+const dataMea = {
+  nouveautes: {
+    titre: "Nos dernières nouveautés",
+  },
+  petitsprix: {
+    titre: "Nos petits prix",
+  },
 };
 
 const dataTrending = {
