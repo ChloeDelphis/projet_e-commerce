@@ -2,23 +2,37 @@ package ecommerce.backend.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 public class Panier {
 
 	@Id
+	@JsonView(JsonViews.Common.class)
 	private int id;
+	
+	@JsonView(JsonViews.Common.class)
 	private Date date;
+	
+	@JsonView(JsonViews.Common.class)
 	private double total;
-	private ArrayList<Ligne> lignes;
+	
+	@OneToMany(mappedBy = "panier")
+	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class})
+	private List<Ligne> lignes;
+	
 	@OneToOne
 	@JoinColumn(name = "email_client")
+	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	private Client client;
 	
 	@Version
@@ -56,7 +70,7 @@ public class Panier {
 		this.total = total;
 	}
 
-	public ArrayList<Ligne> getLignes() {
+	public List<Ligne> getLignes() {
 		return lignes;
 	}
 
@@ -76,7 +90,7 @@ public class Panier {
 		super();
 	}
 
-	public Panier(Client client, int id, Date date, double total, ArrayList<Ligne> lignes) {
+	public Panier(Client client, int id, Date date, double total, List<Ligne> lignes) {
 		super();
 		this.client = client;
 		this.id = id;

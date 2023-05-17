@@ -17,16 +17,18 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import ecommerce.backend.repository.PanierRepository;
 import ecommerce.backend.model.JsonViews;
+import ecommerce.backend.model.Ligne;
 import ecommerce.backend.model.Panier;
+import ecommerce.backend.repository.LigneRepository;
+import ecommerce.backend.repository.PanierRepository;
 
 @RestController
-@RequestMapping("/panier")
+@RequestMapping("/ligne")
 @CrossOrigin(origins = "http://localhost:3000")
-public class PanierController {
+public class LigneController {
 	
-	@Autowired PanierRepository repo;
+	@Autowired LigneRepository repo;
 	
 	@GetMapping("/test")
 	public String getTest(){
@@ -34,20 +36,21 @@ public class PanierController {
 	}
 	
 	@GetMapping("")
-	@JsonView(JsonViews.PanierWithLigneAndClient.class)
-	public List<Panier> getAll(){
+	@JsonView(JsonViews.Common.class)
+	public List<Ligne> getAll(){
 		return repo.findAll();
 	}
 	
 	@GetMapping("/{id}")
+//	@JsonView(JsonViews.ArticleWithCategorie.class)
 	@JsonView(JsonViews.PanierWithLigneAndClient.class)
-	public Panier getByID(@PathVariable Integer id){
+	public Ligne getByID(@PathVariable Integer id){
 		return repo.findById(id).get();
 	}
 	
 	@PostMapping("")
-	public Panier create(@RequestBody Panier p){
-		return repo.save(p);
+	public Ligne create(@RequestBody Ligne l){
+		return repo.save(l);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -57,14 +60,14 @@ public class PanierController {
 	
 	@PutMapping("/{id}")
 	@JsonView(JsonViews.Common.class)
-	public Panier update(@RequestBody Panier p, @PathVariable Integer id){
-		Panier pEnBase = repo.findById(id).orElseThrow(() -> {
+	public Ligne update(@RequestBody Ligne l, @PathVariable Integer id){
+		Ligne lEnBase = repo.findById(id).orElseThrow(() -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		});
 		
-		p.setId(id);
-		p.setVersion(pEnBase.getVersion());
-		return repo.save(p);
+		l.setId(id);
+		l.setVersion(lEnBase.getVersion());
+		return repo.save(l);
 	}
 	
 
