@@ -1,20 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+const HomeCenter = () => {
+  return (
+    <div className="homepage_center">
+      <DisplayHomeCenter data={dataTrending} />
+    </div>
+  );
+};
+
 const DisplayHomeCenter = ({ data }) => {
   return (
     <div className="container">
       <div className="header">
         <div className="header_container">
-          <div className="header_up">{data.header.top}</div>
-          <div className="header_center">{data.header.center}</div>
-          <div className="header_bottom">{data.header.bottom}</div>
+          <div className="header_center">Nos petits prix</div>
         </div>
-        <button>
-          <Link className="link_viewAll" to={"/"}>
-            View all
-          </Link>
-        </button>
       </div>
       <div className="items_display">
         {data.products.list.map((item, index) => (
@@ -28,17 +29,6 @@ const DisplayHomeCenter = ({ data }) => {
     </div>
   );
 };
-
-const HomeCenter = () => {
-  return (
-    <div className="homepage_center">
-      <DisplayHomeCenter data={dataTrending} />
-      <DisplayHomeCenter data={dataOffers} />
-    </div>
-  );
-};
-
-export default HomeCenter;
 
 const dataTrending = {
   header: {
@@ -103,3 +93,5 @@ const dataOffers = {
     ],
   },
 };
+
+export default HomeCenter;

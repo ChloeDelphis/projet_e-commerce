@@ -1,4 +1,5 @@
 import React from "react";
+import Carousel from "./Carousel";
 
 const HomeTop = () => {
   return (
@@ -12,7 +13,7 @@ const HomeTop = () => {
 
       {/* partie droite */}
       <div className="top_right">
-        <img src="./assets/products/5_robes/1.jpg" alt="image_carousel" />
+        <Carousel />
       </div>
     </div>
   );

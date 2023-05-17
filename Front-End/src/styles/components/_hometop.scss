@@ -2,12 +2,13 @@
   display: flex;
   flex-direction: row;
   background-color: $beige;
-  height: 80vh;
+  height: 70vh;
+  padding: 0 10vw;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
   .top_left {
     // background-color: rgba(0, 255, 255, 0.223);
     width: 50%;
-    padding: 0px 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,6 +49,7 @@
   }
 
   .top_right {
+    // background-color: rgba(0, 255, 255, 0.12);
     width: 50%;
     display: flex;
     // justify-content: center;
