@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { IonIcon } from '@ionic/react';
 import { useNavigate } from "react-router-dom";
 import { mailOutline, lockClosedOutline, personOutline, locationOutline, callOutline } from 'ionicons/icons';
@@ -14,6 +14,11 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
+
+  const inputEmailC = useRef(null);
+  const inputEmailI = useRef(null);
+
+  const [msgErrorMail, setMsgErrorMail] = useState("");
 
   const requestOptionsAdresse = {
     method: 'POST',
@@ -85,10 +90,22 @@ const Login = () => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
+    });
+  }
+
+  const checkEmail = (event) => {
+    event.preventDefault();
+    setEmail(event.target.value)
+    var emailReg = new RegExp(/^(([^<>()\[\]\\.,;:\s@']+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i);
+    if(emailReg.test(event.target.value)){
+      setClient({ ...client, ['email']: event.target.value })
+      setMsgErrorMail("")
+    } else {
+      setMsgErrorMail("Saisie incorrect.")
+      inputEmailI.current.focus()
     }
     
-  );
-}
+  }
 
   return (
     <>
@@ -102,7 +119,7 @@ const Login = () => {
 
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setEmail(e.target.value)}></input>
+                <input type="email" required onBlur={checkEmail} ref={inputEmailC}></input>
                 <label htmlFor="">Email</label>
               </div>
 
@@ -129,8 +146,9 @@ const Login = () => {
               <h2>Sign in</h2>
 
               <div className="inputbox">
+                <p className="msgError">{msgErrorMail}</p>
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setClient({ ...client, ['email']: e.target.value })}></input>
+                <input type="email" onBlur={checkEmail} ref={inputEmailI}></input>
                 <label htmlFor="">Email</label>
               </div>
 
