@@ -33,8 +33,6 @@ const Nav = ({ data }) => {
   const navigate = useNavigate();
 
   const handleClickToCateg = (ref) => {
-    // console.log(ref);
-    // console.log(typeof ref);
     navigate(`/category/${ref}`);
   };
 

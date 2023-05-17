@@ -12,6 +12,9 @@ const ProductsByCategory = () => {
   // On stocke les infos sur la catégorie récupérées depuis la bdd
   const [categorie, setCategorie] = useState(null);
 
+  // On récupère les infos de brandSearchTerm (définie dans le composant OrderandFilter)
+  const [brandSearchTerm, setbrandSearchTerm] = useState("");
+
   useEffect(() => {
     fetch(`http://localhost:8080/site/categories/${id}`)
       .then((res) => res.json())
@@ -20,9 +23,13 @@ const ProductsByCategory = () => {
 
   return (
     <div className="productsbycategory">
+      {/* <div>La valeur de brandSearchTerm est : {brandSearchTerm}</div> */}
       <CategoryHeader data={categorie} />
-      <OrderandFilter data={categorie} />
-      <CategoryDetail data={categorie} />
+      <OrderandFilter
+        data={categorie}
+        modifyBrandSearchTerm={setbrandSearchTerm}
+      />
+      <CategoryDetail data={categorie} brandSearchTerm={brandSearchTerm} />
     </div>
   );
 };
@@ -36,7 +43,7 @@ const CategoryHeader = ({ data }) => {
   );
 };
 
-const OrderandFilter = ({ data }) => {
+const OrderandFilter = ({ data, modifyBrandSearchTerm }) => {
   // Quand data est là on demande de remplir le tableau des marques sans doublon
   useEffect(() => {
     if (data) {
@@ -69,18 +76,13 @@ const OrderandFilter = ({ data }) => {
     // console.log("brands = " + brands);
   };
 
-  // On stocke la marque qui a été cliquée dans le select
-  const [brandSearchTerm, setbrandSearchTerm] = useState("");
-
   const handleBrandSearchTerm = (e) => {
     // On récupère la valeur de la marque cliquée
     // console.log(e.target.value);
     let value = e.target.value;
-    // On l'assigne à brandSearchTerm
-    setbrandSearchTerm(value);
+    // On l'assigne à brandSearchTerm (useState du parent)
+    modifyBrandSearchTerm(value);
   };
-
-  // console.log(brandSearchTerm);
 
   return (
     <form className="orderandfilter">
@@ -118,7 +120,7 @@ const OrderandFilter = ({ data }) => {
 };
 
 // Component qui affiche une catégorie en dynamique
-const CategoryDetail = ({ data }) => {
+const CategoryDetail = ({ data, brandSearchTerm }) => {
   const navigate = useNavigate();
 
   // redirect to the item page
@@ -131,22 +133,26 @@ const CategoryDetail = ({ data }) => {
   return (
     <div className="list">
       {data &&
-        data.articles.map((item, index) => (
-          <div
-            className="list__item"
-            key={index}
-            onClick={() => handleClick(item.ref)}
-          >
-            <img
-              className="list__item__img"
-              src={item.img}
-              alt="product_image"
-            />
-            <h3 className="list__item__name">{item.nom}</h3>
-            <h4 className="list__item__brand"> {item.marque}</h4>
-            <p className="list__item__price">{item.prix},00 €</p>
-          </div>
-        ))}
+        data.articles
+          .filter((val) => {
+            return val.marque.includes(brandSearchTerm);
+          })
+          .map((val, index) => (
+            <div
+              className="list__item"
+              key={index}
+              onClick={() => handleClick(val.ref)}
+            >
+              <img
+                className="list__item__img"
+                src={val.img}
+                alt="product_image"
+              />
+              <h3 className="list__item__name">{val.nom}</h3>
+              <h4 className="list__item__brand"> {val.marque}</h4>
+              <p className="list__item__price">{val.prix},00 €</p>
+            </div>
+          ))}
     </div>
   );
 };
