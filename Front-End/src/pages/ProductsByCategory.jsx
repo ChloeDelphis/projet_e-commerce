@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Page qui affiche tous les produits en fonction d'une catégorie
 const ProductsByCategory = () => {
@@ -43,9 +44,9 @@ const OrderandFilter = ({ data }) => {
     }
   }, [data]);
 
-  let [brands, setBrands] = useState([]);
+  const [brands, setBrands] = useState([]);
 
-  // Methode qui retourne les marques sans doublon :
+  // Methode qui retourne les marques sans doublon et les assigne au useState brands :
   const makeBrands = (categorie) => {
     // On recup les marques
     let a = data.articles.map((item, index) => {
@@ -60,15 +61,26 @@ const OrderandFilter = ({ data }) => {
     setBrands(b);
 
     // Verif des types et valeurs
-    console.log("typeof a = " + typeof a);
-    console.log("a = " + a);
-    console.log("typeof b = " + typeof b);
-    console.log("b = " + b);
-    console.log("typeof brands = " + typeof brands);
-    console.log("brands = " + brands);
+    // console.log("typeof a = " + typeof a);
+    // console.log("a = " + a);
+    // console.log("typeof b = " + typeof b);
+    // console.log("b = " + b);
+    // console.log("typeof brands = " + typeof brands);
+    // console.log("brands = " + brands);
   };
 
-  console.log("brands = " + brands);
+  // On stocke la marque qui a été cliquée dans le select
+  const [brandSearchTerm, setbrandSearchTerm] = useState("");
+
+  const handleBrandSearchTerm = (e) => {
+    // On récupère la valeur de la marque cliquée
+    // console.log(e.target.value);
+    let value = e.target.value;
+    // On l'assigne à brandSearchTerm
+    setbrandSearchTerm(value);
+  };
+
+  // console.log(brandSearchTerm);
 
   return (
     <form className="orderandfilter">
@@ -93,9 +105,11 @@ const OrderandFilter = ({ data }) => {
           name="brands"
           id="brands"
           className="shopping__buy__filter__brandchoices"
+          onChange={handleBrandSearchTerm}
         >
+          <option value="">Toutes les marques</option>
           {brands.map((marque) => {
-            return <option value="{marque}">{marque}</option>;
+            return <option value={marque}>{marque}</option>;
           })}
         </select>
       </div>
@@ -105,11 +119,24 @@ const OrderandFilter = ({ data }) => {
 
 // Component qui affiche une catégorie en dynamique
 const CategoryDetail = ({ data }) => {
+  const navigate = useNavigate();
+
+  // redirect to the item page
+  const handleClick = (ref) => {
+    console.log(ref);
+    console.log(typeof ref);
+    navigate(`/productpage/${ref}`);
+  };
+
   return (
     <div className="list">
       {data &&
         data.articles.map((item, index) => (
-          <div className="list__item" key={index}>
+          <div
+            className="list__item"
+            key={index}
+            onClick={() => handleClick(item.ref)}
+          >
             <img
               className="list__item__img"
               src={item.img}
