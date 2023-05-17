@@ -15,34 +15,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import ecommerce.backend.model.Adresse;
 import ecommerce.backend.model.Client;
 import ecommerce.backend.model.JsonViews;
-import ecommerce.backend.repo.ClientRepository;
+import ecommerce.backend.repo.AdresseRepository;
 
 @RestController
-@RequestMapping("/client")
-public class ClientRestController {
+@RequestMapping("/adresse")
+public class AdresseRestController {
 
 	@Autowired
-	private ClientRepository repo;
+	private AdresseRepository repo;
 
 	@CrossOrigin
 	@GetMapping("")
-	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
-	public List<Client> findall() {
+	@JsonView(JsonViews.AdresseWithClient.class)
+	public List<Adresse> findall() {
 		return repo.findAll();
 	}
-
+	
 	@CrossOrigin
-	@GetMapping("/findbyemail/{email}")
-	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
-	public Client findByEmail(@PathVariable(name = "email") String email) {
-		return repo.findByEmail(email);
+	@GetMapping("{id}")
+	@JsonView(JsonViews.AdresseWithClient.class)
+	public Adresse findbyid(@PathVariable(name = "id") int id) {
+		return repo.findById(id).get();
 	}
 
 	@CrossOrigin
 	@PostMapping("")
-	public void create(@RequestBody Client p) {
+	public void create(@RequestBody Adresse p) {
 		repo.save(p);
 	}
 
@@ -55,10 +56,10 @@ public class ClientRestController {
 	@CrossOrigin
 	@PutMapping("")
 	@JsonView(JsonViews.Common.class)
-	public void update(@RequestBody Client p) {
+	public void update(@RequestBody Adresse p) {
 
-		p.setVersion(repo.findByEmail(p.getEmail()).getVersion());
+		p.setVersion(repo.findById(p.getId()).get().getVersion());
 		repo.save(p);
 	}
-
+	
 }

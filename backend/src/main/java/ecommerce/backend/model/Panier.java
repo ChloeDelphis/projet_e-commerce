@@ -11,17 +11,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public class Panier {
 
 	@Id
+	@JsonView(JsonViews.Common.class)
 	private int id;
+	
+	@JsonView(JsonViews.Common.class)
 	private Date date;
+	
+	@JsonView(JsonViews.Common.class)
 	private double total;
+	
 	@OneToMany(mappedBy = "panier")
+	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class})
 	private List<Ligne> lignes;
+	
 	@OneToOne
 	@JoinColumn(name = "email_client")
+	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	private Client client;
 	
 	@Version

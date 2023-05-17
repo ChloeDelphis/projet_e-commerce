@@ -31,7 +31,7 @@ public class CategorieRestController {
 	// (GET) FIND ALL
 	@CrossOrigin
 	@GetMapping("")
-	@JsonView(JsonViews.Common.class)
+	@JsonView(JsonViews.CategorieWithArticle.class)
 	public List<Categorie> findall() {
 		return repo.findAll();
 	}

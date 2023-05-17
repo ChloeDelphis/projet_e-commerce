@@ -8,20 +8,36 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public class Client {
 
 	@Id
+	@JsonView(JsonViews.Common.class)
 	private String email;
+	
+	@JsonView(JsonViews.Common.class)
 	private String mdp;
+	
+	@JsonView(JsonViews.Common.class)
 	private String prenom;
+	
+	@JsonView(JsonViews.Common.class)
 	private String nom;
+	
+	@JsonView(JsonViews.Common.class)
 	private String tel;
+	
 	@ManyToOne
 	@JoinColumn(name = "adresse")
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Adresse adresse;
+	
 	@OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Panier panier;
+	
 	@Version
 	private int version;
 

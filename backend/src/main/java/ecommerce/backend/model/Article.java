@@ -18,13 +18,15 @@ public class Article {
 	private int ref;
 	@JsonView(JsonViews.Common.class)
 	private String nom;
+	@JsonView(JsonViews.Common.class)
 	private String marque = "";
 	@JsonView(JsonViews.Common.class)
 	private String description;
 
 	@ManyToOne
 	@JoinColumn(name = "categorie")
-	@JsonView(JsonViews.ArticleWithCategorie.class)
+//	@JsonView(JsonViews.ArticleWithCategorie.class)
+	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	private Categorie categorie;
 	
 	@JsonView(JsonViews.Common.class)

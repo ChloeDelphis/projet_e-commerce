@@ -32,14 +32,15 @@ public class ArticleRestController {
 	// (GET) FIND ALL
 	@CrossOrigin
 	@GetMapping("")
-	@JsonView(JsonViews.Common.class)
+	@JsonView(JsonViews.ArticleWithCategorie.class)
 	public List<Article> findall() {
 		return repo.findAll();
 	}
 
 	// (GET) FIND BY REF
 	@GetMapping("/{ref}")
-	@JsonView(JsonViews.ArticleWithCategorie.class)
+//	@JsonView(JsonViews.ArticleWithCategorie.class)
+	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	public Article getByID(@PathVariable Integer ref) {
 		return repo.findById(ref).orElseThrow(() -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);

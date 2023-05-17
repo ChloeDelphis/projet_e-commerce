@@ -6,18 +6,34 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public class Ligne {
 
 	@Id
+	@JsonView(JsonViews.Common.class)
 	private int id;
+	
 	@ManyToOne
 	@JoinColumn(name = "panier_id")
+	@JsonView(JsonViews.LigneWithPanierAndArticle.class)
 	private Panier panier;
+	
 	@ManyToOne
 	@JoinColumn(name = "article_id")
+//	@JsonView({JsonViews.ArticleWithCategorie.class})
+	@JsonView({JsonViews.PanierWithLigneAndClient.class})	
 	private Article article;
+	
+	@JsonView(JsonViews.Common.class)
 	private int quantite;
+	
+	@JsonView(JsonViews.Common.class)
+    private double total;
+	
 	@Version
 	private int version;
 
@@ -51,8 +67,17 @@ public class Ligne {
 
 	public void setQuantite(int quantite) {
 		this.quantite = quantite;
+		calculateTotal();
 	}
 
+	public double getTotal() {
+	    return total;
+	}
+	
+	public void setTotal(double total) {
+	    this.total = total;
+	}
+	
 	public int getVersion() {
 		return version;
 	}
@@ -60,23 +85,21 @@ public class Ligne {
 	public void setVersion(int version) {
 		this.version = version;
 	}
+	
+	 @JsonIgnore
+    private void calculateTotal() {
+        this.total = this.quantite * this.article.getPrix();
+    }
 
-	public Ligne(int id, Panier panier, Article article, int quantite) {
-		super();
-		this.id = id;
-		this.panier = panier;
-		this.article = article;
-		this.quantite = quantite;
-	}
+	 public Ligne(int id, Panier panier, Article article, int quantite) {
+	        this.id = id;
+	        this.panier = panier;
+	        this.article = article;
+	        this.quantite = quantite;
+	        calculateTotal();
+	    }
 
-	public Ligne() {
-		super();
-	}
-
-	@Override
-	public String toString() {
-		return "Ligne [id=" + id + ", panier=" + panier + ", article=" + article + ", quantite=" + quantite
-				+ ", version=" + version + "]";
-	}
+	    public Ligne() {
+	    }
 
 }
