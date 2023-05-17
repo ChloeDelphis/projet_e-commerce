@@ -8,11 +8,10 @@ const ProductsByCategory = () => {
   // id de la catégorie à afficher
   const { id } = useParams();
 
-  const [categorie, setCategorie] = useState();
+  // On stocke les infos sur la catégorie récupérées depuis la bdd
+  const [categorie, setCategorie] = useState(null);
 
   useEffect(() => {
-    console.log(id);
-
     fetch(`http://localhost:8080/site/categories/${id}`)
       .then((res) => res.json())
       .then((data) => setCategorie(data));
@@ -21,7 +20,7 @@ const ProductsByCategory = () => {
   return (
     <div className="productsbycategory">
       <CategoryHeader data={categorie} />
-      <OrderandFilter />
+      <OrderandFilter data={categorie} />
       <CategoryDetail data={categorie} />
     </div>
   );
@@ -31,12 +30,46 @@ const CategoryHeader = ({ data }) => {
   return (
     <div className="header">
       <h1 className="header__title">{data && data.name}</h1>
-      <h2 className="header__description">{data && data.name}</h2>
+      <h2 className="header__description">{data && data.description}</h2>
     </div>
   );
 };
 
-const OrderandFilter = () => {
+const OrderandFilter = ({ data }) => {
+  // Quand data est là on demande de remplir le tableau des marques sans doublon
+  useEffect(() => {
+    if (data) {
+      makeBrands(data);
+    }
+  }, [data]);
+
+  let [brands, setBrands] = useState([]);
+
+  // Methode qui retourne les marques sans doublon :
+  const makeBrands = (categorie) => {
+    // On recup les marques
+    let a = data.articles.map((item, index) => {
+      return item.marque;
+    });
+    // On retire les doublons
+    let b = a.filter((x, i) => {
+      return a.indexOf(x) === i;
+    });
+
+    // On assigne les marques sans doublon au useState brands
+    setBrands(b);
+
+    // Verif des types et valeurs
+    console.log("typeof a = " + typeof a);
+    console.log("a = " + a);
+    console.log("typeof b = " + typeof b);
+    console.log("b = " + b);
+    console.log("typeof brands = " + typeof brands);
+    console.log("brands = " + brands);
+  };
+
+  console.log("brands = " + brands);
+
   return (
     <form className="orderandfilter">
       <div className="orderandfilter__order">
@@ -53,19 +86,17 @@ const OrderandFilter = () => {
         </select>
       </div>
       <div className="orderandfilter__filter">
-        <label className="orderandfiler__filter__label">
+        <label className="orderandfiler__filter__brandlabel">
           Filtrer par marque :
         </label>
         <select
-          name="orderby"
-          id="orderby"
-          className="shopping__buy__filter__choices"
+          name="brands"
+          id="brands"
+          className="shopping__buy__filter__brandchoices"
         >
-          {/* {data.categorie.articles.map((item, index) => (
-            <option key={index} value="priceasc">
-              {item.marque}
-            </option>
-          ))} */}
+          {brands.map((marque) => {
+            return <option value="{marque}">{marque}</option>;
+          })}
         </select>
       </div>
     </form>
