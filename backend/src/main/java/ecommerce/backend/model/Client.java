@@ -24,13 +24,18 @@ public class Client {
 	private String nom;
 	@JsonView(JsonViews.Common.class)
 	private String tel;
+
 	@ManyToOne
 	@JoinColumn(name = "adresse")
-	@JsonView(JsonViews.ClientWithAdresse.class)
+	// @JsonView(JsonViews.ClientWithAdresse.class)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Adresse adresse;
+
 	@OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
-	@JsonView(JsonViews.ClientWithPanier.class)
+	// @JsonView(JsonViews.ClientWithPanier.class)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Panier panier;
+
 	@Version
 	private int version;
 

@@ -28,9 +28,11 @@ public class Adresse {
 	private String cp;
 	@JsonView(JsonViews.Common.class)
 	private String ville;
+
 	@OneToMany(mappedBy = "adresse")
 	@JsonView(JsonViews.AdresseWithClient.class)
 	private Collection<Client> clients;
+
 	@Version
 	private int version;
 

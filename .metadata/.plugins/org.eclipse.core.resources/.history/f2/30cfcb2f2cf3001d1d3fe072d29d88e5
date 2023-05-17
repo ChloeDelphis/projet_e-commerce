@@ -5,4 +5,6 @@ import ecommerce.backend.model.Client;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
+	public Client findByEmail(String email);
+	
 }

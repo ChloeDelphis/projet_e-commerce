@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import ecommerce.backend.model.Adresse;
+
+import ecommerce.backend.model.Client;
 import ecommerce.backend.model.JsonViews;
 import ecommerce.backend.repository.AdresseRepository;
 
@@ -40,19 +42,18 @@ public class AdresseRestController {
 		return repo.findById(id).get();
 	}
 
+	@CrossOrigin
+	@PostMapping("")
+	public int create(@RequestBody Adresse a) {
+		Adresse newAdresse = repo.save(a);
+		return newAdresse.getId();
+	}
+
 //	@CrossOrigin
 //	@PostMapping("")
 //	public void create(@RequestBody Adresse p) {
 //		repo.save(p);
 //	}
-	
-	@CrossOrigin
-	@PostMapping("")
-	public int create(@RequestBody Adresse a) {
-		Adresse newAdresse = repo.save(a);
-	    return newAdresse.getId();
-	}
-
 
 	@CrossOrigin
 	@DeleteMapping("{id}")
@@ -68,28 +69,4 @@ public class AdresseRestController {
 		p.setVersion(repo.findById(p.getId()).get().getVersion());
 		repo.save(p);
 	}
-
-	// @CrossOrigin
-	// @GetMapping("")
-	// public int findlast() {
-	// return repo.findLast().getId();
-	// }
-
-//	@CrossOrigin
-//	@GetMapping("/findbynumeroandrueandcpandville")
-//	@JsonView(JsonViews.Common.class)
-//	public Adresse findbynumeroandrueandcpandville(@RequestBody Adresse p) {
-//		return repo.findByNumeroAndRueAndCpAndVille(p.getNumero(), p.getRue(), p.getCp(), p.getVille());
-//	}
-	
-	@CrossOrigin
-	@GetMapping("/findbynumeroandrueandcpandville/{numero}/{rue}/{cp}/{ville}")
-	@JsonView(JsonViews.Common.class)
-	public Adresse findbynumeroandrueandcpandville(@PathVariable(name = "numero") int numero, 
-			@PathVariable(name = "rue") String rue, @PathVariable(name = "cp") String cp, 
-			@PathVariable(name = "ville") String ville) {
-		
-		return repo.findByNumeroAndRueAndCpAndVille(numero, rue, cp, ville);
-	}
-
 }
