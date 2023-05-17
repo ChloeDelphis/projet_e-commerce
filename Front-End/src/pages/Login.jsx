@@ -37,58 +37,59 @@ const Login = () => {
     if (isNewClient) {
       const fetchPostClient = () => {
         console.log(client);
-        fetch('http://localhost:8080/site/client', requestUpdateAdresseClient); 
+        fetch('http://localhost:8080/site/client', requestUpdateAdresseClient);
       }
-      
+
       fetchPostClient();
     }
   }, [isNewClient]);
 
-  
+
   const CreateClient = async (event) => {
     event.preventDefault();
 
     fetch('http://localhost:8080/site/adresse', requestOptionsAdresse)
-    .then(response => response.json())
-    .then(responseData => {{
-        console.log(responseData);
-        const newAdresse = {
-          id: responseData,
-          numero: adresse.numero,
-          rue: adresse.rue,
-          complement: "",
-          cp: adresse.cp,
-          ville: adresse.ville  
+      .then(response => response.json())
+      .then(responseData => {
+        {
+          console.log(responseData);
+          const newAdresse = {
+            id: responseData,
+            numero: adresse.numero,
+            rue: adresse.rue,
+            complement: "",
+            cp: adresse.cp,
+            ville: adresse.ville
+          }
+
+          fetch('http://localhost:8080/site/client', requestOptionsClient);
+
+          setClient({ ...client, ['adresse']: newAdresse });
+          // setClient({ ...client, ['adresse']: responseData });
+          setIsNewClient(true);
+
         }
-        
-        fetch('http://localhost:8080/site/client', requestOptionsClient); 
-        
-        setClient({ ...client, ['adresse']: newAdresse });
-        // setClient({ ...client, ['adresse']: responseData });
-        setIsNewClient(true);
-        
-      }
-    })
+      })
   }
 
   useEffect(() => {
-    if (isClientLogged){
+    if (isClientLogged) {
       sessionStorage.setItem("client", client);
       console.log("ok");
       navigate("/");
     }
   }, [isClientLogged])
-  
+
   const connexion = (event) => {
     event.preventDefault();
     fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
-      
+
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
     }
-    
-  );
-}
+
+    );
+  }
 
   return (
     <>

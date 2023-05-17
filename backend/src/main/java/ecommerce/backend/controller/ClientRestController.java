@@ -50,7 +50,8 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
-	@JsonView(JsonViews.ClientWithAdresse.class)
+//	@JsonView(JsonViews.ClientWithAdresse.class)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	public Client findbyemailandmdp(@PathVariable(name = "email") String email,
 			@PathVariable(name = "mdp") String mdp) {
 		return repo.findByEmailAndMdp(email, mdp);
