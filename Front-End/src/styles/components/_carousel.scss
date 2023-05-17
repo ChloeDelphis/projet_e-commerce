@@ -1,1 +1,28 @@
 // Le CSS Carousel
+// .carousel-container {}
+
+.embla {
+    overflow: hidden;
+    // background-color: black;
+}
+
+.embla__container {
+    display: flex;
+}
+
+.embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.embla__slide img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
