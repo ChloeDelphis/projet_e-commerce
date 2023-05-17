@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // La page du detail d'un produit
 const ProductPage = () => {
@@ -29,9 +30,20 @@ const ProductPage = () => {
 };
 
 const Nav = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleClickToCateg = (ref) => {
+    // console.log(ref);
+    // console.log(typeof ref);
+    navigate(`/category/${ref}`);
+  };
+
   return (
     <nav className=" nav">
-      <a className=" nav__category" href="">
+      <a
+        className=" nav__category"
+        onClick={() => handleClickToCateg(data.categorie.id)}
+      >
         {data && data.categorie.name}
       </a>
       <div className=" nav__link">></div>

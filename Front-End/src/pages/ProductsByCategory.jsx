@@ -123,8 +123,8 @@ const CategoryDetail = ({ data }) => {
 
   // redirect to the item page
   const handleClick = (ref) => {
-    console.log(ref);
-    console.log(typeof ref);
+    // console.log(ref);
+    // console.log(typeof ref);
     navigate(`/productpage/${ref}`);
   };
 
