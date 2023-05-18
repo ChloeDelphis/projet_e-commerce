@@ -48,6 +48,8 @@ const Login = () => {
   const CreateClient = async (event) => {
     event.preventDefault();
 
+    console.log(client);
+
     fetch('http://localhost:8080/site/adresse', requestOptionsAdresse)
       .then(response => response.json())
       .then(responseData => {
@@ -131,13 +133,13 @@ const Login = () => {
 
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"></input>
+                <input type="email" required onChange={(e) => setClient({ ...client, ['email']: e.target.value })} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="exemple : lorem@ispum.fr"></input>
                 <label htmlFor="">Email</label>
               </div>
 
               <div className="inputbox">
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required onChange={(e) => setMdp(e.target.value)} pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" title="minimum 8 caractères (minuscule, majuscule, chiffre)"></input>
+                <input type="password" required onChange={(e) => setClient({ ...client, ['mdp']: e.target.value })} pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" title="minimum 8 caractères (minuscule, majuscule, chiffre)"></input>
                 <label htmlFor="">Password</label>
               </div>
 
