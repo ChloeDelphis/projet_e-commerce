@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // La page listant les catégories de produits
 const ProductCategories = () => {
@@ -13,6 +14,10 @@ const ProductCategories = () => {
   }, []);
 
   console.log(categories);
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    navigate(`/category/${id}`);
+  };
 
   return (
     <div className="product_categories">
@@ -29,7 +34,11 @@ const ProductCategories = () => {
       <div className="main">
         {categories &&
           categories.map((category, index) => (
-            <div className="card" key={index}>
+            <div
+              className="card"
+              key={index}
+              onClick={() => handleClick(category && category.id)}
+            >
               <CategoryCard {...category} />
             </div>
           ))}
