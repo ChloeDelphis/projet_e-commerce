@@ -13,13 +13,15 @@ import Profil from "./pages/Profil";
 import ProductsByCategory from "./pages/ProductsByCategory";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import NewNavbar from "./components/NewNavbar";
 
 
 const App = () => {
   return (
     <div className="app">
       <BrowserRouter>
-        <Navbar />
+        {/* <Navbar /> */}
+        <NewNavbar />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -30,7 +32,6 @@ const App = () => {
           <Route path="/category/:id" element={<ProductsByCategory />} />
           <Route path="/productpage/:id" element={<ProductPage />} />
           {/* <Route path="/productlist" element={<ProductList />} /> */}
-
 
           <Route path="/profil" element={<Profil />} />
           <Route path="/about" element={<About />} />

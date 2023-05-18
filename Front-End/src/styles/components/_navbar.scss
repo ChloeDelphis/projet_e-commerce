@@ -1,5 +1,6 @@
 // Le CSS Navbar
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -61,7 +62,8 @@
 
         .sub-menu-account {
           position: absolute;
-          top: 100%; /* positionner la sous-menu juste en dessous de l'élément parent */
+          top: 100%;
+          /* positionner la sous-menu juste en dessous de l'élément parent */
           left: -50%;
           width: 120px;
           background: white;
