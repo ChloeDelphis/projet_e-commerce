@@ -8,7 +8,6 @@ const ProductPage = () => {
   // id du produit à afficher
 
   const { id } = useParams();
-
   const [article, setArticle] = useState();
   
 
@@ -92,6 +91,9 @@ const ProductDetails = ({ data }) => {
 
 const Buy = ({ data }) => {
 
+  const clientJSON = JSON.parse(sessionStorage.getItem("client"));
+  const idPanier = clientJSON.panier.id;
+
   const [quantite, setQuantite] = useState(1);
   const [isUpdate, setIsUpdate] = useState(false);
   const [panier, setPanier] = useState({});
@@ -154,7 +156,7 @@ const Buy = ({ data }) => {
         if (data.article.ref == ligne.article.ref) {
           console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
           isDouble = true;
-          const nouvelleLigne = {...ligne, "panier":{"id":1}};
+          const nouvelleLigne = {...ligne, "panier":{"id":idPanier}};
           nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
           console.log("NOUVELLE LIGNE : ", JSON.stringify(nouvelleLigne), "QUANTITEEEE : ", quantity);
           updateLigne(nouvelleLigne);
@@ -166,7 +168,7 @@ const Buy = ({ data }) => {
         const nouvelleLigne = {
           "id": 0,
           "panier": {
-            "id": 1,
+            "id": idPanier,
           },
           "article": data.article,
           "quantite": quantity,
@@ -208,7 +210,7 @@ const Buy = ({ data }) => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8080/site/panier/1`)
+    fetch(`http://localhost:8080/site/panier/${idPanier}`)
       .then((res) => res.json())
       .then(data => {
         setPanier(data);
@@ -217,7 +219,7 @@ const Buy = ({ data }) => {
   }, []);
 
   useEffect(() => {  
-    fetch(`http://localhost:8080/site/panier/1`)
+    fetch(`http://localhost:8080/site/panier/${idPanier}`)
       .then((res) => res.json())
       .then(data => {
         sessionStorage.setItem('panier', JSON.stringify(data));
