@@ -38,7 +38,7 @@ const Carousel = ({ articles }) => {
               .filter((val) => val.mea === 1)
               .map((val, index) => (
                 <div key={index} className="embla__slide">
-                  <Link to={`/productpage/${val.id}`}>
+                  <Link to={`/productpage/${val.ref}`}>
                     <img src={val.img} alt="image_carousel" />
                   </Link>
                 </div>
