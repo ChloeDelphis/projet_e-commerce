@@ -1,16 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Commande from "../components/Commande";
+import Commande from "../classes/Commande";
 
 // La page du Panier (shopping cart)
 const Cart = () => {
 
-  const { id } = useParams();
+  const [client, setClient] = useState({});
+  const clientJSON = JSON.parse(sessionStorage.getItem("client"));
+  const id = clientJSON.panier.id;
   const [panier, setPanier] = useState({});
   const [commande, setCommande] = useState({});
   const [isUpdate, setIsUpdate] = useState(false);
   const [isCommande, setIsCommande] = useState(0);
+
+  
 
   function handleCommandClick() {
     const currentDate = new Date().toISOString();
@@ -107,6 +111,7 @@ const Cart = () => {
 
   useEffect(() => {  
       if(Object.keys(panier).length !== 0){
+        
         const requestOptions = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -116,7 +121,6 @@ const Cart = () => {
       }
   }, [panier]);
 
-
   useEffect(() => {  
     fetch(`http://localhost:8080/site/panier/${id}`)
       .then((res) => res.json())
@@ -124,11 +128,24 @@ const Cart = () => {
         sessionStorage.setItem('panier', JSON.stringify(data));
         setPanier(data);
       });   
-  }, [isUpdate,panier]);
+  }, []);
+
+
+  useEffect(() => {  
+    fetch(`http://localhost:8080/site/panier/${id}`)
+      .then((res) => res.json())
+      .then(data => {
+        sessionStorage.setItem('panier', JSON.stringify(data));
+        setPanier(data);
+
+      });   
+  }, [isUpdate/*,panier*/]);
+  
+  
   // if (panier.length > 0) {
     return (
       <>
-          
+
           <div className="recap-panier">
             
             <div className="articles">
@@ -179,6 +196,7 @@ const Cart = () => {
                 <h2>Résumé de votre commande</h2>
                 <div className="total">
                   <h4>Total : </h4>
+                  {console.log("Le panier actuel : ",panier.total)}
                   <h3>{panier.total}€</h3>
                 </div>
                 <button onClick={ () => handleCommandClick()}>Passer à la caisse</button>

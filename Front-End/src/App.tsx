@@ -29,7 +29,7 @@ const App = () => {
           <Route path="/category/:id" element={<ProductsByCategory />} />
           <Route path="/productlist" element={<ProductList />} />
           <Route path="/productpage/:id" element={<ProductPage />} />
-          <Route path="/cart/:id" element={<Cart />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="*" element={<PageNotFound />} />
           {/* Pas besoin car déjà dans le router tout en haut */}

@@ -9,7 +9,7 @@ const Login = () => {
   const [client, setClient] = useState({});
   const [isNewClient, setIsNewClient] = useState(false);
   const [isClientLogged, setIsClientLogged] = useState(false);
-
+  const [panier, setPanier] = useState({});
   const [adresse, setAdresse] = useState({});
 
   const [email, setEmail] = useState("");
@@ -19,6 +19,20 @@ const Login = () => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(adresse)
+  };
+
+  const requestOptionsPanier = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+    
+      "date": new Date().toISOString(),
+      "total": 0,
+      "lignes": [],
+      "client": {
+          "email": client.email
+      }
+  })
   };
 
   const requestOptionsClient = {
@@ -35,12 +49,15 @@ const Login = () => {
 
   useEffect(() => {
     if (isNewClient) {
+      console.log("ISNEWCLIENT YES");
       const fetchPostClient = () => {
         console.log(client);
         fetch('http://localhost:8080/site/client', requestUpdateAdresseClient);
       }
 
       fetchPostClient();
+      console.log("NOUVEAU PANIER : ",JSON.stringify(requestOptionsPanier.body));
+      fetch('http://localhost:8080/site/panier', requestOptionsPanier)
     }
   }, [isNewClient]);
 
@@ -63,7 +80,6 @@ const Login = () => {
           }
 
           fetch('http://localhost:8080/site/client', requestOptionsClient);
-
           setClient({ ...client, ['adresse']: newAdresse });
           // setClient({ ...client, ['adresse']: responseData });
           setIsNewClient(true);
@@ -87,7 +103,8 @@ const Login = () => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
-
+      console.log("DATAS : ",JSON.stringify(data));
+      localStorage.setItem('client', JSON.stringify(data));
     });
   }
 
@@ -103,13 +120,13 @@ const Login = () => {
 
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"></input>
+                <input type="email" required onChange={(e) => setEmail(e.target.value)} ></input>
                 <label htmlFor="">Email</label>
               </div>
 
               <div className="inputbox">
                 <IonIcon icon={lockClosedOutline} />
-                <input type="password" required onChange={(e) => setMdp(e.target.value)} pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" title="minimum 8 caractères (minuscule, majuscule, chiffre)"></input>
+                <input type="password" required onChange={(e) => setMdp(e.target.value)} ></input>
                 <label htmlFor="">Password</label>
               </div>
 
