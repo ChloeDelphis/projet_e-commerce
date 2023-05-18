@@ -1,6 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// La page listant les catégories de produits
+const ProductCategories = () => {
+  return (
+    <div className="product_categories">
+      <div className="header">
+        <h2>Toutes nos catégories</h2>
+        <p className="bottom">
+          Découvrez une sélection exclusive de vêtements tendance qui vous
+          permettront de vous démarquer avec style. Exprimez votre personnalité
+          et faites sensation avec nos collections soigneusement choisies pour
+          vous.
+        </p>
+      </div>
+
+      <div className="main">
+        <CategoryCard data={categoryOne} />
+        <CategoryCard data={categoryTwo} />
+        <CategoryCard data={categoryThree} />
+        <CategoryCard data={categoryFour} />
+        <CategoryCard data={categoryFive} />
+      </div>
+    </div>
+  );
+};
+
 const CategoryCard = ({ data }) => {
   return (
     <Link to={data.link}>
@@ -21,32 +46,6 @@ const CategoryCard = ({ data }) => {
     </Link>
   );
 };
-
-// La page listant les catégories de produits
-const ProductCategories = () => {
-  return (
-    <div className="product_categories">
-      <div className="header">
-        <h2>Toutes nos catégories</h2>
-        <p className="bottom">
-          Découvrez une sélection exclusive de vêtements tendance qui vous permettront de vous démarquer avec style.
-          Exprimez votre personnalité et faites sensation avec nos collections soigneusement choisies pour vous.
-        </p>
-      </div>
-
-      <div className="main">
-        <CategoryCard data={categoryOne} />
-        <CategoryCard data={categoryTwo} />
-        <CategoryCard data={categoryThree} />
-        <CategoryCard data={categoryFour} />
-        <CategoryCard data={categoryFive} />
-      </div>
-
-    </div>
-  );
-};
-
-export default ProductCategories;
 
 const categoryOne = {
   center: "T-Shirts",
@@ -87,3 +86,5 @@ const categoryFive = {
   link: "/category/5",
   img: "./assets/components/cards/card_05.png",
 };
+
+export default ProductCategories;
