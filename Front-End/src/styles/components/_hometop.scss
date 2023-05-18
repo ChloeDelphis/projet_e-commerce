@@ -1,14 +1,15 @@
 .homepage_top {
   display: flex;
   flex-direction: row;
+  align-items: center;
   background-color: $beige;
-
+  height: 70vh;
+  padding: 0 10vw;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
   .top_left {
     // background-color: rgba(0, 255, 255, 0.223);
     width: 50%;
-    padding: 0px 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,7 +24,7 @@
     }
 
     h1 {
-      font-family: "Russo One", Arial, sans-serif;
+      font-family: "Berkshire Swash", cursive;
       font-size: 56px;
     }
 
@@ -33,6 +34,9 @@
     }
 
     button {
+      a {
+        color: white;
+      }
       width: 185px;
       height: 59px;
       border: none;
@@ -56,8 +60,12 @@
     justify-content: end;
 
     img {
-      width: fit-content;
-      height: auto;
+      border-radius: 3vmin;
+      height: 70vh;
+      width: 30vw;
+      cursor: pointer;
+      object-fit: cover;
+      object-position: 50% 0%;
     }
   }
 }

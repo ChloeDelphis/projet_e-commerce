@@ -43,6 +43,14 @@ public class CategorieRestController {
 		return repo.findById(id);
 	}
 
+	
+	// (GET) FIND FIRST BY MEA
+	@GetMapping("/mea/{x}")
+	@JsonView(JsonViews.CategorieWithArticle.class)
+	public Categorie findFirstByMea (@PathVariable int x){
+		return repo.findFirstByMea(x);
+	}
+	
 	// (POST) CREATE
 	@CrossOrigin
 	@PostMapping("")
