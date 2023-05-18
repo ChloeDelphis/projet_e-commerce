@@ -31,23 +31,20 @@ const Carousel = ({ articles }) => {
 
   return (
     <>
-      {articles &&
-        articles
-          .filter((val) => val.mea === 1)
-          .map((val, index) => (
-            <div key={index} className="embla" ref={emblaRef}>
-              <div className="embla__container">
-                <div className="embla__slide">
-                  <Link to={"/productlist"}>
-                    <img
-                      src="./assets/components/carousel/2.jpg"
-                      alt="image_carousel"
-                    />
+      <div className="embla" ref={emblaRef}>
+        <div className="embla__container">
+          {articles &&
+            articles
+              .filter((val) => val.mea === 1)
+              .map((val, index) => (
+                <div key={index} className="embla__slide">
+                  <Link to={`/productpage/${val.id}`}>
+                    <img src={val.img} alt="image_carousel" />
                   </Link>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))}
+        </div>
+      </div>
     </>
   );
 };
