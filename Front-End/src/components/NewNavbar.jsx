@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const NewNavbar = () => {
-    const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
     const [isActive, setIsActive] = useState(false);
 
     // open/close side menu when hamburger is clicked
     const handleToggle = () => {
         setIsActive(!isActive);
     };
+
+    const deleteUserFromSessionStorage = () => {
+        sessionStorage.removeItem('client');
+    };
+
 
     return (
         <>
@@ -17,11 +22,16 @@ const NewNavbar = () => {
                     <div className="left">
                         <div className="logo">
                             <NavLink className={"logo-navlink"} to={"/"}>Fashion Store</NavLink>
-                            {/* <img src="../../../assets/components/footer/logo.png" alt="logo" /> */}
                         </div>
                     </div>
 
                     <div className="right">
+                        <div
+                            className={`hamburger-container ${isActive ? "hamburger-active" : "hamburger-rest"
+                                }`}
+                            onClick={handleToggle}
+                        ></div>
+
                         <ul className={`menu-list ${isActive ? "show-menu" : ""}`}>
                             <li onClick={() => setIsActive(false)}>
                                 <NavLink
@@ -37,7 +47,7 @@ const NewNavbar = () => {
                             </li>
                             <li
                                 onClick={() => setIsActive(false)}>
-                                <div className="product-dropdown">
+                                <div className={`product-dropdown`}>
                                     <NavLink
                                         className={(nav) =>
                                             nav.isActive
@@ -47,7 +57,7 @@ const NewNavbar = () => {
                                         to="/productcategories"
                                     >
                                         Products
-                                        <div className="sub-menu-products">
+                                        <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
                                             <ul className="sub-menu-products__container">
                                                 <li className="sub-container">
                                                     <ul>
@@ -124,11 +134,12 @@ const NewNavbar = () => {
                                 <NavLink
                                     className={(nav) =>
                                         nav.isActive
-                                            ? "nav-active menu-list-item"
+                                            ? "menu-list-item"
                                             : "menu-list-item"
                                     }
-                                    to="/cart"
+                                    to={`${JSON.parse(sessionStorage.getItem("client")) ? "/cart" : "/login"}`}
                                 >
+
                                     <span>
                                         Cart
                                     </span>
@@ -144,7 +155,7 @@ const NewNavbar = () => {
                                             ? "nav-active menu-list-item"
                                             : "menu-list-item"
                                     }
-                                    to="/profil"
+                                    to={`${JSON.parse(sessionStorage.getItem("client")) ? "/profil" : "/login"}`}
                                 >
                                     <div className="user-icon-container">
                                         <img src="../../../assets/components/navbar/icon-user.png"
@@ -152,6 +163,20 @@ const NewNavbar = () => {
                                     </div>
                                 </NavLink>
                             </li>
+
+                            {
+                                JSON.parse(sessionStorage.getItem("client")) != null &&
+                                <li onClick={() => {
+                                    deleteUserFromSessionStorage();
+                                    navigate("/");
+                                }}>
+                                    <div className="logoff-icon-container">
+                                        <img src="../../../assets/components/navbar/log-off.png"
+                                            alt="user" />
+                                    </div>
+                                </li>
+                            }
+
                         </ul>
                     </div>
 
