@@ -17,7 +17,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import ecommerce.backend.model.Client;
 import ecommerce.backend.model.JsonViews;
-import ecommerce.backend.repo.ClientRepository;
+
+import ecommerce.backend.repository.ClientRepository;
 
 @RestController
 @RequestMapping("/client")
@@ -28,11 +29,18 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@GetMapping("")
-	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
+	@JsonView(JsonViews.Common.class)
 	public List<Client> findall() {
 		return repo.findAll();
 	}
 
+//	@CrossOrigin
+//	@GetMapping("/findbyemail/{email}")
+//	@JsonView(JsonViews.ClientWithAdresse.class)
+//	public Client findbyemail(@PathVariable(name = "email") String email) {
+//		return repo.findByEmail(email);
+//	}
+	
 	@CrossOrigin
 	@GetMapping("/findbyemail/{email}")
 	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
@@ -41,15 +49,18 @@ public class ClientRestController {
 	}
 
 	@CrossOrigin
-	@PostMapping("")
-	public void create(@RequestBody Client p) {
-		repo.save(p);
+	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
+//	@JsonView(JsonViews.ClientWithAdresse.class)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
+	public Client findbyemailandmdp(@PathVariable(name = "email") String email,
+			@PathVariable(name = "mdp") String mdp) {
+		return repo.findByEmailAndMdp(email, mdp);
 	}
 
 	@CrossOrigin
-	@DeleteMapping("{id}")
-	public void delete(@PathVariable(name = "id") int id) {
-		repo.deleteById(id);
+	@DeleteMapping("{email}")
+	public void delete(@PathVariable(name = "email") String email) {
+		repo.deleteById(email);
 	}
 
 	@CrossOrigin
@@ -60,5 +71,26 @@ public class ClientRestController {
 		p.setVersion(repo.findByEmail(p.getEmail()).getVersion());
 		repo.save(p);
 	}
+
+//	@GetMapping("")
+//	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
+//	public List<Client> findall() {
+//		return repo.findAll();
+//
+//	}
+
+
+
+	@CrossOrigin
+	@PostMapping("")
+	public void create(@RequestBody Client p) {
+		repo.save(p);
+	}
+
+//	@CrossOrigin
+//	@DeleteMapping("{id}")
+//	public void delete(@PathVariable(name = "id") int id) {
+//		repo.deleteById(id);
+//	}
 
 }

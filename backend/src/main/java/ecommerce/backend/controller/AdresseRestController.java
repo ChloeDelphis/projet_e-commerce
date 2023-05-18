@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import ecommerce.backend.model.Adresse;
+
 import ecommerce.backend.model.Client;
 import ecommerce.backend.model.JsonViews;
-import ecommerce.backend.repo.AdresseRepository;
+import ecommerce.backend.repository.AdresseRepository;
 
 @RestController
 @RequestMapping("/adresse")
@@ -29,11 +30,11 @@ public class AdresseRestController {
 
 	@CrossOrigin
 	@GetMapping("")
-	@JsonView(JsonViews.AdresseWithClient.class)
+	@JsonView(JsonViews.Common.class)
 	public List<Adresse> findall() {
 		return repo.findAll();
 	}
-	
+
 	@CrossOrigin
 	@GetMapping("{id}")
 	@JsonView(JsonViews.AdresseWithClient.class)
@@ -43,9 +44,16 @@ public class AdresseRestController {
 
 	@CrossOrigin
 	@PostMapping("")
-	public void create(@RequestBody Adresse p) {
-		repo.save(p);
+	public int create(@RequestBody Adresse a) {
+		Adresse newAdresse = repo.save(a);
+		return newAdresse.getId();
 	}
+
+//	@CrossOrigin
+//	@PostMapping("")
+//	public void create(@RequestBody Adresse p) {
+//		repo.save(p);
+//	}
 
 	@CrossOrigin
 	@DeleteMapping("{id}")
@@ -61,5 +69,4 @@ public class AdresseRestController {
 		p.setVersion(repo.findById(p.getId()).get().getVersion());
 		repo.save(p);
 	}
-	
 }

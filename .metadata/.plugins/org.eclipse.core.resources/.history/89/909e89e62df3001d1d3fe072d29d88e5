@@ -1,0 +1,5 @@
+package ecommerce.backend.repo;
+
+public class AdresseRepository {
+
+}

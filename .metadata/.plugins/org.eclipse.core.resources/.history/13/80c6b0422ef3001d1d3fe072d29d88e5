@@ -1,0 +1,17 @@
+package ecommerce.backend.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ecommerce.backend.repo.AdresseRepository;
+
+@RestController
+@RequestMapping("/adresse")
+public class AdresseRestController {
+
+	@Autowired
+	private AdresseRepository repo;
+
+	
+}

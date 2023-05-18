@@ -8,6 +8,5 @@ export class Adresse {
     complement:string;
     cp:string;
     ville:string;
-    clients:Array<Client>;
     version?:number;
 }

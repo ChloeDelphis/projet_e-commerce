@@ -18,26 +18,21 @@ public class Adresse {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(JsonViews.Common.class)
 	private int id;
-	
 	@JsonView(JsonViews.Common.class)
 	private int numero;
-	
 	@JsonView(JsonViews.Common.class)
 	private String rue;
-	
 	@JsonView(JsonViews.Common.class)
 	private String complement;
-	
 	@JsonView(JsonViews.Common.class)
 	private String cp;
-	
 	@JsonView(JsonViews.Common.class)
 	private String ville;
-	
+
 	@OneToMany(mappedBy = "adresse")
 	@JsonView(JsonViews.AdresseWithClient.class)
 	private Collection<Client> clients;
-	
+
 	@Version
 	private int version;
 

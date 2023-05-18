@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // La page du detail d'un produit
 const ProductPage = () => {
@@ -10,6 +11,7 @@ const ProductPage = () => {
 
   const [article, setArticle] = useState();
   
+
   useEffect(() => {
     fetch(`http://localhost:8080/site/articles/${id}`)
       .then((res) => res.json())
@@ -28,9 +30,18 @@ const ProductPage = () => {
 };
 
 const Nav = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleClickToCateg = (ref) => {
+    navigate(`/category/${ref}`);
+  };
+
   return (
     <nav className=" nav">
-      <a className=" nav__category" href="">
+      <a
+        className=" nav__category"
+        onClick={() => handleClickToCateg(data.categorie.id)}
+      >
         {data && data.categorie.name}
       </a>
       <div className=" nav__link">></div>
@@ -218,7 +229,7 @@ const Buy = ({ data }) => {
       <form className="shopping__buy" action="">
         <div className="shopping__buy__size">
           <label className="shopping__buy__size__label" htmlFor="size">
-            Size
+            Taille
           </label>
           <br />
           <select
@@ -235,7 +246,7 @@ const Buy = ({ data }) => {
         </div>
         <div className="shopping__buy__quantity">
           <label className="shopping__buy__quantity__label" htmlFor="quantity">
-            Quantity
+            Quantité
           </label>
           <br />
           

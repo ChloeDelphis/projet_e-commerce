@@ -32,7 +32,8 @@ const App = () => {
           <Route path="/cart/:id" element={<Cart />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="*" element={<PageNotFound />} />
-          <Route path="/navbar" element={<Navbar />} />
+          {/* Pas besoin car déjà dans le router tout en haut */}
+          {/* <Route path="/navbar" element={<Navbar />} /> */}
         </Routes>
 
         <Footer />

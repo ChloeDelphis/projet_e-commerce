@@ -16,28 +16,26 @@ public class Client {
 	@Id
 	@JsonView(JsonViews.Common.class)
 	private String email;
-	
 	@JsonView(JsonViews.Common.class)
 	private String mdp;
-	
 	@JsonView(JsonViews.Common.class)
 	private String prenom;
-	
 	@JsonView(JsonViews.Common.class)
 	private String nom;
-	
 	@JsonView(JsonViews.Common.class)
 	private String tel;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "adresse")
+	// @JsonView(JsonViews.ClientWithAdresse.class)
 	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Adresse adresse;
-	
+
 	@OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+	// @JsonView(JsonViews.ClientWithPanier.class)
 	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Panier panier;
-	
+
 	@Version
 	private int version;
 
