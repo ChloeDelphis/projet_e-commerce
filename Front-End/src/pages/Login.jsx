@@ -24,6 +24,10 @@ const Login = () => {
     body: JSON.stringify(adresse)
   };
 
+  const requestDeleteAdresse = {
+    method: 'DELETE'
+  }
+
   const requestOptionsPanier = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -41,18 +45,18 @@ const Login = () => {
   const requestOptionsClient = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...client})
+    body: JSON.stringify(client)
   };
 
   const requestUpdateAdresseClient = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...client})
+    body: JSON.stringify(client)
   };
 
   useEffect(() => {
     if (isNewClient) {
-      console.log(requestOptionsPanier.body);
+
       const fetchPostClient = () => {
         fetch('http://localhost:8080/site/client', requestUpdateAdresseClient).then(
           fetch('http://localhost:8080/site/panier', requestOptionsPanier)
@@ -60,10 +64,6 @@ const Login = () => {
       }
 
       fetchPostClient();
-
-      
-      console.log("OPTIONS PANIER",requestOptionsPanier.body);
-      console.log(client.email);
     }
   }, [isNewClient]);
 
@@ -100,10 +100,11 @@ const Login = () => {
            // this.setState({ errorMessage: error.toString() });
             console.error('There was an error!', error);
             setMsgErreurI("Il existe déjà un compte avec cette adresse mail");
+            // fetch(`http://localhost:8080/site/adresse/${newAdresse.id}`, requestDeleteAdresse);
         });
 
         setMsgErreurI("");
-          
+        // console.log("inscription réussi, veuillez vous connectez")
           setClient({ ...client, ['adresse']: newAdresse });
           // setClient({ ...client, ['adresse']: responseData });
           setIsNewClient(true);
@@ -128,6 +129,7 @@ const Login = () => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
+      console.log("DATAS : ",JSON.stringify(data));
       localStorage.setItem('client', JSON.stringify(data));
     }).then(async response => {
 
