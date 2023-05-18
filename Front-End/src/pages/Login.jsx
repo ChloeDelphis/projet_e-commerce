@@ -15,6 +15,9 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
+  const [msgErreurI, setMsgErreurI] = useState("");
+  const [msgErreurC, setMsgErreurC] = useState("");
+
   const requestOptionsAdresse = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +39,7 @@ const Login = () => {
   useEffect(() => {
     if (isNewClient) {
       const fetchPostClient = () => {
-        console.log(client);
+
         fetch('http://localhost:8080/site/client', requestUpdateAdresseClient);
       }
 
@@ -52,7 +55,6 @@ const Login = () => {
       .then(response => response.json())
       .then(responseData => {
         {
-          console.log(responseData);
           const newAdresse = {
             id: responseData,
             numero: adresse.numero,
@@ -62,20 +64,38 @@ const Login = () => {
             ville: adresse.ville
           }
 
-          fetch('http://localhost:8080/site/client', requestOptionsClient);
+          fetch('http://localhost:8080/site/client', requestOptionsClient).then(async response => {
 
+          const isJson = response.headers.get('content-type')?.includes('application/json');
+          const data = isJson && await response.json();
+
+          // check for error response
+          if (!response.ok) {
+              // get error message from body or default to response status
+              const error = (data && data.message) || response.status;
+              return Promise.reject(error);
+          }
+
+          }).catch(error => {
+           // this.setState({ errorMessage: error.toString() });
+            console.error('There was an error!', error);
+            setMsgErreurI("Il existe déjà un compte avec cette adresse mail");
+        });
+
+        setMsgErreurI("");
           setClient({ ...client, ['adresse']: newAdresse });
           // setClient({ ...client, ['adresse']: responseData });
           setIsNewClient(true);
 
         }
-      })
+      });
   }
 
   useEffect(() => {
     if (isClientLogged) {
       sessionStorage.setItem("client", client);
       console.log("ok");
+      setMsgErreurC("");
       navigate("/");
     }
   }, [isClientLogged])
@@ -88,6 +108,22 @@ const Login = () => {
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
 
+    }).then(async response => {
+
+      const isJson = response.headers.get('content-type')?.includes('application/json');
+      const data = isJson && await response.json();
+
+      // check for error response
+      if (!response.ok) {
+          // get error message from body or default to response status
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+      }
+
+      }).catch(error => {
+       // this.setState({ errorMessage: error.toString() });
+        console.error('There was an error!', error);
+        setMsgErreurC("Adresse mail ou mot de passe invalide");
     });
   }
 
@@ -101,9 +137,10 @@ const Login = () => {
 
               <h2>Login</h2>
 
+              <p className='msgError'>{msgErreurC}</p>
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"></input>
+                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]{1,}$" title="lorem@ispum.fr"></input>
                 <label htmlFor="">Email</label>
               </div>
 
@@ -129,9 +166,10 @@ const Login = () => {
 
               <h2>Sign in</h2>
 
+              <p className='msgError'>{msgErreurI}</p>
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setClient({ ...client, ['email']: e.target.value })} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]{2,}$" title="exemple : lorem@ispum.fr"></input>
+                <input type="email" required onChange={(e) => setClient({ ...client, ['email']: e.target.value })} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]{1,}$" title="exemple : lorem@ispum.fr"></input>
                 <label htmlFor="">Email</label>
               </div>
 
