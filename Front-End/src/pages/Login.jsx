@@ -30,7 +30,7 @@ const Login = () => {
       "total": 0,
       "lignes": [],
       "client": {
-          "email": client.email
+          "email": email
       }
   })
   };
@@ -38,33 +38,30 @@ const Login = () => {
   const requestOptionsClient = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(client)
+    body: JSON.stringify({ ...client, ['email']: email})
   };
 
   const requestUpdateAdresseClient = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(client)
+    body: JSON.stringify({ ...client, ['email']: email})
   };
 
   useEffect(() => {
     if (isNewClient) {
-      console.log("ISNEWCLIENT YES");
       const fetchPostClient = () => {
-        console.log(client);
         fetch('http://localhost:8080/site/client', requestUpdateAdresseClient);
       }
 
       fetchPostClient();
-      console.log("NOUVEAU PANIER : ",JSON.stringify(requestOptionsPanier.body));
-      fetch('http://localhost:8080/site/panier', requestOptionsPanier)
+      fetch('http://localhost:8080/site/panier', requestOptionsPanier);
     }
   }, [isNewClient]);
 
 
   const CreateClient = async (event) => {
     event.preventDefault();
-
+    
     fetch('http://localhost:8080/site/adresse', requestOptionsAdresse)
       .then(response => response.json())
       .then(responseData => {
@@ -80,7 +77,9 @@ const Login = () => {
           }
 
           fetch('http://localhost:8080/site/client', requestOptionsClient);
-          setClient({ ...client, ['adresse']: newAdresse });
+        
+          
+          setClient({ ...client, ['adresse']: newAdresse});
           // setClient({ ...client, ['adresse']: responseData });
           setIsNewClient(true);
 
@@ -103,7 +102,6 @@ const Login = () => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
-      console.log("DATAS : ",JSON.stringify(data));
       localStorage.setItem('client', JSON.stringify(data));
     });
   }
@@ -148,7 +146,7 @@ const Login = () => {
 
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
-                <input type="email" required onChange={(e) => setEmail(e.target.value)} pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"></input>
+                <input type="email" required onChange={(e) => setEmail(e.target.value)} /*pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]$" title="lorem@ispum.fr"*/></input>
                 <label htmlFor="">Email</label>
               </div>
 
