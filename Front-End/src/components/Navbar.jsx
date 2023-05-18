@@ -85,9 +85,9 @@ const Navbar = () => {
           <ul>
             <li><Link to={"/"}>Home</Link></li>
             <li>
-            <Link to={"/"} onMouseOver={() => handleMouseOver("products")} onMouseLeave={() => handleMouseLeave("products")} >Products</Link>
+            <Link to={"/cart/1"} onMouseOver={() => handleMouseOver("products")} onMouseLeave={() => handleMouseLeave("products")} >Products</Link>
             </li>
-            <li><Link to={"/"}>About</Link></li>
+            <li><Link to={"/cart/1"}>About</Link></li>
             <li><Link to={"/"}>Contact</Link></li>
             <div className="icons">
               <li className="icon account" onMouseOver={() => handleMouseOver("account")} onMouseLeave={() => handleMouseLeave("account")} ><Link to={"/"}><IonIcon icon={personOutline} /></Link>

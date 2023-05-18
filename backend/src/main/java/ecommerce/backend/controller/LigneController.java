@@ -48,7 +48,9 @@ public class LigneController {
 		return repo.findById(id).get();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("")
+	@JsonView(JsonViews.Common.class)
 	public Ligne create(@RequestBody Ligne l){
 		return repo.save(l);
 	}
@@ -58,9 +60,11 @@ public class LigneController {
 		repo.deleteById(id);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("")
 	@JsonView(JsonViews.Common.class)
-	public Ligne update(@RequestBody Ligne l, @PathVariable Integer id){
+	public Ligne update(@RequestBody Ligne l){
+		Integer id = l.getId(); 
+
 		Ligne lEnBase = repo.findById(id).orElseThrow(() -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		});

@@ -5,12 +5,12 @@ import { useParams } from "react-router-dom";
 // La page du detail d'un produit
 const ProductPage = () => {
   // id du produit à afficher
+
   const { id } = useParams();
 
   const [article, setArticle] = useState();
+  
   useEffect(() => {
-    console.log(id);
-
     fetch(`http://localhost:8080/site/articles/${id}`)
       .then((res) => res.json())
       .then((data) => setArticle(data));
@@ -54,6 +54,7 @@ const ProductPhoto = ({ data }) => {
 };
 
 const Shopping = ({ data }) => {
+  dataOne.article = data;
   return (
     <section className="shopping">
       <ProductDetails data={data} />
@@ -79,6 +80,139 @@ const ProductDetails = ({ data }) => {
 };
 
 const Buy = ({ data }) => {
+
+  const [quantite, setQuantite] = useState(1);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [panier, setPanier] = useState({});
+
+  const handleQuantityChange = (event) => {
+    let quantity = parseInt(event.target.value);
+    
+    if (!isNaN(quantity) && quantity >= 1) {
+      console.log("Bonjour",event.target.value)
+      
+      // console.log(article.ref)
+
+      // const newPanier = { ...panier };
+      // newPanier.lignes[index].quantite = quantity;
+      // newPanier.lignes[index].total = quantity * newPanier.lignes[index].article.prix;
+      // setPanier(newPanier);
+
+      // const nouvelleLigne = {
+      //   ...panier.lignes[index],
+      //   "panier": {"id": panier.id},
+      // };
+      // updateLigne(nouvelleLigne);
+    }
+  };
+
+  const updateLigne = async (nouvelleLigne) => {
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nouvelleLigne)
+    };
+    fetch(`http://localhost:8080/site/ligne/`, requestOptions);
+    setIsUpdate(!isUpdate);
+  }
+
+  const createLigne = async (nouvelleLigne) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nouvelleLigne)
+    };
+    fetch(`http://localhost:8080/site/ligne/`, requestOptions);
+    setIsUpdate(!isUpdate);
+  }
+
+  const handleAjout = (quantity) => {
+    console.log("la Quantite",quantity);
+    console.log("l'article",JSON.stringify(data.article));
+
+    
+
+    let isDouble = false;
+    if (panier.lignes) {
+      for (let i = 0; i < panier.lignes.length; i++) {
+        const ligne = panier.lignes[i];
+    
+        // console.log("LIGNE : ",JSON.stringify(ligne));
+        console.log("LIGNE : ",data.article.ref);
+        console.log("LIGNE : ",ligne.article.ref);
+        if (data.article.ref == ligne.article.ref) {
+          console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
+          isDouble = true;
+          const nouvelleLigne = {...ligne, "panier":{"id":1}};
+          nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
+          console.log("NOUVELLE LIGNE : ", JSON.stringify(nouvelleLigne), "QUANTITEEEE : ", quantity);
+          updateLigne(nouvelleLigne);
+          break;
+        }
+      }
+
+      if(!isDouble){
+        const nouvelleLigne = {
+          "id": 0,
+          "panier": {
+            "id": 1,
+          },
+          "article": data.article,
+          "quantite": quantity,
+          "total": data.article.prix*quantity,
+        }
+        console.log("La ligne a creer",data.article.ref)
+        createLigne(nouvelleLigne);
+      }
+    }
+    
+
+    // panier.lignes && panier.lignes.map((ligne, index) => {
+      
+    //   console.log("LIGNE : ",JSON.stringify(ligne));
+
+    //   if(data.article.ref === ligne.article.ref){
+    //     console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
+    //   }
+    //   else{
+    //     const nouvelleLigne = {
+    //       "id": 0,
+    //       "panier": {
+    //         "id": 1,
+    //       },
+    //       "article": data.article,
+    //       "quantite": quantity,
+    //       "total": data.article.prix*quantity,
+    //     }
+    //     console.log("La ligne a creer",data.article.ref)
+    //     createLigne(nouvelleLigne);
+    //     break;
+
+    //   }
+
+    // })
+    
+
+
+  };
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/site/panier/1`)
+      .then((res) => res.json())
+      .then(data => {
+        setPanier(data);
+        console.log(data);
+      }); 
+  }, []);
+
+  useEffect(() => {  
+    fetch(`http://localhost:8080/site/panier/1`)
+      .then((res) => res.json())
+      .then(data => {
+        sessionStorage.setItem('panier', JSON.stringify(data));
+        setPanier(data);
+      });   
+  }, [isUpdate]);
   return (
     <>
       <form className="shopping__buy" action="">
@@ -104,18 +238,13 @@ const Buy = ({ data }) => {
             Quantity
           </label>
           <br />
-          <input
-            className="shopping__buy__quantity__input"
-            name="quantity"
-            type="number"
-            min="0"
-            placeholder="1"
-          />
+          
+          <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" onChangeCapture={(event) => handleQuantityChange(event)}></input>
         </div>
-
-        <button className="shopping__buy__cart">Ajouter au panier</button>
+        
+        <button type="button" className="shopping__buy__cart" onClick={() => handleAjout(document.querySelector('.shopping__buy__quantity__input').value)}>Ajouter au panier</button>
         <br />
-        <button className="shopping__buy__buynow">Acheter maintenant</button>
+        <button type="button" className="shopping__buy__buynow">Acheter maintenant</button>
         <div className="shopping__buy__shipping">
           Livraison gratuite à partir de {data.shipping.freeShipping} € d'achat.
         </div>

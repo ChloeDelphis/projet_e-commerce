@@ -55,9 +55,10 @@ public class PanierController {
 		repo.deleteById(id);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("")
 	@JsonView(JsonViews.Common.class)
-	public Panier update(@RequestBody Panier p, @PathVariable Integer id){
+	public Panier update(@RequestBody Panier p){
+		Integer id = p.getId();
 		Panier pEnBase = repo.findById(id).orElseThrow(() -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		});
