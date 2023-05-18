@@ -85,6 +85,10 @@
     .list {
       width: 90%;
 
+      a {
+        color: black;
+      }
+
       &__item {
         width: 24% !important;
 

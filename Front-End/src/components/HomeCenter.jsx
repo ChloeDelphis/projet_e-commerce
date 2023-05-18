@@ -50,14 +50,16 @@ const DisplayHomeCenter = ({ articles, mea }) => {
         {articles &&
           articles.map((article, index) => (
             <div className="list__item" key={index}>
-              <img
-                className="list__item__img"
-                src={article.img}
-                alt="product_image"
-              />
-              <h3 className="list__item__name">{article.nom}</h3>
-              <h4 className="list__item__brand"> {article.marque}</h4>
-              <p className="list__item__price">{article.prix},00€</p>
+              <Link to={`/productpage/${article.ref}`}>
+                <img
+                  className="list__item__img"
+                  src={article.img}
+                  alt="product_image"
+                />
+                <h3 className="list__item__name">{article.nom}</h3>
+                <h4 className="list__item__brand"> {article.marque}</h4>
+                <p className="list__item__price">{article.prix},00€</p>
+              </Link>
             </div>
           ))}
       </div>
