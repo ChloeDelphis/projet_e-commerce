@@ -1,6 +1,7 @@
 .homepage_top {
   display: flex;
   flex-direction: row;
+  align-items: center;
   background-color: $beige;
   height: 70vh;
   padding: 0 10vw;
@@ -59,8 +60,7 @@
     justify-content: end;
 
     img {
-      width: cover;
-      height: auto;
+      height: 100%;
     }
   }
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-const Carousel = () => {
+const Carousel = ({ articles }) => {
   const [emblaRef] = useEmblaCarousel({ loop: false }, [Autoplay()]);
 
   // => enleve une erreur sur le navigateur
@@ -27,35 +27,28 @@ const Carousel = () => {
     });
   }, []);
 
+  console.log(articles);
+
   return (
-    <div className="embla" ref={emblaRef}>
-      <div className="embla__container">
-        <div className="embla__slide">
-          <Link to={"/productlist"}>
-            <img
-              src="./assets/components/carousel/1.jpg"
-              alt="image_carousel"
-            />
-          </Link>
-        </div>
-        <div className="embla__slide">
-          <Link to={"/productlist"}>
-            <img
-              src="./assets/components/carousel/2.jpg"
-              alt="image_carousel"
-            />
-          </Link>
-        </div>
-        <div className="embla__slide">
-          <Link to={"/productlist"}>
-            <img
-              src="./assets/components/carousel/3.jpg"
-              alt="image_carousel"
-            />
-          </Link>
-        </div>
-      </div>
-    </div>
+    <>
+      {articles &&
+        articles
+          .filter((val) => val.mea === 1)
+          .map((val, index) => (
+            <div key={index} className="embla" ref={emblaRef}>
+              <div className="embla__container">
+                <div className="embla__slide">
+                  <Link to={"/productlist"}>
+                    <img
+                      src="./assets/components/carousel/2.jpg"
+                      alt="image_carousel"
+                    />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+    </>
   );
 };
 

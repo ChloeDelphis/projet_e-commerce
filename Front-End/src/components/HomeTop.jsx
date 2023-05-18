@@ -12,6 +12,8 @@ const HomeTop = () => {
       .then((data) => setCategorieMea(data));
   }, []);
 
+  // console.log(categorieMea);
+
   return (
     <div className="homepage_top">
       {/* partie gauche */}
@@ -30,7 +32,7 @@ const HomeTop = () => {
 
       {/* partie droite */}
       <div className="top_right">
-        <Carousel />
+        <Carousel articles={categorieMea && categorieMea.articles} />
       </div>
     </div>
   );
