@@ -102,7 +102,8 @@ const Buy = ({ data }) => {
     let quantity = parseInt(event.target.value);
     
     if (!isNaN(quantity) && quantity >= 1) {
-      console.log("Bonjour",event.target.value)
+      // console.log("Bonjour",event.target.value)
+      console.log("clientJSON", clientJSON);
       
       // console.log(article.ref)
 

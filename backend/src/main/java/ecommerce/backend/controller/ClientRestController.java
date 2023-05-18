@@ -83,6 +83,7 @@ public class ClientRestController {
 
 	@CrossOrigin
 	@PostMapping("")
+	@JsonView(JsonViews.Common.class)
 	public void create(@RequestBody Client p) {
 		repo.save(p);
 	}

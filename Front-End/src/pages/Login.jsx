@@ -41,33 +41,36 @@ const Login = () => {
   const requestOptionsClient = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(client)
+    body: JSON.stringify({ ...client})
   };
 
   const requestUpdateAdresseClient = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(client)
+    body: JSON.stringify({ ...client})
   };
 
   useEffect(() => {
     if (isNewClient) {
-      console.log("ISNEWCLIENT YES");
+      console.log(requestOptionsPanier.body);
       const fetchPostClient = () => {
-
-        fetch('http://localhost:8080/site/client', requestUpdateAdresseClient);
+        fetch('http://localhost:8080/site/client', requestUpdateAdresseClient).then(
+          fetch('http://localhost:8080/site/panier', requestOptionsPanier)
+        );
       }
 
       fetchPostClient();
-      console.log("NOUVEAU PANIER : ",JSON.stringify(requestOptionsPanier.body));
-      fetch('http://localhost:8080/site/panier', requestOptionsPanier)
+
+      
+      console.log("OPTIONS PANIER",requestOptionsPanier.body);
+      console.log(client.email);
     }
   }, [isNewClient]);
 
 
   const CreateClient = async (event) => {
     event.preventDefault();
-
+    
     fetch('http://localhost:8080/site/adresse', requestOptionsAdresse)
       .then(response => response.json())
       .then(responseData => {
@@ -100,6 +103,7 @@ const Login = () => {
         });
 
         setMsgErreurI("");
+          
           setClient({ ...client, ['adresse']: newAdresse });
           // setClient({ ...client, ['adresse']: responseData });
           setIsNewClient(true);
@@ -124,7 +128,6 @@ const Login = () => {
       
       setClient(JSON.stringify(data))
       setIsClientLogged(true);
-      console.log("DATAS : ",JSON.stringify(data));
       localStorage.setItem('client', JSON.stringify(data));
     }).then(async response => {
 

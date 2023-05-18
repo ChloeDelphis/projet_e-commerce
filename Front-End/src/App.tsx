@@ -35,7 +35,7 @@ const App = () => {
           <Route path="/profil" element={<Profil />} />
           <Route path="/about" element={<About />} />
           <Route path="/about" element={<Contact />} />
-          <Route path="/cart/:id" element={<Cart />} />
+          <Route path="/cart/" element={<Cart />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>
