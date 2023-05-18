@@ -12,23 +12,33 @@ const HomeCenter = () => {
       .then((data) => setArticles(data));
   }, []);
 
+  // Traitement nouveautés
+  let nouveautes = null;
+
+  if (articles) {
+    nouveautes = [...articles].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+    nouveautes = nouveautes.slice(0, 4);
+  }
+
+  // Traitement petits prix
+  let lowprices = null;
+
+  if (articles) {
+    lowprices = [...articles].sort((a, b) => a.prix - b.prix);
+    lowprices = lowprices.slice(0, 4);
+  }
+
   return (
     <div className="homepage_center">
-      <DisplayHomeCenter articles={articles} mea={dataMea.nouveautes} />
+      <DisplayHomeCenter articles={nouveautes} mea={dataMea.nouveautes} />
+      <DisplayHomeCenter articles={lowprices} mea={dataMea.lowprices} />
     </div>
   );
 };
 
 const DisplayHomeCenter = ({ articles, mea }) => {
-  let sortedArticles = null;
-
-  if (articles) {
-    sortedArticles = [...articles].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
-    sortedArticles = sortedArticles.slice(0, 4);
-  }
-
   return (
     <div className="container">
       <div className="header">
@@ -37,8 +47,8 @@ const DisplayHomeCenter = ({ articles, mea }) => {
         </div>
       </div>
       <div className="list">
-        {sortedArticles &&
-          sortedArticles.map((article, index) => (
+        {articles &&
+          articles.map((article, index) => (
             <div className="list__item" key={index}>
               <img
                 className="list__item__img"
@@ -59,72 +69,8 @@ const dataMea = {
   nouveautes: {
     titre: "Nos dernières nouveautés",
   },
-  petitsprix: {
+  lowprices: {
     titre: "Nos petits prix",
-  },
-};
-
-const dataTrending = {
-  header: {
-    top: "Trending",
-    center: "Trending Products",
-    bottom: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  products: {
-    list: [
-      {
-        img: "./assets/components/homecenter/product_01.png",
-        name: "Product name",
-        price: 55.0,
-      },
-      {
-        img: "./assets/components/homecenter/product_02.png",
-        name: "Product name",
-        price: 55.0,
-      },
-      {
-        img: "./assets/components/homecenter/product_03.png",
-        name: "Product name",
-        price: 55.0,
-      },
-      {
-        img: "./assets/components/homecenter/product_04.png",
-        name: "Product name",
-        price: 55.0,
-      },
-    ],
-  },
-};
-
-const dataOffers = {
-  header: {
-    top: "Offers & Promotion",
-    center: "Offers & Promotion Products",
-    bottom: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  products: {
-    list: [
-      {
-        img: "./assets/components/homecenter/product_05.png",
-        name: "Product name",
-        price: 55.0,
-      },
-      {
-        img: "./assets/components/homecenter/product_06.png",
-        name: "Product name",
-        price: 55.0,
-      },
-      {
-        img: "./assets/components/homecenter/product_07.png",
-        name: "Product name",
-        price: 55.0,
-      },
-      {
-        img: "./assets/components/homecenter/product_08.png",
-        name: "Product name",
-        price: 55.0,
-      },
-    ],
   },
 };
 
