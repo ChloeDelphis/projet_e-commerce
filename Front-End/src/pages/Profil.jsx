@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import CommandesClient from '../components/CommandesClient';
+import { useNavigate } from 'react-router-dom';
 
 const CardInfo = ({ data, type }) => {
     return (
@@ -225,14 +226,24 @@ const CardClient = ({ client }) => {
 
 // La page de profil du client
 const Profil = () => {
+    const navigate = useNavigate();
     const [client, setClient] = useState(null);
 
     useEffect(() => {
-        if (client === null)
-            setClient(JSON.parse(sessionStorage.getItem("client")));
+        const storedClient = JSON.parse(sessionStorage.getItem("client"));
+        // on redirige le user vers la page de login s'il n'est pas en session
+        if (!storedClient) {
+            navigate('/login');
+        } else {
+            setClient(storedClient);
+        }
+    }, [navigate]);
 
-        if (client) console.log(client);
-    }, [client])
+    useEffect(() => {
+        if (client) {
+            console.log(client);
+        }
+    }, [client]);
 
     const dataPoints = {
         nbCommandes: 5,
