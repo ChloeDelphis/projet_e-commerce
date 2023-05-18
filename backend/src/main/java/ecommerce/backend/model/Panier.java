@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
@@ -26,7 +28,7 @@ public class Panier {
 	@JsonView(JsonViews.Common.class)
 	private double total;
 	
-	@OneToMany(mappedBy = "panier")
+	@OneToMany(mappedBy = "panier", cascade = CascadeType.REMOVE)
 	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class})
 	private List<Ligne> lignes;
 	
@@ -36,6 +38,7 @@ public class Panier {
 	private Client client;
 	
 	@Version
+	@JsonView(JsonViews.Common.class)
 	private int version;
 
 	public Client getClient() {
@@ -47,6 +50,7 @@ public class Panier {
 	}
 
 	public int getId() {
+		calculateTotal();
 		return id;
 	}
 
@@ -74,7 +78,7 @@ public class Panier {
 		return lignes;
 	}
 
-	public void setLignes(ArrayList<Ligne> lignes) {
+	public void setLignes(List<Ligne> lignes) {
 		this.lignes = lignes;
 	}
 
@@ -85,6 +89,18 @@ public class Panier {
 	public void setVersion(int version) {
 		this.version = version;
 	}
+	
+	@JsonIgnore
+    public void calculateTotal() {
+        int prixTotal = 0;
+        if(lignes.size()>0){
+	        for (Ligne ligne : lignes) {
+				prixTotal += ligne.getTotal();
+			}
+        }
+        
+        this.total = prixTotal;
+    }
 
 	public Panier() {
 		super();
@@ -97,10 +113,12 @@ public class Panier {
 		this.date = date;
 		this.total = total;
 		this.lignes = lignes;
+		calculateTotal();
 	}
 
 	@Override
 	public String toString() {
+		calculateTotal();
 		return "Panier [client=" + client + ", id=" + id + ", date=" + date + ", total="
 				+ total + ", lignes=" + lignes + ", version=" + version + "]";
 	}

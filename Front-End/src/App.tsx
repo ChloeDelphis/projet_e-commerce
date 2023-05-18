@@ -12,6 +12,7 @@ import ProductCategories from "./pages/ProductCategories";
 import Profil from "./pages/Profil";
 import ProductsByCategory from "./pages/ProductsByCategory";
 
+
 const App = () => {
   return (
     <div className="app">
