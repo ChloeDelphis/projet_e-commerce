@@ -89,7 +89,7 @@ const Navbar = () => {
           <div className="nav-links">
             <ul>
               <li>
-                <Link to={"/"}>Home</Link>
+                <Link to={"/"}>Accueil</Link>
               </li>
               <li>
                 <Link
@@ -97,7 +97,7 @@ const Navbar = () => {
                   onMouseOver={() => handleMouseOver("products")}
                   onMouseLeave={() => handleMouseLeave("products")}
                 >
-                  Products
+                  Produits
                 </Link>
               </li>
               <li>
