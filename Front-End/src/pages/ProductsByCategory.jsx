@@ -22,7 +22,7 @@ const ProductsByCategory = () => {
     fetch(`http://localhost:8080/site/categories/${id}`)
       .then((res) => res.json())
       .then((data) => setCategorie(data));
-  }, []);
+  }, [id]);
 
   return (
     <div className="productsbycategory">

@@ -56,131 +56,129 @@ const Navbar = () => {
   }, []);
 
   return (
-    <>
-      <div className="container-header">
-        <header className="header">
-          <div className="top">
-            <img
-              src="../../../assets/components/footer/logo.png"
-              alt="LOGO"
-              className="logo"
-            />
-            {/* <h1 className="title">Fashion Store</h1> */}
-            <div className="icons-mobile">
-              <div className="mobile-icon account">
-                <Link to={"/"}>
-                  <IonIcon icon={personOutline} />
-                </Link>
-              </div>
-              <div className="mobile-icon cart">
-                <Link to={"/"}>
-                  <IonIcon icon={cartOutline} />
-                </Link>
-                <h2>0</h2>
-              </div>
+    <div className="container-header">
+      <header className="header">
+        <div className="top">
+          <img
+            src="../../../assets/components/footer/logo.png"
+            alt="LOGO"
+            className="logo"
+          />
+          {/* <h1 className="title">Fashion Store</h1> */}
+          <div className="icons-mobile">
+            <div className="mobile-icon account">
+              <Link to={"/"}>
+                <IonIcon icon={personOutline} />
+              </Link>
             </div>
-            <img
-              src="../../../assets/components/navbar/liste.png"
-              alt="menu Hamburger_icon"
-              className="menu-hamburger"
-            />
+            <div className="mobile-icon cart">
+              <Link to={"/"}>
+                <IonIcon icon={cartOutline} />
+              </Link>
+              <h2>0</h2>
+            </div>
           </div>
+          <img
+            src="../../../assets/components/navbar/liste.png"
+            alt="menu Hamburger_icon"
+            className="menu-hamburger"
+          />
+        </div>
 
-          <nav className="navbar">
-            <div className="nav-links">
-              <ul>
-                <li>
-                  <Link to={"/"}>Home</Link>
-                </li>
-                <li>
-                  <Link
-                    to={"/"}
-                    onMouseOver={() => handleMouseOver("products")}
-                    onMouseLeave={() => handleMouseLeave("products")}
-                  >
-                    Products
+        <nav className="navbar">
+          <div className="nav-links">
+            <ul>
+              <li>
+                <Link to={"/"}>Home</Link>
+              </li>
+              <li>
+                <Link
+                  to={"/productcategories"}
+                  onMouseOver={() => handleMouseOver("products")}
+                  onMouseLeave={() => handleMouseLeave("products")}
+                >
+                  Products
+                </Link>
+              </li>
+              <li>
+                <Link to={"/about"}>À propos</Link>
+              </li>
+              <li>
+                <Link to={"/contact"}>Contact</Link>
+              </li>
+              <div className="icons">
+                <li
+                  className="icon account"
+                  onMouseOver={() => handleMouseOver("account")}
+                  onMouseLeave={() => handleMouseLeave("account")}
+                >
+                  <Link to={"/profil"}>
+                    <IonIcon icon={personOutline} />
                   </Link>
+                  <div className={submenuAccount}>
+                    <ul>
+                      <li>
+                        <Link to={"/login"}>Connexion</Link>
+                      </li>
+                      <li>
+                        <Link to={"/profil"}>Mon compte</Link>
+                      </li>
+                      <li>
+                        <Link to={"/cart"}>Mes commandes</Link>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
-                <li>
-                  <Link to={"/"}>About</Link>
+                <li className="icon cart">
+                  <Link to={"/cart"}>
+                    <IonIcon icon={cartOutline} />
+                  </Link>
+                  <h2>0</h2>
                 </li>
-                <li>
-                  <Link to={"/"}>Contact</Link>
-                </li>
-                <div className="icons">
-                  <li
-                    className="icon account"
-                    onMouseOver={() => handleMouseOver("account")}
-                    onMouseLeave={() => handleMouseLeave("account")}
-                  >
-                    <Link to={"/"}>
-                      <IonIcon icon={personOutline} />
-                    </Link>
-                    <div className={submenuAccount}>
-                      <ul>
-                        <li>
-                          <Link to={"/"}>Connexion</Link>
-                        </li>
-                        <li>
-                          <Link to={"/"}>Mon compte</Link>
-                        </li>
-                        <li>
-                          <Link to={"/"}>Mes commandes</Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li className="icon cart">
-                    <Link to={"/"}>
-                      <IonIcon icon={cartOutline} />
-                    </Link>
-                    <h2>0</h2>
-                  </li>
-                </div>
-              </ul>
-            </div>
-          </nav>
-        </header>
-        <div
-          className={submenuProducts}
-          onMouseOver={() => handleMouseOver("products")}
-          onMouseLeave={() => handleMouseLeave("products")}
-        >
-          <div className="item">
-            <h3>Les hauts</h3>
-            <ul>
-              <li>
-                <Link to={"/category/1"}>T-shirts</Link>
-              </li>
-              <li>
-                <Link to={"/category/2"}>Pulls</Link>
-              </li>
+              </div>
             </ul>
           </div>
+        </nav>
+      </header>
+      <div
+        className={submenuProducts}
+        onMouseOver={() => handleMouseOver("products")}
+        onMouseLeave={() => handleMouseLeave("products")}
+      >
+        <div className="item">
+          <h3>Les hauts</h3>
+          <ul>
+            <li>
+              <Link to={"/category/1"}>T-shirts</Link>
+            </li>
+            <li>
+              <Link to={"/category/2"}>Pulls</Link>
+            </li>
+          </ul>
+        </div>
 
-          <div className="item">
-            <h3>Les bas</h3>
-            <ul>
-              <li>
-                <Link to={"/category/3"}>Pantalons</Link>
-              </li>
-              <li>
-                <Link to={"/category/4"}>Jupes</Link>
-              </li>
-            </ul>
-          </div>
+        <div className="item">
+          <h3>Les bas</h3>
+          <ul>
+            <li>
+              <Link to={"/category/3"}>Pantalons</Link>
+            </li>
+            <li>
+              <Link to={"/category/4"}>Jupes</Link>
+            </li>
+          </ul>
+        </div>
 
-          <div className="item">
-            <h3>Habillée de haut en bas !</h3>
-            <ul>
-              <li>
-                <Link to={"/category/5"}>Robes</Link>
-              </li>
-            </ul>
-          </div>
+        <div className="item">
+          <h3>Habillée de haut en bas !</h3>
+          <ul>
+            <li>
+              <Link to={"/category/5"}>Robes</Link>
+            </li>
+          </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
