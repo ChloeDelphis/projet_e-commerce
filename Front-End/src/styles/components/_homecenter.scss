@@ -33,7 +33,6 @@
 
     // Style de la liste
     .list {
-      color: blue;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-evenly;
@@ -43,6 +42,7 @@
         flex-direction: column;
         width: 49%;
         margin: 5vmin 0;
+        cursor: pointer;
 
         > * {
           padding: 1vmin 0 0 0;
@@ -71,10 +71,22 @@
 }
 
 @media (min-width: 1024px) {
-  .homepage-center {
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .header {
+      align-self: flex-start;
+    }
+  }
+
+  .homepage_center {
     .list {
+      width: 90%;
+
       &__item {
-        width: 24%;
+        width: 24% !important;
 
         &__img {
           border-radius: 3vmin;
@@ -84,14 +96,14 @@
         }
 
         &__name {
-          font-size: 22px;
+          font-size: 22px !important;
         }
         &__brand {
-          font-size: 17px;
+          font-size: 17px !important;
           color: $orange;
         }
         &__price {
-          font-size: 17px;
+          font-size: 17px !important;
         }
       }
     }
