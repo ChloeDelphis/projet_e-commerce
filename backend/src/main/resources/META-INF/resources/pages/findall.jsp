@@ -58,15 +58,21 @@
 					<tr>
 
 						<c:forEach var="field" items="${object['class'].declaredFields}">
-
+							<c:if test="${field.name != 'articles' }">
 							<c:set var="idType" value="${object['class'].declaredFields[0].name}" /> 
 							<c:set var="idValue" value="${object[object['class'].declaredFields[0].name]}" />
-							<c:if test="${field.name != 'articles' }"></c:if>
+							
 								<td class="editable">${object[field.name]}</td>
-
+							</c:if>
 						</c:forEach>
 						<td><input type="button" class="btn btn-warning" value="Modifier"></td>
-						<td><input type="button" class="btn btn-danger" value="Supprimer"></td>
+						<td>
+							<form action="${removeMethod}" method="post">       	 
+	 				        	<input type="hidden" id="${idType}" name="${idType}" value="${idValue }" />
+								<input type="submit" class="btn btn-danger" value="Supprimer">
+							</form>
+						</td>
+							
 					<tr>
 				</c:forEach>
 			</table>
