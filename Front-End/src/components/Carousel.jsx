@@ -27,7 +27,7 @@ const Carousel = ({ articles }) => {
     });
   }, []);
 
-  console.log(articles);
+  // console.log(articles);
 
   return (
     <>

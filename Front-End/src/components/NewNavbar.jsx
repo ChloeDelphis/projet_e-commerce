@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
+import { useUser } from "../context/UserContext";
+
 const NewNavbar = () => {
+    const { user, handleLogout, cartQuantity, emptyCart } = useUser();
+
     const navigate = useNavigate();
     const [isActive, setIsActive] = useState(false);
     const [categories, setCategories] = useState(null);
@@ -13,6 +17,8 @@ const NewNavbar = () => {
 
     const deleteUserFromSessionStorage = () => {
         sessionStorage.removeItem('client');
+        handleLogout();
+        emptyCart();
     };
 
     useEffect(() => {
@@ -20,10 +26,6 @@ const NewNavbar = () => {
             .then((res) => res.json())
             .then((data) => setCategories(data));
     }, []);
-
-    useEffect(() => {
-        console.log(categories);
-    }, [categories])
 
     return (
         <>
@@ -115,7 +117,7 @@ const NewNavbar = () => {
                                             ? "menu-list-item"
                                             : "menu-list-item"
                                     }
-                                    to={`${JSON.parse(sessionStorage.getItem("client")) ? "/cart" : "/login"}`}
+                                    to={`${user != null ? "/cart" : "/login"}`}
                                 >
 
                                     <span>
@@ -123,7 +125,7 @@ const NewNavbar = () => {
                                     </span>
                                     <img src="../../../assets/components/navbar/shopping-cart.png"
                                         alt="cart" />
-                                    <div className="nb-items-cart">{0}</div>
+                                    <div className="nb-items-cart">{cartQuantity}</div>
                                 </NavLink>
                             </li>
                             <li onClick={() => setIsActive(false)}>
@@ -133,7 +135,7 @@ const NewNavbar = () => {
                                             ? "nav-active menu-list-item"
                                             : "menu-list-item"
                                     }
-                                    to={`${JSON.parse(sessionStorage.getItem("client")) ? "/profil" : "/login"}`}
+                                    to={`${user != null ? "/profil" : "/login"}`}
                                 >
                                     <div className="user-icon-container">
                                         <img src="../../../assets/components/navbar/icon-user.png"
@@ -143,7 +145,7 @@ const NewNavbar = () => {
                             </li>
 
                             {
-                                JSON.parse(sessionStorage.getItem("client")) != null &&
+                                user != null &&
                                 <li onClick={() => {
                                     deleteUserFromSessionStorage();
                                     navigate("/");

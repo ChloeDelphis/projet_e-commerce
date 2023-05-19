@@ -1,10 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Commande from "../classes/Commande";
+
+import { useUser } from "../context/UserContext";
 
 // La page du Panier (shopping cart)
 const Cart = () => {
+  const { user, addQuantity, removeQuantity } = useUser();
+  const navigate = useNavigate();
 
   const [client, setClient] = useState({});
   const clientJSON = JSON.parse(sessionStorage.getItem("client"));
@@ -14,15 +18,13 @@ const Cart = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [isCommande, setIsCommande] = useState(0);
 
-  
-
   function handleCommandClick() {
     const currentDate = new Date().toISOString();
 
     let detail = "";
 
     panier.lignes && panier.lignes.map((ligne, index) => {
-      
+
       detail += ligne.quantite + "/" + ligne.article.ref + " ";
       supprimerLigne(ligne.id);
     })
@@ -41,7 +43,7 @@ const Cart = () => {
     };
     fetch(`http://localhost:8080/site/commandes/`, requestOptions);
 
-    setIsCommande(isCommande+1);    
+    setIsCommande(isCommande + 1);
   }
 
   const updateLigne = async (nouvelleLigne) => {
@@ -55,12 +57,15 @@ const Cart = () => {
   }
 
   const supprimerLigne = (index) => {
+    removeQuantity(panier.lignes[0].quantite);
+
     const requestOptions = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-  };
-  fetch(`http://localhost:8080/site/ligne/${index}`, requestOptions);
-  setIsUpdate(!isUpdate);
+    };
+    fetch(`http://localhost:8080/site/ligne/${index}`, requestOptions);
+    setIsUpdate(!isUpdate);
+
   }
 
 
@@ -74,25 +79,26 @@ const Cart = () => {
 
       const nouvelleLigne = {
         ...panier.lignes[index],
-        "panier": {"id": panier.id},
+        "panier": { "id": panier.id },
       };
       updateLigne(nouvelleLigne);
     }
   };
 
-  function handleMinusClick(index : Number) {
-    if (!isNaN(panier.lignes[index].quantite) && panier.lignes[index].quantite > 1) {      
-      const newPanier = { ...panier };      
+  function handleMinusClick(index: Number) {
+    if (!isNaN(panier.lignes[index].quantite) && panier.lignes[index].quantite > 1) {
+      const newPanier = { ...panier };
       newPanier.lignes[index].quantite = newPanier.lignes[index].quantite - 1;
       newPanier.lignes[index].total = newPanier.lignes[index].quantite * newPanier.lignes[index].article.prix;
       setPanier(newPanier);
-      
+
       const nouvelleLigne = {
         ...panier.lignes[index],
-        "panier": {"id": panier.id},
+        "panier": { "id": panier.id },
       };
 
       updateLigne(nouvelleLigne);
+      removeQuantity(1);
     }
   }
 
@@ -103,108 +109,114 @@ const Cart = () => {
     setPanier(newPanier);
     const nouvelleLigne = {
       ...panier.lignes[index],
-      "panier": {"id": panier.id},
+      "panier": { "id": panier.id },
     };
-    updateLigne(nouvelleLigne);    
+    updateLigne(nouvelleLigne);
+    addQuantity(1);
   }
 
 
-  useEffect(() => {  
-      if(Object.keys(panier).length !== 0){
-        
-        const requestOptions = {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(panier)
-        };
-        fetch(`http://localhost:8080/site/panier/`, requestOptions);
-      }
+  useEffect(() => {
+    // if (user == null)
+    //   navigate("/login");
+
+    console.log(user);
+
+    if (Object.keys(panier).length !== 0) {
+
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(panier)
+      };
+      fetch(`http://localhost:8080/site/panier/`, requestOptions);
+    }
   }, [panier]);
 
-  useEffect(() => {  
+  useEffect(() => {
     fetch(`http://localhost:8080/site/panier/${id}`)
       .then((res) => res.json())
       .then(data => {
         // sessionStorage.setItem('panier', JSON.stringify(data));
         setPanier(data);
-      });   
+      });
   }, []);
 
 
-  useEffect(() => {  
+  useEffect(() => {
     fetch(`http://localhost:8080/site/panier/${id}`)
       .then((res) => res.json())
       .then(data => {
         setPanier(data);
 
-      });   
+      });
   }, [isUpdate/*,panier*/]);
-  
-  
+
+
   // if (panier.length > 0) {
-    return (
-      <>
+  return (
+    <>
 
-          <div className="recap-panier">
-            
-            <div className="articles">
-              {
-              
-              panier.lignes && panier.lignes.map((ligne, index) => {  
-                
-                  let linkProduct = "productpage/" + ligne.article.ref;
-                  return(
-                    
-                    <div key={ligne.id} className="article">
+      <div className="recap-panier">
 
-                      <img src={ligne.article.img} alt="Image" />
-                      
-                      <div className="description">
+        <div className="articles">
+          {
 
-                        <h3> <a href={linkProduct}>{ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}</a> </h3>
+            panier.lignes && panier.lignes.map((ligne, index) => {
 
-                        <div className="detail">
+              let linkProduct = "productpage/" + ligne.article.ref;
+              return (
 
-                          <label>Taille : </label>
-                          <select id="taille" name="taille">
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                          </select>
+                <div key={ligne.id} className="article">
 
-                          <h4>Prix : {ligne.article.prix}€</h4>
+                  <img src={ligne.article.img} alt="Image" />
 
-                          <label>Quantité :</label>
-                          <div className="quantity-input">
-                            <button className="btn-minus" onClick={ () => handleMinusClick(index)}>-</button>
-                            <input type="number" id="quantity" name="quantity" value={panier.lignes[index].quantite} onChangeCapture={(event) => handleQuantityChange(event, index)}></input>
-                            <button className="btn-plus" onClick={() => handlePlusClick(index)}>+</button>
-                          </div>
+                  <div className="description">
 
-                          <h4>Total :{panier.lignes[index].total}€</h4>
-                        </div>
-                        <h5 onClick={ () => supprimerLigne(ligne.id)}>Supprimer</h5>
+                    <h3> <a href={linkProduct}>{ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}</a> </h3>
+
+                    <div className="detail">
+
+                      <label>Taille : </label>
+                      <select id="taille" name="taille">
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                      </select>
+
+                      <h4>Prix : {ligne.article.prix}€</h4>
+
+                      <label>Quantité :</label>
+                      <div className="quantity-input">
+                        <button className="btn-minus" onClick={() => handleMinusClick(index)}>-</button>
+                        <input type="number" id="quantity" name="quantity" value={panier.lignes[index].quantite} onChangeCapture={(event) => handleQuantityChange(event, index)}></input>
+                        <button className="btn-plus" onClick={() => handlePlusClick(index)}>+</button>
                       </div>
 
+                      <h4>Total :{panier.lignes[index].total}€</h4>
                     </div>
-                  )
-                  }
-                )
-              }
-            </div>
+                    <h5 onClick={() => supprimerLigne(ligne.id)}>Supprimer</h5>
+                  </div>
 
-            <div className="paiement">
-                <h2>Résumé de votre commande</h2>
-                <div className="total">
-                  <h4>Total : </h4>
-                  {console.log("Le panier actuel : ",panier.total)}
-                  <h3>{panier.total}€</h3>
                 </div>
-                <button onClick={ () => handleCommandClick()}>Passer à la caisse</button>
-            </div>
+              )
+            }
+            )
+          }
+        </div>
+
+        <div className="paiement">
+          <h2>Résumé de votre commande</h2>
+          <div className="total">
+            <h4>Total : </h4>
+            {console.log("Le panier actuel : ", panier.total)}
+            <h3>{panier.total}€</h3>
           </div>
-      </>
-    )
+          <button onClick={() => handleCommandClick()}>Passer à la caisse</button>
+        </div>
+      </div>
+    </>
+  )
   // }
   // else{
   //   return(

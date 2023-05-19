@@ -3,8 +3,12 @@ import { IonIcon } from '@ionic/react';
 import { useNavigate } from "react-router-dom";
 import { mailOutline, lockClosedOutline, personOutline, locationOutline, callOutline } from 'ionicons/icons';
 
+import { useUser } from "../context/UserContext";
+
 // La page de Login (connexion)
 const Login = () => {
+  const { user, handleLogin } = useUser();
+
   const navigate = useNavigate();
   const [client, setClient] = useState({});
   // const [isNewClient, setIsNewClient] = useState(false);
@@ -32,14 +36,14 @@ const Login = () => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-    
+
       "date": new Date().toISOString(),
       "total": 0,
       "lignes": [],
       "client": {
-          "email": client.email
+        "email": client.email
       }
-  })
+    })
   };
 
   // const requestUpdateAdresseClient = {
@@ -62,7 +66,7 @@ const Login = () => {
 
   const CreateClient = async (event) => {
     event.preventDefault();
-    
+
     fetch('http://localhost:8080/site/adresse', requestOptionsAdresse)
       .then(response => response.json())
       .then(responseData => {
@@ -78,7 +82,7 @@ const Login = () => {
 
           const nouveauClient = { ...client };
           nouveauClient.adresse = newAdresse;
-          
+
 
 
           const requestOptionsClient = {
@@ -89,32 +93,32 @@ const Login = () => {
 
           fetch('http://localhost:8080/site/client', requestOptionsClient).then(async response => {
 
-          console.log(client.email);
-          fetch('http://localhost:8080/site/panier', requestOptionsPanier);
-          const isJson = response.headers.get('content-type')?.includes('application/json');
-          const data = isJson && await response.json();
-          
-          // check for error response
-          if (!response.ok) {
+            console.log(client.email);
+            fetch('http://localhost:8080/site/panier', requestOptionsPanier);
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson && await response.json();
+
+            // check for error response
+            if (!response.ok) {
               // get error message from body or default to response status
               const error = (data && data.message) || response.status;
               return Promise.reject(error);
-          }
+            }
 
           }).catch(error => {
-           // this.setState({ errorMessage: error.toString() });
+            // this.setState({ errorMessage: error.toString() });
             console.error('There was an error!', error);
             setMsgErreurI("Il existe déjà un compte avec cette adresse mail");
             // fetch(`http://localhost:8080/site/adresse/${newAdresse.id}`, requestDeleteAdresse);
-        });
+          });
 
-        setMsgErreurI("");
-        console.log("inscription réussi, veuillez vous connectez");
+          setMsgErreurI("");
+          console.log("inscription réussi, veuillez vous connectez");
           setClient({ ...client, ['adresse']: newAdresse });
-        console.log(client);
+          console.log(client);
           // setClient({ ...client, ['adresse']: responseData });
           setIsClientLogged(true);
-          
+
 
         }
       });
@@ -123,7 +127,10 @@ const Login = () => {
   useEffect(() => {
     if (isClientLogged) {
       sessionStorage.setItem("client", JSON.stringify(client));
-      console.log("ok");
+
+      // add user in the user context
+      handleLogin(client);
+
       setMsgErreurC("");
       navigate("/");
     }
@@ -132,11 +139,14 @@ const Login = () => {
   const connexion = (event) => {
     event.preventDefault();
 
-      fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
-      
-      setClient(data)
+    fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
+
+      setClient(data);
       setIsClientLogged(true);
       localStorage.setItem('client', JSON.stringify(data));
+
+      // add user in the user context
+      handleLogin(data);
     }).then(async response => {
 
       const isJson = response.headers.get('content-type')?.includes('application/json');
@@ -144,17 +154,24 @@ const Login = () => {
 
       // check for error response
       if (!response.ok) {
-          // get error message from body or default to response status
-          const error = (data && data.message) || response.status;
-          return Promise.reject(error);
+        // get error message from body or default to response status
+        const error = (data && data.message) || response.status;
+        return Promise.reject(error);
       }
 
-      }).catch(error => {
-       // this.setState({ errorMessage: error.toString() });
-        console.error('There was an error!', error);
-        setMsgErreurC("Adresse mail ou mot de passe invalide");
+    }).catch(error => {
+      // this.setState({ errorMessage: error.toString() });
+      console.error('There was an error!', error);
+      setMsgErreurC("Adresse mail ou mot de passe invalide");
     });
   }
+
+  useEffect(() => {
+    if (user != null) {
+      console.log("TEST: ", user);
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <>
