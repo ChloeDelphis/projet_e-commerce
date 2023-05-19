@@ -30,11 +30,11 @@
 	
 		
 		<table>
-	        <c:forEach var="field" items="${object['class'].declaredFields}">
-	        	<tr>
-	        		<th>${field.name}:</th>
-	        	</tr>
-	        </c:forEach>		
+			<tr>
+		        <c:forEach var="field" items="${object['class'].declaredFields}">
+		        		<th>${field.name}:</th>
+		        </c:forEach>	
+	        </tr>	
 	        
 		    <c:forEach items="${liste}" var="item">
 		    	<tr>
