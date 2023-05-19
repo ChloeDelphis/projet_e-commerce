@@ -9,9 +9,9 @@
 <title>FINDALL</title>
 </head>
 <body>
-
+<% if(session.getAttribute("admin") != null){ %>
 	<jsp:include page="nav.jsp" />
-	<h1>Gestion des XX</h1>
+	<h1>Gestion des ${type }</h1>
 
 	<c:set var="object" value="${liste[0]}" />
 	<c:if test="${not empty object['class'].declaredFields}">
@@ -45,8 +45,8 @@
 			<table class="table table-hover">
 				<tr>
 					<c:forEach var="field" items="${object['class'].declaredFields}">
-						<c:if test="${field.name != 'articles' }">	
-							<th>${field.name}:</th>
+						<c:if test="${field.name != 'articles' && field.name != 'version'}">	
+							<th style="text-align:center;">${field.name}:</th>
 						</c:if>
 					</c:forEach>
 					<th>Modifier:</th>
@@ -56,16 +56,24 @@
 				<c:forEach items="${liste}" var="item">
 					<c:set var="object" value="${item}"/>
 					<tr>
-
-						<c:forEach var="field" items="${object['class'].declaredFields}">
-							<c:if test="${field.name != 'articles' }">
-							<c:set var="idType" value="${object['class'].declaredFields[0].name}" /> 
-							<c:set var="idValue" value="${object[object['class'].declaredFields[0].name]}" />
-							
-								<td class="editable">${object[field.name]}</td>
-							</c:if>
-						</c:forEach>
-						<td><input type="button" class="btn btn-warning" value="Modifier"></td>
+						<form action="${updateMethod }" method="post"> 
+							<c:forEach var="field" items="${object['class'].declaredFields}">
+								<c:if test="${field.name != 'articles' && field.name != 'version'}">
+								<c:set var="idType" value="${object['class'].declaredFields[0].name}" /> 
+								<c:set var="idValue" value="${object[object['class'].declaredFields[0].name]}" />
+									<c:if test="${field.name == 'date'}">
+										<td> ${object[field.name]}</td>
+									</c:if>
+									<c:if test="${field.name != 'categorie' && field.name != 'date'}">
+										<td> <input type="text" id="${field.name }" name="${field.name }" value ="${object[field.name]}" style="border:none; text-align:center;" ></input></td>
+									</c:if>
+									<c:if test="${field.name == 'categorie'}">
+										<td> <input type="text" id="${field.name }" name="${field.name }" value ="${object[field.name].getId()}" style="border:none; text-align:center;" ></input></td>
+									</c:if>
+								</c:if>
+							</c:forEach>
+							<td><input type="submit" class="btn btn-warning" value="Modifier"></td>
+						</form>
 						<td>
 							<form action="${removeMethod}" method="post">       	 
 	 				        	<input type="hidden" id="${idType}" name="${idType}" value="${idValue }" />
@@ -79,24 +87,7 @@
 		</div>
 
 	</c:if>
-
-	<script>
-
-    // On sélectionne les éléments éditables
-    const editableElmts = document.querySelectorAll('.editable');
-
-    // On leur pose un listener sur le clic à chacun
-    editableElmts.forEach(elmt => {
-      elmt.addEventListener("click", handleEdit);
-    });
-
-    // On tranforme en input type texte
-    function handleEdit(event) {
-      const cell = event.target;
-      const text = cell.innerHTML;
-      cell.innerHTML = '<input type="text" value="' + text + '">';
-    }
-  </script>
+<% } %>
     	
 </body>
 </html>

@@ -51,89 +51,29 @@ public class AdminController {
     }
     
   //ACCES PAGES 
-    
-    @RequestMapping("successlogin")
-    public String successLogin(){
-    	return "/successLogin";
-    }
 
     @RequestMapping("/login")
-    public ModelAndView login(HttpServletRequest request, HttpSession session) {
+    public ModelAndView login(HttpSession session) {
     	ModelAndView modelAndView;
-    	Admin adminSession = (Admin)request.getSession().getAttribute("admin");
+    	Admin adminSession = (Admin) session.getAttribute("admin");
     	if( adminSession != null){
-    		modelAndView = new ModelAndView("/successLogin", "message", "Vous êtes déja connecté");
+    		modelAndView = new ModelAndView("/nav");
     	}
     	else{
     		modelAndView = new ModelAndView("/login");
     	}
         return modelAndView;
     }
-    
-    @RequestMapping("insert")
-    public String insert(){
-    	return "/insert";
-    }
-    
-    @RequestMapping("delete")
-    public String delete(){
-    	return "/delete";
-    }
-    
-    @RequestMapping("findbyid")
-    public String findById(){
-    	return "/findbyid";
-    }
-    
-    @PostMapping("/selecttype")
-    public ModelAndView selectType(@RequestParam(name = "select-choice") String type) {
-    	ModelAndView modelAndView = new ModelAndView("/findbyid");
-    	
-    	String action;
-    	String inputType;
-    	String label;
-    	
-    	
-    	switch (type) {
-		case "Admin":
-			action = "findadminbyid";
-			inputType = "text";
-			label = "email";
 
-			
-			break;
-		case "Article":
-			action = "findarticlebyid";
-			inputType = "number";
-			label = "ref";
-			break;
-		case "Client":
-			action = "findclientbyid";
-			inputType = "text";
-			label = "email";
-			break;
-		default:
-			action = "";
-			inputType = "";
-			label = "";
-			break;
-		}
-    	
-    	modelAndView.addObject("action", action);
-    	modelAndView.addObject("inputType", inputType);
-    	modelAndView.addObject("itemType", type);
-    	modelAndView.addObject("label", label);
-        return modelAndView;
-    }
     
   //LOGIN Admin ----------------------------------------------------------------------
      
     @PostMapping("/login")
     public ModelAndView processLogin(HttpSession session,@ModelAttribute("admin") Admin admin) {
-
+    	
         if (isValidCredentials(admin.getEmail(), admin.getPassword())) {
         	    session.setAttribute("admin", admin);
-            return new ModelAndView("/successLogin", "message", "Bienvenue !");
+            return new ModelAndView("/nav");
         } else {
             ModelAndView modelAndView = new ModelAndView("/login","error", "Mauvais Mot de passe");
             return modelAndView;
@@ -149,23 +89,28 @@ public class AdminController {
         
         return false;
     }
+    
+    @RequestMapping("/logoff")
+    public ModelAndView logOff(HttpSession session) {
+    	session.setAttribute("admin", null);
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	return modelAndView;
+    }
 
     //CRUD Admin ----------------------------------------------------------------------
     
     @RequestMapping("/findalladmin")
-    public ModelAndView findallAdmin() {
-        ModelAndView modelAndView = new ModelAndView("/findall", "liste", adminRepo.findAll());
-        modelAndView.addObject("type", "Admin");
-        modelAndView.addObject("createMethod", "createadmin");
-        modelAndView.addObject("removeMethod", "removeadmin");
-        return modelAndView;
+    public ModelAndView findallAdmin(HttpSession session) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+	        modelAndView = new ModelAndView("/findall", "liste", adminRepo.findAll());
+	        modelAndView.addObject("type", "Admin");
+	        modelAndView.addObject("createMethod", "createadmin");
+	        modelAndView.addObject("removeMethod", "removeadmin");
+	        modelAndView.addObject("updateMethod", "updateadmin");
+		}
+	    return modelAndView;	
     }
-    
-//    @RequestMapping("/findadminbyid/{email}")
-//    public ModelAndView findAdminById(Model model, @PathVariable(name = "email") String email) {
-//        ModelAndView modelAndView = new ModelAndView("/findbyid", "item", adminRepo.findById(email).get());
-//
-//        return modelAndView;
     
     @PostMapping("/findadminbyid")
     public ModelAndView findAdminById(@RequestParam(name = "email") String email) {
@@ -188,30 +133,31 @@ public class AdminController {
         return "redirect:/admin/findalladmin";
     }
     
-    @PostMapping("update")
-    public String update(@ModelAttribute(name = "admin") Admin admin, Model model) {
-        adminRepo.save(admin);
+    @PostMapping("updateadmin")
+    public String updateadmin(@ModelAttribute(name = "admin") Admin admin, Model model) {
+    	Admin a = adminRepo.findById(admin.getEmail()).get();
+    	admin.setVersion(a.getVersion());
+    	System.out.println(admin.getVersion());
+    	adminRepo.save(admin);
         
-        return "redirect:/findall";
+        return "redirect:/admin/findalladmin";
     }
     
   //CRUD Articles ----------------------------------------------------------------------
     @RequestMapping("/findallarticles")
-    public ModelAndView findallArticles() {
-        ModelAndView modelAndView = new ModelAndView("/findall", "liste", articleRepo.findAll());
-        modelAndView.addObject("type", "Article");
-        modelAndView.addObject("createMethod", "createarticle");
-        modelAndView.addObject("removeMethod", "removearticle");
-        return modelAndView;
+    public ModelAndView findallArticles(HttpSession session) {
+    	
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+            modelAndView = new ModelAndView("/findall", "liste", articleRepo.findAll());
+            modelAndView.addObject("type", "Article");
+            modelAndView.addObject("createMethod", "createarticle");
+            modelAndView.addObject("removeMethod", "removearticle");
+            modelAndView.addObject("updateMethod", "updatearticle");
+		}
+	    return modelAndView;	
     }
-    
-//    @RequestMapping("/findarticlebyid/{id}")
-//    public ModelAndView findArticleById(Model model, @PathVariable(name = "id") int id) {
-//        ModelAndView modelAndView = new ModelAndView("/findbyid", "item", articleRepo.findById(id).get());
-//
-//        return modelAndView;
-//    }
-    
+
     @PostMapping("/findarticlebyid")
     public ModelAndView findAdminById(@RequestParam(name = "ref") int ref) {
         ModelAndView modelAndView = new ModelAndView("/findbyid", "item", articleRepo.findById(ref).get());
@@ -221,8 +167,6 @@ public class AdminController {
     
     @PostMapping("/createarticle")
     public String createArticle(@ModelAttribute(name = "article") Article article) {
-//    	article.setDate(new Date());
-    	System.out.println(article);
         articleRepo.save(article);
         
         return "redirect:/admin/findallarticles";
@@ -235,14 +179,27 @@ public class AdminController {
         return "redirect:/admin/findallarticles";
     }
     
+    @PostMapping("updatearticle")
+    public String updateArticle(@ModelAttribute(name = "article") Article article, Model model) {
+    	Article a = articleRepo.findById(article.getRef()).get();
+    	article.setVersion(a.getVersion());
+    	articleRepo.save(article);
+        
+        return "redirect:/admin/findallarticles";
+    }
+    
   //CRUD Categories ----------------------------------------------------------------------
     @RequestMapping("/findallcategories")
-    public ModelAndView findallCategories() {
-        ModelAndView modelAndView = new ModelAndView("/findall", "liste", categorieRepo.findAll());
-        modelAndView.addObject("type", "Categorie");
-        modelAndView.addObject("createMethod", "createcategorie");
-        modelAndView.addObject("removeMethod", "removecategorie");
-        return modelAndView;
+    public ModelAndView findallCategories(HttpSession session) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+    		modelAndView = new ModelAndView("/findall", "liste", categorieRepo.findAll());
+            modelAndView.addObject("type", "Categorie");
+            modelAndView.addObject("createMethod", "createcategorie");
+            modelAndView.addObject("removeMethod", "removecategorie");
+            modelAndView.addObject("updateMethod", "updatecategorie");
+		}
+	    return modelAndView;	
     }
     
     @PostMapping("/createcategorie")
@@ -260,24 +217,43 @@ public class AdminController {
         
         return "redirect:/admin/findallcategories";
     }
+    
+    @PostMapping("updatecategorie")
+    public String updateCategorie(@ModelAttribute(name = "categorie") Categorie categorie, Model model) {
+    	Categorie c = categorieRepo.findById(categorie.getId()).get();
+    	categorie.setVersion(c.getVersion());
+    	categorieRepo.save(categorie);
+        
+        return "redirect:/admin/findallcategories";
+    }
 
     
     //CRUD Clients ----------------------------------------------------------------------
     @RequestMapping("/findallclients")
-    public ModelAndView findallClients() {
-        ModelAndView modelAndView = new ModelAndView("/findall", "liste", clientRepo.findAll());
-        modelAndView.addObject("type", "Client");
-        return modelAndView;
+    public ModelAndView findallClients(HttpSession session) {        
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+    		modelAndView = new ModelAndView("/findall", "liste", clientRepo.findAll());
+            modelAndView.addObject("type", "Client");
+            modelAndView.addObject("createMethod", "createclient");
+            modelAndView.addObject("removeMethod", "removeclient");
+            modelAndView.addObject("updateMethod", "updateclient");
+		}
+	    return modelAndView;	
     }
     
     //CRUD Commandes ----------------------------------------------------------------------
     @RequestMapping("/findallcommandes")
-    public ModelAndView findallCommandes() {
-        ModelAndView modelAndView = new ModelAndView("/findall", "liste", commandeRepo.findAll());
-        modelAndView.addObject("type", "Commande");
-        modelAndView.addObject("createMethod", "createcommande");
-        modelAndView.addObject("removeMethod", "removecommande");
-        return modelAndView;
+    public ModelAndView findallCommandes(HttpSession session) {
+
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+    		modelAndView = new ModelAndView("/findall", "liste", commandeRepo.findAll());
+            modelAndView.addObject("type", "Commande");
+            modelAndView.addObject("createMethod", "createcommande");
+            modelAndView.addObject("removeMethod", "removecommande");
+		}
+	    return modelAndView;	
     }
     
     @PostMapping("/createcommande")
