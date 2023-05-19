@@ -10,14 +10,18 @@
 </head>
 <body>
 	<jsp:include page="nav.jsp" />
-	<h1>Liste</h1>
+	<h1>Gestion des XX</h1>
 
 	<c:set var="object" value="${liste[0]}" />
 	<c:if test="${not empty object['class'].declaredFields}">
+	    <div class="mt-5 m-3">
 		<h2>
-			Create <em>${type}</em>
+			Ajouter <em>${type}</em>
 		</h2>
 		<form action="createadmin" method="post">
+		
+		
+		
 			<input type="hidden" id="version" name=${type } value="4" />
 			<ul>
 				<c:forEach var="field" items="${object['class'].declaredFields}">
@@ -28,12 +32,13 @@
 					</c:catch>
 				</c:forEach>
 			</ul>
-			<input type="submit" value="Ajouter">
+			<input type="submit" class="btn btn-success" value="Ajouter">
 		</form>
+		    </div>
 
 
 		<div class="mt-5 m-3">
-			<h2>Liste des XX</h2>
+			<h2>Liste</h2>
 			<table class="table table-hover">
 				<tr>
 					<c:forEach var="field" items="${object['class'].declaredFields}">
@@ -44,22 +49,26 @@
 				</tr>
 
 				<c:forEach items="${liste}" var="item">
+					<c:set var="object" value="${item}" />
 					<tr>
+
 						<c:forEach var="field" items="${object['class'].declaredFields}">
 
 							<td class="editable">${object[field.name]}</td>
 
 						</c:forEach>
-						<td><input type="button" class="btn btn-warning" value="Modifier"></td>
-						<td><input type="button" class="btn btn-danger" value="Supprimer"></td>
+						<td><input type="button" class="btn btn-warning"
+							value="Modifier"></td>
+						<td><input type="button" class="btn btn-danger"
+							value="Supprimer"></td>
 					<tr>
 				</c:forEach>
 			</table>
 		</div>
 
 	</c:if>
-	
-	  <script>
+
+	<script>
 
     // On sélectionne les éléments éditables
     const editableElmts = document.querySelectorAll('.editable');
