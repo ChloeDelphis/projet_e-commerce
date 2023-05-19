@@ -1,0 +1,15 @@
+.connexion {
+  margin: 10vh 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bienvenue {
+  color: orange;
+}
+
+.titre {
+  margin: 5vh 0;
+}
