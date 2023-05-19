@@ -10,7 +10,6 @@
 </head>
 <body>
 <jsp:include page="nav.jsp" /> 
-	<a href=""></a>
 	<c:set var="object" value="${liste[0]}" />
 	<c:if test="${not empty object['class'].declaredFields}">
 		<div class="Saisie">

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ecommerce.backend.model.Admin;
 import ecommerce.backend.model.Article;
 import ecommerce.backend.model.Categorie;
+import ecommerce.backend.model.Commande;
 import ecommerce.backend.repository.AdminRepository;
 import ecommerce.backend.repository.ArticleRepository;
 import ecommerce.backend.repository.CategorieRepository;
@@ -240,6 +241,7 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", categorieRepo.findAll());
         modelAndView.addObject("type", "Categorie");
         modelAndView.addObject("createMethod", "createcategorie");
+        modelAndView.addObject("removeMethod", "removecategorie");
         return modelAndView;
     }
     
@@ -248,6 +250,13 @@ public class AdminController {
 
     	System.out.println(categorie);
         categorieRepo.save(categorie);
+        
+        return "redirect:/admin/findallcategories";
+    }
+    
+    @PostMapping("removecategorie")
+    public String removeCategorie(@ModelAttribute(name = "id") int id, Model model) {        
+        categorieRepo.deleteById(id);
         
         return "redirect:/admin/findallcategories";
     }
@@ -266,7 +275,22 @@ public class AdminController {
     public ModelAndView findallCommandes() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", commandeRepo.findAll());
         modelAndView.addObject("type", "Commande");
+        modelAndView.addObject("createMethod", "createcommande");
+        modelAndView.addObject("removeMethod", "removecommande");
         return modelAndView;
+    }
+    
+    @PostMapping("/createcommande")
+    public String createCommande(@ModelAttribute(name = "commande") Commande commande) {
+        commandeRepo.save(commande);
+        return "redirect:/admin/findallcommandes";
+    }
+    
+    @PostMapping("removecommande")
+    public String removeCommande(@ModelAttribute(name = "idCommande") int idCommande, Model model) {        
+    	commandeRepo.deleteById(idCommande);
+        
+        return "redirect:/admin/findallcommandes";
     }
 
 }
