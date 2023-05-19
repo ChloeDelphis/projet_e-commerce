@@ -11,14 +11,12 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-<title>Administration du site</title>
+<title>findallcategories</title>
 </head>
 <body>
 <jsp:include page="nav.jsp" /> 
-    <div
-      class="d-flex flex-column justify-content-center align-items-center mt-5"
-    >
-      <div class="mt-5">${message}</div>
-    </div>
+
+    <%--       <div>${liste}</div> --%>
+
 </body>
 </html>

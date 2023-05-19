@@ -131,7 +131,7 @@ public class AdminController {
 
         if (isValidCredentials(admin.getEmail(), admin.getPassword())) {
         	    session.setAttribute("admin", admin);
-            return new ModelAndView("/successLogin", "message", "Bienvenu !");
+            return new ModelAndView("/successLogin", "message", "Bienvenue !");
         } else {
             ModelAndView modelAndView = new ModelAndView("/login","error", "Mauvais Mot de passe");
             return modelAndView;
@@ -230,7 +230,7 @@ public class AdminController {
   //CRUD Categories ----------------------------------------------------------------------
     @RequestMapping("/findallcategories")
     public ModelAndView findallCategories() {
-        ModelAndView modelAndView = new ModelAndView("/findall", "liste", categorieRepo.findAll());
+        ModelAndView modelAndView = new ModelAndView("/findallcategories", "liste", categorieRepo.findAll());
         return modelAndView;
     }
     
