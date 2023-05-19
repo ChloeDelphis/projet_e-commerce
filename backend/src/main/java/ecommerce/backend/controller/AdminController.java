@@ -131,7 +131,7 @@ public class AdminController {
 
         if (isValidCredentials(admin.getEmail(), admin.getPassword())) {
         	    session.setAttribute("admin", admin);
-            return new ModelAndView("/successLogin", "message", "Bienvenu !");
+            return new ModelAndView("/successLogin", "message", "Bienvenue !");
         } else {
             ModelAndView modelAndView = new ModelAndView("/login","error", "Mauvais Mot de passe");
             return modelAndView;
@@ -153,6 +153,7 @@ public class AdminController {
     @RequestMapping("/findalladmin")
     public ModelAndView findallAdmin() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", adminRepo.findAll());
+        modelAndView.addObject("type", "Admin");
         return modelAndView;
     }
     
@@ -194,6 +195,7 @@ public class AdminController {
     @RequestMapping("/findallarticles")
     public ModelAndView findallArticles() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", articleRepo.findAll());
+        modelAndView.addObject("type", "Article");
         return modelAndView;
     }
     
@@ -231,6 +233,7 @@ public class AdminController {
     @RequestMapping("/findallcategories")
     public ModelAndView findallCategories() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", categorieRepo.findAll());
+        modelAndView.addObject("type", "Categorie");
         return modelAndView;
     }
     
@@ -238,6 +241,7 @@ public class AdminController {
     @RequestMapping("/findallclients")
     public ModelAndView findallClients() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", clientRepo.findAll());
+        modelAndView.addObject("type", "Client");
         return modelAndView;
     }
     
@@ -245,6 +249,7 @@ public class AdminController {
     @RequestMapping("/findallcommandes")
     public ModelAndView findallCommandes() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", commandeRepo.findAll());
+        modelAndView.addObject("type", "Commande");
         return modelAndView;
     }
 
