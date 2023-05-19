@@ -10,7 +10,7 @@
 <body>
 
 <c:if test = "${itemType == 'Admin'}">
-Bonjour
+<jsp:include page="update.jsp" /> 
 </c:if>
 
 <h1>Find by Id</h1>
@@ -34,7 +34,7 @@ Bonjour
     </form>
 <h1>Data</h1>
     <div>${item }</div>
-<jsp:include page="update.jsp" /> 
+
 
 
 </body>

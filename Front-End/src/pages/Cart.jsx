@@ -125,7 +125,7 @@ const Cart = () => {
     fetch(`http://localhost:8080/site/panier/${id}`)
       .then((res) => res.json())
       .then(data => {
-        sessionStorage.setItem('panier', JSON.stringify(data));
+        // sessionStorage.setItem('panier', JSON.stringify(data));
         setPanier(data);
       });   
   }, []);

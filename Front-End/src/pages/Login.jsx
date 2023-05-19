@@ -7,7 +7,7 @@ import { mailOutline, lockClosedOutline, personOutline, locationOutline, callOut
 const Login = () => {
   const navigate = useNavigate();
   const [client, setClient] = useState({});
-  const [isNewClient, setIsNewClient] = useState(false);
+  // const [isNewClient, setIsNewClient] = useState(false);
   const [isClientLogged, setIsClientLogged] = useState(false);
   const [panier, setPanier] = useState({});
   const [adresse, setAdresse] = useState({});
@@ -42,30 +42,22 @@ const Login = () => {
   })
   };
 
-  const requestOptionsClient = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(client)
-  };
+  // const requestUpdateAdresseClient = {
+  //   method: 'PUT',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(client)
+  // };
 
-  const requestUpdateAdresseClient = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(client)
-  };
+  // useEffect(() => {
+  //   if (isNewClient) {
 
-  useEffect(() => {
-    if (isNewClient) {
+  //     const fetchPostClient = () => {
+  //       fetch('http://localhost:8080/site/client', requestUpdateAdresseClient)
+  //     }
 
-      const fetchPostClient = () => {
-        fetch('http://localhost:8080/site/client', requestUpdateAdresseClient).then(
-          fetch('http://localhost:8080/site/panier', requestOptionsPanier)
-        );
-      }
-
-      fetchPostClient();
-    }
-  }, [isNewClient]);
+  //     fetchPostClient();
+  //   }
+  // }, [isNewClient]);
 
 
   const CreateClient = async (event) => {
@@ -84,11 +76,24 @@ const Login = () => {
             ville: adresse.ville
           }
 
+          const nouveauClient = { ...client };
+          nouveauClient.adresse = newAdresse;
+          
+
+
+          const requestOptionsClient = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nouveauClient)
+          };
+
           fetch('http://localhost:8080/site/client', requestOptionsClient).then(async response => {
 
+          console.log(client.email);
+          fetch('http://localhost:8080/site/panier', requestOptionsPanier);
           const isJson = response.headers.get('content-type')?.includes('application/json');
           const data = isJson && await response.json();
-
+          
           // check for error response
           if (!response.ok) {
               // get error message from body or default to response status
@@ -104,10 +109,12 @@ const Login = () => {
         });
 
         setMsgErreurI("");
-        // console.log("inscription réussi, veuillez vous connectez")
+        console.log("inscription réussi, veuillez vous connectez");
           setClient({ ...client, ['adresse']: newAdresse });
+        console.log(client);
           // setClient({ ...client, ['adresse']: responseData });
-          setIsNewClient(true);
+          setIsClientLogged(true);
+          
 
         }
       });
@@ -115,7 +122,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isClientLogged) {
-      sessionStorage.setItem("client", client);
+      sessionStorage.setItem("client", JSON.stringify(client));
       console.log("ok");
       setMsgErreurC("");
       navigate("/");
@@ -127,9 +134,8 @@ const Login = () => {
 
       fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`).then((res) => res.json()).then(data => {
       
-      setClient(JSON.stringify(data))
+      setClient(data)
       setIsClientLogged(true);
-      console.log("DATAS : ",JSON.stringify(data));
       localStorage.setItem('client', JSON.stringify(data));
     }).then(async response => {
 
@@ -174,8 +180,8 @@ const Login = () => {
               </div>
 
               <div className="ligne">
-                <label htmlFor=""><input type="checkbox"></input>Remember Me </label>
-                <a href="">Forget Password</a>
+                {/* <label htmlFor=""><input type="checkbox"></input>Remember Me </label>
+                <a href="">Forget Password</a> */}
               </div>
 
               <button>Log in</button>
