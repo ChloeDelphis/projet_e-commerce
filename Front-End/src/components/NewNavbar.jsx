@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const NewNavbar = () => {
     const navigate = useNavigate();
     const [isActive, setIsActive] = useState(false);
+    const [categories, setCategories] = useState(null);
 
     // open/close side menu when hamburger is clicked
     const handleToggle = () => {
@@ -14,6 +15,15 @@ const NewNavbar = () => {
         sessionStorage.removeItem('client');
     };
 
+    useEffect(() => {
+        fetch(`http://localhost:8080/site/categories`)
+            .then((res) => res.json())
+            .then((data) => setCategories(data));
+    }, []);
+
+    useEffect(() => {
+        console.log(categories);
+    }, [categories])
 
     return (
         <>
@@ -59,47 +69,15 @@ const NewNavbar = () => {
                                         Products
                                         <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
                                             <ul className="sub-menu-products__container">
-                                                <li className="sub-container">
-                                                    <ul>
-                                                        <li>Les hauts</li>
-                                                        <li>
-                                                            <Link to={"/category/1"}>
-                                                                T-Shirts
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link to={"category/2"}>
-                                                                Pulls
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li className="sub-container">
-                                                    <ul>
-                                                        <li>Les bas</li>
-                                                        <li>
-                                                            <Link to={"/category/3"}>
-                                                                Pantalons
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link to={"/category/4"}>
-                                                                Jupes
-                                                            </Link>
-                                                        </li>
+                                                {categories && categories.map((item, index) => (
+                                                    <li key={index}>
+                                                        <Link to={`/category/${item.id}`}>
+                                                            {item.name}
+                                                        </Link>
+                                                    </li>
+                                                ))
+                                                }
 
-                                                    </ul>
-                                                </li>
-                                                <li className="sub-container">
-                                                    <ul>
-                                                        <li>Habillée de haut en bas !</li>
-                                                        <li>
-                                                            <Link to={"/category/5"}>
-                                                                Robes
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
                                             </ul>
                                         </div>
                                     </NavLink>
