@@ -1,0 +1,133 @@
+// Le CSS Page de la liste des produits par catégorie
+.productsbycategory {
+  font-family: "Roboto", sans-serif;
+  letter-spacing: 0.5px;
+  margin-top: 10vh;
+  padding: 2vmin;
+
+  .header {
+    height: 25vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__title {
+      padding: 2vh 0;
+      font-size: 35px;
+      font-family: "Berkshire Swash", cursive;
+    }
+    &__description {
+      font-size: 15px;
+    }
+  }
+
+  .orderandfilter {
+    font-size: 12px;
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
+
+    select {
+      width: 200px;
+      height: 5vh;
+      border: solid black 1px;
+      border-radius: 2vmin;
+      align-self: flex-end;
+      margin: 2vmin 0;
+    }
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      width: 49%;
+      margin: 5vmin 0;
+
+      > * {
+        padding: 1vmin 0 0 0;
+      }
+
+      &__img {
+        border-radius: 3vmin;
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+      }
+
+      &__name {
+        font-size: 15px;
+      }
+      &__brand {
+        font-size: 12px;
+        color: $orange;
+      }
+      &__price {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .productsbycategory {
+    font-family: "Roboto", sans-serif;
+    margin-top: 2vmin;
+    padding: 8vmin;
+
+    .header {
+      height: 10vh;
+
+      &__title {
+        padding: 1vh 0;
+        font-size: 55px;
+        font-family: "Berkshire Swash", cursive;
+      }
+      &__description {
+        font-size: 25px;
+      }
+    }
+
+    .orderandfilter {
+      margin-top: 10vh;
+      display: flex;
+      flex-direction: row;
+      font-size: 17px;
+
+      select {
+        margin-right: 5vmin;
+      }
+    }
+
+    .list {
+      &__item {
+        width: 24%;
+
+        &__img {
+          border-radius: 3vmin;
+          width: 100%;
+          aspect-ratio: 1/1;
+          object-fit: cover;
+        }
+
+        &__name {
+          font-size: 22px;
+        }
+        &__brand {
+          font-size: 17px;
+          color: $orange;
+        }
+        &__price {
+          font-size: 17px;
+        }
+      }
+    }
+  }
+}

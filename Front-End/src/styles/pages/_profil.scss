@@ -1,0 +1,309 @@
+// Le CSS de la page de profil du client
+.profil_client {
+    margin: 20px 0px 200px 0px;
+    padding: 35px 45px;
+    color: $darkGray;
+
+    .card {
+        background: $white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        border-radius: 20px;
+    }
+
+    h1 {
+        font-family: "Russo One", Arial, sans-serif;
+        font-size: 26px;
+        letter-spacing: 2px;
+        margin: 15px 0px;
+    }
+
+    hr {
+        opacity: 25%;
+    }
+
+    .container {
+        margin: 40px 0px;
+        display: flex;
+        justify-content: center;
+        gap: 100px;
+
+        .left {
+            width: 40%;
+            max-width: 420px;
+
+            .card_client_container {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+
+                .card_client {
+                    padding: 15px 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 20px;
+
+                    .top {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 15px;
+
+                        img {
+                            width: 70px;
+                            height: auto;
+                        }
+
+                        .nomPrenom {
+                            font-family: "Roboto", sans-serif;
+                            font-size: 22px;
+                            font-weight: 600;
+                            letter-spacing: 1px;
+                        }
+
+                        .status {
+                            background-color: $lightGrayTwo;
+                            color: rgba(0, 128, 0, 0.5);
+                            border-radius: 10px;
+                            padding: 10px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            text-transform: capitalize;
+                        }
+                    }
+
+                    .center {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 10px;
+
+                        .dataStyle {
+                            width: 320px;
+                            height: 60px;
+                            font-size: 14px;
+                            position: relative;
+                            padding: 24px 16px;
+                            border-radius: 14px;
+                            background-color: $lightGrayTwo;
+                            border: 1px solid $borderGray;
+
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            gap: 5px;
+
+                            span {
+                                letter-spacing: 0.2px;
+                            }
+
+                            span:nth-child(1) {
+                                color: $policeGray;
+                                font-size: 12px;
+                            }
+                        }
+                    }
+
+                    .bottom {
+                        margin: 20px 0px;
+
+                        button {
+                            width: 245px;
+                            height: 50px;
+                            border: none;
+                            font-size: 15px;
+                            font-weight: 700;
+                            line-height: 150%;
+                            letter-spacing: 0.5px;
+                            color: $white;
+                            font-family: "Roboto", sans-serif;
+                            cursor: pointer;
+                            background: linear-gradient(264.91deg, #f47726 2.91%, #ffb483 98.68%);
+                            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+                            border-radius: 20px;
+                        }
+                    }
+                }
+
+                .card_client_edit {
+                    padding: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 20px;
+
+                    form {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 20px;
+
+                        div {
+                            position: relative;
+
+                            span {
+                                position: absolute;
+                                top: 14px;
+                                left: 18px;
+                                color: $policeGray;
+                                font-size: 12px;
+                                letter-spacing: 0.2px;
+                                z-index: 10;
+                            }
+
+                            input {
+                                width: 320px;
+                                height: 30px;
+                                font-size: 14px;
+                                position: relative;
+                                padding: 10px 16px;
+                                padding-top: 40px;
+                                padding-bottom: 20px;
+                                border-radius: 14px;
+                                background-color: $lightGrayTwo;
+                                border: 1px solid $borderGray;
+
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                gap: 5px;
+                            }
+
+                            input:focus {
+                                outline: none;
+                                box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
+                            }
+
+                            .inputBorderError {
+                                border: 1px solid rgba(235, 15, 15, 0.4);
+                            }
+
+                            .errorPasswordMsg {
+                                color: rgb(235, 15, 15);
+                                letter-spacing: 1px;
+                                font-style: italic;
+                                font-size: 14px;
+                                margin: 2px 0px 0px 4px;
+                                opacity: 0;
+                            }
+
+                            .showErrorPasswordMsg {
+                                opacity: 1;
+                            }
+                        }
+
+                        button {
+                            margin: 15px 0px;
+                            width: 245px;
+                            height: 50px;
+                            border: none;
+                            font-size: 15px;
+                            font-weight: 700;
+                            line-height: 150%;
+                            letter-spacing: 0.5px;
+                            color: $white;
+                            font-family: "Roboto", sans-serif;
+                            cursor: pointer;
+                            background: linear-gradient(264.91deg, #f47726 2.91%, #ffb483 98.68%);
+                            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+                            border-radius: 20px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .right {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+
+            .top {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .card_info {
+                    padding: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    font-family: Arial, serif;
+
+                    .dataNb {
+                        color: $orange;
+                        font-weight: 400;
+                        font-size: 25px;
+                    }
+
+                    .dataInfo {
+                        color: $policeGray;
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .bottom {
+                padding: 20px;
+
+                .card_commandes {
+                    .headerCommandes {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 20px;
+
+                        h2 {
+                            font-weight: 400;
+                            color: $darkGray;
+                            font-size: 16px;
+                            padding: 5px 0px;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .titleBold {
+                        font-weight: 700 !important;
+                        border-bottom: 0.5px solid gray;
+                    }
+
+                    hr {
+                        margin: 10px 0px;
+                        opacity: 0.3;
+                    }
+
+                    .commandes_container {
+                        margin: 20px 0px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 30px;
+
+                        .commande {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            justify-content: space-between;
+
+                            .date {}
+
+                            .nbArticles {}
+
+                            .status {}
+
+                            .facture {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

@@ -1,96 +1,69 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-const CategoryCard = ({ data }) => {
-  return (
-    <div className="card">
-      <div className="card_header">
-        <p className="top">{data.top}</p>
-        <h2>{data.center}</h2>
-        <p className="bottom">{data.bottom}</p>
-        <button>
-          <Link className="card_btn" to={data.link}>
-            See all
-          </Link>
-        </button>
-      </div>
-      <div className="card_img">
-        <img src={data.img} alt="cateogry_image" />
-      </div>
-    </div>
-  );
-};
+import { useNavigate } from "react-router-dom";
 
 // La page listant les catégories de produits
 const ProductCategories = () => {
+  const [categories, setCategories] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/site/categories`)
+      .then((res) => res.json())
+      .then((data) => setCategories(data));
+  }, []);
+
+  console.log(categories);
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    navigate(`/category/${id}`);
+  };
+
   return (
     <div className="product_categories">
       <div className="header">
-        <p className="top">Main category</p>
-        <h2>Heading goes here</h2>
+        <h2>Toutes nos catégories</h2>
         <p className="bottom">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim, qui.
+          Découvrez une sélection exclusive de vêtements tendance qui vous
+          permettront de vous démarquer avec style. Exprimez votre personnalité
+          et faites sensation avec nos collections soigneusement choisies pour
+          vous.
         </p>
       </div>
 
       <div className="main">
-        <div className="main_left">
-          <CategoryCard data={categoryOne} />
-        </div>
-        <div className="main_right">
-          <CategoryCard data={categoryTwo} />
-          <CategoryCard data={categoryThree} />
-          <CategoryCard data={categoryFour} />
-          <CategoryCard data={categoryFive} />
-        </div>
+        {categories &&
+          categories.map((category, index) => (
+            <div
+              className="card"
+              key={index}
+              onClick={() => handleClick(category && category.id)}
+            >
+              <CategoryCard {...category} />
+            </div>
+          ))}
       </div>
     </div>
   );
 };
 
+const CategoryCard = (category) => {
+  return (
+    <>
+      <div className="card_header">
+        <h2>{category && category.name}</h2>
+        <p className="bottom">{category && category.description}</p>
+        <button>
+          <Link className="card_btn" to={`/category/${category.id}`}>
+            Voir nos articles
+          </Link>
+        </button>
+      </div>
+      <div className="card_img">
+        <img src={category && category.image} alt="cateogry_image" />
+      </div>
+    </>
+  );
+};
+
 export default ProductCategories;
-
-const categoryOne = {
-  top: "Main category",
-  center: "Main Category",
-  bottom:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
-  link: "/",
-  img: "./assets/components/cards/card_01.png",
-};
-
-const categoryTwo = {
-  top: "Main category",
-  center: "Main Category",
-  bottom:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
-  link: "/",
-  img: "./assets/components/cards/card_02.png",
-};
-
-const categoryThree = {
-  top: "Main category",
-  center: "Main Category",
-  bottom:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
-  link: "/",
-  img: "./assets/components/cards/card_03.png",
-};
-
-const categoryFour = {
-  top: "Main category",
-  center: "Main Category",
-  bottom:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
-  link: "/",
-  img: "./assets/components/cards/card_04.png",
-};
-
-const categoryFive = {
-  top: "Main category",
-  center: "Main Category",
-  bottom:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
-  link: "/",
-  img: "./assets/components/cards/card_05.png",
-};

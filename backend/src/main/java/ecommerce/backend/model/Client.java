@@ -1,38 +1,51 @@
 package ecommerce.backend.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public class Client {
 
 	@Id
+	@JsonView(JsonViews.Common.class)
 	private String email;
+	@JsonView(JsonViews.Common.class)
 	private String mdp;
+	@JsonView(JsonViews.Common.class)
 	private String prenom;
+	@JsonView(JsonViews.Common.class)
 	private String nom;
+	@JsonView(JsonViews.Common.class)
 	private String tel;
+
 	@ManyToOne
 	@JoinColumn(name = "adresse")
+	// @JsonView(JsonViews.ClientWithAdresse.class)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	private Adresse adresse;
-	// @OneToOne(mappedBy = "mailCient")
-	// private Panier panier;
+
+	@OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+	// @JsonView(JsonViews.ClientWithPanier.class)
+	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
+	private Panier panier;
+
 	@Version
 	private int version;
 
-	/*
-	 * public Panier getPanier(){ return panier; }
-	 */
+	public Panier getPanier() {
+		return panier;
+	}
 
-	/*
-	 * public void setPanier(Panier panier){ this.panier = panier; }
-	 */
+	public void setPanier(Panier panier) {
+		this.panier = panier;
+	}
 
 	public String getMdp() {
 		return mdp;
@@ -90,7 +103,7 @@ public class Client {
 		this.nom = nom;
 	}
 
-	public Client(String email, String mdp, String prenom, String nom, String tel, Adresse adresse) {
+	public Client(String email, String mdp, String prenom, String nom, String tel, Adresse adresse, Panier panier) {
 		super();
 		this.email = email;
 		this.mdp = mdp;
@@ -98,16 +111,17 @@ public class Client {
 		this.nom = nom;
 		this.tel = tel;
 		this.adresse = adresse;
+		this.panier = panier;
 	}
 
 	public Client() {
 		super();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Client [email=" + email + ", mdp=" + mdp + ", prenom=" + prenom + ", nom=" + nom + ", tel=" + tel
-				+ ", adresse=" + adresse + "]";
+				+ ", adresse=" + adresse + ", panier=" + panier + ", version=" + version + "]";
 	}
 
 }

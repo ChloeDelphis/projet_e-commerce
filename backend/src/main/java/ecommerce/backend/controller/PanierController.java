@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import ecommerce.backend.repository.PanierRepository;
+import ecommerce.backend.model.JsonViews;
 import ecommerce.backend.model.Panier;
 
 @RestController
@@ -33,11 +34,13 @@ public class PanierController {
 	}
 	
 	@GetMapping("")
+	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	public List<Panier> getAll(){
 		return repo.findAll();
 	}
 	
 	@GetMapping("/{id}")
+	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	public Panier getByID(@PathVariable Integer id){
 		return repo.findById(id).get();
 	}
@@ -52,8 +55,10 @@ public class PanierController {
 		repo.deleteById(id);
 	}
 	
-	@PutMapping("/{id}")
-	public Panier update(@RequestBody Panier p, @PathVariable Integer id){
+	@PutMapping("")
+	@JsonView(JsonViews.Common.class)
+	public Panier update(@RequestBody Panier p){
+		Integer id = p.getId();
 		Panier pEnBase = repo.findById(id).orElseThrow(() -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		});
