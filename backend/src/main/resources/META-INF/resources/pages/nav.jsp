@@ -13,6 +13,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<% if(session.getAttribute("admin") != null){ %>
     <nav class="navbar navbar-expand-sm bg-light">
       <div class="container-fluid">
         <!-- Links -->
@@ -32,9 +33,25 @@
           <li class="nav-item">
             <a class="nav-link" href="/site/admin/findalladmin">Administrateurs</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/site/admin/logoff">Deconnexion</a>
+          </li>
         </ul>
       </div>
     </nav>
-
+	<% }
+	else{
+	%>
+    <nav class="navbar navbar-expand-sm bg-light">
+      <div class="container-fluid">
+        <!-- Links -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/site/admin/login">Connexion</a>
+          </li>
+        </ul>
+      </div>
+    </nav>	
+	<% } %>
 </body>
 </html>
