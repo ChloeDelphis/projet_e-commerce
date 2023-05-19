@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ecommerce.backend.model.Admin;
 import ecommerce.backend.model.Article;
+import ecommerce.backend.model.Categorie;
 import ecommerce.backend.repository.AdminRepository;
 import ecommerce.backend.repository.ArticleRepository;
 import ecommerce.backend.repository.CategorieRepository;
@@ -154,6 +155,8 @@ public class AdminController {
     public ModelAndView findallAdmin() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", adminRepo.findAll());
         modelAndView.addObject("type", "Admin");
+        modelAndView.addObject("createMethod", "createadmin");
+        modelAndView.addObject("removeMethod", "removeadmin");
         return modelAndView;
     }
     
@@ -178,7 +181,7 @@ public class AdminController {
     }
     
     @PostMapping("removeadmin")
-    public String update(@ModelAttribute(name = "email") String email, Model model) {        
+    public String removeAdmin(@ModelAttribute(name = "email") String email, Model model) {        
         adminRepo.deleteById(email);
         
         return "redirect:/admin/findalladmin";
@@ -196,6 +199,8 @@ public class AdminController {
     public ModelAndView findallArticles() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", articleRepo.findAll());
         modelAndView.addObject("type", "Article");
+        modelAndView.addObject("createMethod", "createarticle");
+        modelAndView.addObject("removeMethod", "removearticle");
         return modelAndView;
     }
     
@@ -234,8 +239,19 @@ public class AdminController {
     public ModelAndView findallCategories() {
         ModelAndView modelAndView = new ModelAndView("/findall", "liste", categorieRepo.findAll());
         modelAndView.addObject("type", "Categorie");
+        modelAndView.addObject("createMethod", "createcategorie");
         return modelAndView;
     }
+    
+    @PostMapping("/createcategorie")
+    public String createCategorie(@ModelAttribute(name = "article") Categorie categorie) {
+
+    	System.out.println(categorie);
+        categorieRepo.save(categorie);
+        
+        return "redirect:/admin/findallcategories";
+    }
+
     
     //CRUD Clients ----------------------------------------------------------------------
     @RequestMapping("/findallclients")
