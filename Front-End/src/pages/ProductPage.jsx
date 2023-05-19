@@ -92,8 +92,9 @@ const ProductDetails = ({ data }) => {
 const Buy = ({ data }) => {
 
   const clientJSON = JSON.parse(sessionStorage.getItem("client"));
-  const idPanier = clientJSON.panier.id;
-
+  // const idPanier = clientJSON.panier.id;
+  const idPanier = clientJSON ? clientJSON.panier.id : "nolog";
+  const navigate = useNavigate();
   const [quantite, setQuantite] = useState(1);
   const [isUpdate, setIsUpdate] = useState(false);
   const [panier, setPanier] = useState({});
@@ -141,42 +142,47 @@ const Buy = ({ data }) => {
   }
 
   const handleAjout = (quantity) => {
-    console.log("la Quantite",quantity);
-    console.log("l'article",JSON.stringify(data.article));
 
-    
+    if(quantity !=0){
+      console.log("Panier : ", panier);
+      console.log("la Quantite",quantity);
+      console.log("l'article",JSON.stringify(data.article));
 
-    let isDouble = false;
-    if (panier.lignes) {
-      for (let i = 0; i < panier.lignes.length; i++) {
-        const ligne = panier.lignes[i];
-    
-        // console.log("LIGNE : ",JSON.stringify(ligne));
-        console.log("LIGNE : ",data.article.ref);
-        console.log("LIGNE : ",ligne.article.ref);
-        if (data.article.ref == ligne.article.ref) {
-          console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
-          isDouble = true;
-          const nouvelleLigne = {...ligne, "panier":{"id":idPanier}};
-          nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
-          console.log("NOUVELLE LIGNE : ", JSON.stringify(nouvelleLigne), "QUANTITEEEE : ", quantity);
-          updateLigne(nouvelleLigne);
-          break;
+      
+
+      let isDouble = false;
+      if (panier.lignes) {
+        for (let i = 0; i < panier.lignes.length; i++) {
+          const ligne = panier.lignes[i];
+      
+          // console.log("LIGNE : ",JSON.stringify(ligne));
+          console.log("LIGNE : ",data.article.ref);
+          console.log("LIGNE : ",ligne.article.ref);
+          if (data.article.ref == ligne.article.ref) {
+            console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
+            isDouble = true;
+            const nouvelleLigne = {...ligne, "panier":{"id":idPanier}};
+            nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
+            nouvelleLigne.total = nouvelleLigne.quantite*nouvelleLigne.article.prix;
+            console.log("NOUVELLE LIGNE : ", JSON.stringify(nouvelleLigne), "QUANTITEEEE : ", quantity);
+            updateLigne(nouvelleLigne);
+            break;
+          }
         }
-      }
 
-      if(!isDouble){
-        const nouvelleLigne = {
-          "id": 0,
-          "panier": {
-            "id": idPanier,
-          },
-          "article": data.article,
-          "quantite": quantity,
-          "total": data.article.prix*quantity,
+        if(!isDouble){
+          const nouvelleLigne = {
+            "id": 0,
+            "panier": {
+              "id": idPanier,
+            },
+            "article": data.article,
+            "quantite": quantity,
+            "total": data.article.prix*quantity,
+          }
+          console.log("La ligne a creer",data.article.ref)
+          createLigne(nouvelleLigne);
         }
-        console.log("La ligne a creer",data.article.ref)
-        createLigne(nouvelleLigne);
       }
     }
     
@@ -223,7 +229,6 @@ const Buy = ({ data }) => {
     fetch(`http://localhost:8080/site/panier/${idPanier}`)
       .then((res) => res.json())
       .then(data => {
-        sessionStorage.setItem('panier', JSON.stringify(data));
         setPanier(data);
       });   
   }, [isUpdate]);
@@ -256,9 +261,26 @@ const Buy = ({ data }) => {
           <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" onChangeCapture={(event) => handleQuantityChange(event)}></input>
         </div>
         
-        <button type="button" className="shopping__buy__cart" onClick={() => handleAjout(document.querySelector('.shopping__buy__quantity__input').value)}>Ajouter au panier</button>
+        <button type="button" className="shopping__buy__cart" onClick={() => {
+              if(clientJSON == null){
+                navigate("/login");
+              }
+              else{
+                handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
+              } 
+          }
+        }>Ajouter au panier</button>
         <br />
-        <button type="button" className="shopping__buy__buynow">Acheter maintenant</button>
+        <button type="button" className="shopping__buy__buynow" onClick={() => {
+              if(clientJSON == null){
+                navigate("/login");
+              }
+              else if(document.querySelector('.shopping__buy__quantity__input').value != 0){
+                handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
+                navigate("/cart");
+              } 
+            }
+          }>Acheter maintenant</button>
         <div className="shopping__buy__shipping">
           Livraison gratuite à partir de {data.shipping.freeShipping} € d'achat.
         </div>
