@@ -135,7 +135,6 @@ const Cart = () => {
     fetch(`http://localhost:8080/site/panier/${id}`)
       .then((res) => res.json())
       .then(data => {
-        sessionStorage.setItem('panier', JSON.stringify(data));
         setPanier(data);
 
       });   
@@ -151,7 +150,9 @@ const Cart = () => {
             <div className="articles">
               {
               
-              panier.lignes && panier.lignes.map((ligne, index) => {            
+              panier.lignes && panier.lignes.map((ligne, index) => {  
+                
+                  let linkProduct = "productpage/" + ligne.article.ref;
                   return(
                     
                     <div key={ligne.id} className="article">
@@ -160,7 +161,7 @@ const Cart = () => {
                       
                       <div className="description">
 
-                        <h3> {ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}</h3>
+                        <h3> <a href={linkProduct}>{ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}</a> </h3>
 
                         <div className="detail">
 

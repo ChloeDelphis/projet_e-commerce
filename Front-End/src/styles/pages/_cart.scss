@@ -31,7 +31,16 @@
                 flex-direction: column;
                 gap: 1vh;
 
+                h3{
+                    a{
+                        text-decoration: none;
+                        color: black;
+                    }
 
+                    a:hover{
+                        color:darkgray;
+                    }
+                }
                 .detail{
                     display: flex;
                     flex-direction: row;
@@ -99,11 +108,12 @@
                 }
 
                 h5{
-                    color:darkgray;
+                    color:black;
                 }
 
                 h5:hover{
-                    color:black;
+                    
+                    color:darkgray;
                 }
             }
         }
