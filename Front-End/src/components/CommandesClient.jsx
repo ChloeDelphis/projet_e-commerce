@@ -36,12 +36,12 @@ const CommandesClient = ({ email }) => {
         fetchData();
     }, [])
 
-    useEffect(() => {
-        // console.log(commandes);
-    }, [commandes])
-    useEffect(() => {
-        console.log(articles);
-    }, [articles])
+    // useEffect(() => {
+    //     // console.log(commandes);
+    // }, [commandes])
+    // useEffect(() => {
+    //     console.log(articles);
+    // }, [articles])
 
     const getNbArticles = (detail) => {
         let nbArticles = 0;
