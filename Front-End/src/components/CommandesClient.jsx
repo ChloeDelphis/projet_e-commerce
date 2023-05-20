@@ -1,5 +1,4 @@
-import { all } from 'axios';
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 const CommandesClient = ({ email }) => {
     const [commandes, setCommandes] = useState([]);
@@ -9,37 +8,33 @@ const CommandesClient = ({ email }) => {
 
     const [articles, setArticles] = useState();
 
+    // update la liste de tous les articles commandes
     useEffect(() => {
-        // console.log("COMMANDES: ", commandes);
         if (commandes.length > 0) {
-            console.log(commandes);
-            const getAllArticleFromCommandes = (commandes) => {
-                const allArticles = [];
+            const allArticles = [];
 
-                for (let command of commandes) {
-                    if (command.detail) {
-                        const articles = command.detail.split('/');
+            for (let command of commandes) {
+                if (command.detail) {
+                    const articles = command.detail.split('/');
 
-                        for (let article of articles) {
-                            const articleParts = article.split('-');
-                            if (articleParts.length === 2) {
-                                const itemID = parseInt(articleParts[0]);
-                                const quantity = parseInt(articleParts[1]);
-                                if (!isNaN(itemID) && !isNaN(quantity)) {
-                                    allArticles.push({ itemID, quantity });
-                                }
+                    for (let article of articles) {
+                        const articleParts = article.split('-');
+                        if (articleParts.length === 2) {
+                            const itemID = parseInt(articleParts[0]);
+                            const quantity = parseInt(articleParts[1]);
+                            if (!isNaN(itemID) && !isNaN(quantity)) {
+                                const date = new Date(command.date).toLocaleDateString('en-GB');
+                                allArticles.push({ itemID, quantity, date });
                             }
                         }
                     }
                 }
-                console.log(allArticles);
-                return allArticles;
-            };
+            }
 
-
-            getAllArticleFromCommandes(commandes);
+            setCommandesByArticle(allArticles);
         }
-    }, [commandes])
+    }, [commandes]);
+
 
     // Fetch Commandes
     useEffect(() => {
@@ -86,33 +81,17 @@ const CommandesClient = ({ email }) => {
         return nbArticles;
     };
 
-
-
-
-    const getArticleNameQuantityList = (detail) => {
-        const articleNames = [];
-        const finalArticleNames = [];
-
-        if (detail) {
-            const refArticles = detail.split('/');
-            for (let article of refArticles) {
-                const [name, quantity] = article.split('-');
-                articleNames.push({ name: parseInt(name), quantity: parseInt(quantity) });
-            }
-        }
-
-        for (let i = 0; i < articleNames.length; i++) {
-            for (let article of articles) {
-                if (articleNames[i].name === article.ref) {
-                    finalArticleNames.push({ name: article.nom, quantity: articleNames[i].quantity });
-                }
-            }
-        }
-
-        return finalArticleNames;
+    // retourne le nom de l'article via son (id) ref
+    const getArticleNameFromArticleID = (id) => {
+        const foundArticle = articles.find(article => article.ref === id);
+        return foundArticle ? foundArticle.nom : null;
     };
 
-
+    // retourne le nom de l'article via son (id) ref
+    const getArticlePriceFromArticleID = (id) => {
+        const foundArticle = articles.find(article => article.ref === id);
+        return foundArticle ? foundArticle.prix : null;
+    };
 
 
     return (
@@ -137,15 +116,15 @@ const CommandesClient = ({ email }) => {
                             <th>Status</th>
                             <th>Montant</th>
                         </tr>
-                        <hr />
                     </thead>
+
                     <tbody>
                         {commandes && commandes.map((commande, index) => (
                             <tr className='commande' key={index}>
-                                <td>{new Date(commande.date).toLocaleDateString("en-GB")}</td>
+                                <td className='date'>{new Date(commande.date).toLocaleDateString("en-GB")}</td>
                                 <td>{getNbArticles(commande.detail)}</td>
                                 <td className='status'><div>Envoyé</div></td>
-                                <td>${commande.total}</td>
+                                <td>{commande.total} €</td>
                             </tr>
                         ))}
                     </tbody>
@@ -162,27 +141,15 @@ const CommandesClient = ({ email }) => {
                             <th>Quantite</th>
                             <th>Montant</th>
                         </tr>
-                        <hr />
                     </thead>
+
                     <tbody>
-                        {commandes.map((commande, index) => (
+                        {commandesByArticle.map((commande, index) => (
                             <tr className='commande' key={index}>
-                                <td>{new Date(commande.date).toLocaleDateString("en-GB")}</td>
-                                <td>
-                                    <ul>
-                                        {getArticleNameQuantityList(commande.detail).map((article, index) => (
-                                            <li key={index}>{article.name}</li>
-                                        ))}
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul>
-                                        {getArticleNameQuantityList(commande.detail).map((article, index) => (
-                                            <li key={index}>{article.quantity}</li>
-                                        ))}
-                                    </ul>
-                                </td>
-                                <td>${commande.total}</td>
+                                <td className='date'>{commande.date}</td>
+                                <td>{getArticleNameFromArticleID(commande.itemID)}</td>
+                                <td>{commande.quantity}</td>
+                                <td>{getArticlePriceFromArticleID(commande.itemID)} €</td>
                             </tr>
                         ))}
                     </tbody>

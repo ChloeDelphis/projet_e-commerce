@@ -6,9 +6,9 @@ import { useUser } from "../context/UserContext";
 
 // La page du detail d'un produit
 const ProductPage = () => {
-  // id du produit à afficher
   const { addQuantity } = useUser();
 
+  // id du produit à afficher
   const { id } = useParams();
   const [article, setArticle] = useState();
 
@@ -292,15 +292,29 @@ const Buy = ({ data, addQuantity }) => {
 };
 
 const BuyingDetails = ({ data }) => {
+  const [openIndex, setOpenIndex] = useState(-1);
+
+  const toggleRotation = (index) => {
+    setOpenIndex((prevIndex) => (prevIndex === index ? -1 : index));
+  };
+
   return (
     <div className="buyingdetails">
       {data.shoppingInfo.list.map((item, index) => (
-        <details className="buyingdetails__details" key={index}>
-          <summary className="buyingdetails__details__summary">
-            <span className="buyingdetails__details__summary__name">
-              {item.name}{" "}
-            </span>{" "}
-            <span className="buyingdetails__details__summary__v">V</span>
+        <details
+          className={`buyingdetails__details${openIndex === index ? ' open' : ''}`}
+          key={index}
+        >
+          <summary
+            className="buyingdetails__details__summary"
+            onClick={() => toggleRotation(index)}
+          >
+            <span className="buyingdetails__details__summary__name">{item.name}</span>
+            <img
+              src="../../../assets/pages/productpage/arrow_orange.png"
+              alt="arrow_down"
+              className={openIndex === index ? 'rotated' : ''}
+            />
           </summary>
           <p>{item.details}</p>
         </details>
@@ -319,17 +333,17 @@ const dataOne = {
       {
         name: "Détails",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Découvrez tous les détails de cet article de vêtement. Vous trouverez des informations sur les matériaux utilisés, les mesures et les instructions d'entretien. Profitez d'une qualité exceptionnelle et d'un confort optimal avec cet article.",
       },
       {
         name: "Livraison",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Nous offrons une livraison rapide et fiable pour tous nos produits. Vous recevrez votre commande à votre porte dans les plus brefs délais. Pour plus d'informations sur nos options de livraison, veuillez consulter notre page de livraison.",
       },
       {
         name: "Retours",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Si vous n'êtes pas entièrement satisfait de votre achat, nous acceptons les retours dans les 30 jours suivant la réception de votre commande. Veuillez consulter notre politique de retour pour plus de détails sur la procédure de retour et les conditions applicables.",
       },
     ],
   },

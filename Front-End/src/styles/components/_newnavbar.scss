@@ -1,6 +1,6 @@
 .navbar-container {
-  height: 65px;
-  padding-top: 5px;
+  height: 70px;
+  padding-top: 8px;
   border-bottom: 0.5px solid $borderGray;
 
   @media only screen and (max-width: $phone) {
@@ -27,8 +27,8 @@
         .logo-navlink {
           color: $darkGray !important;
           font-family: "Berkshire Swash", cursive;
-          font-size: 30px;
-          font-weight: 5700;
+          font-size: 32px;
+          font-weight: 700;
           letter-spacing: 2px;
         }
       }
@@ -46,6 +46,7 @@
         cursor: pointer;
         z-index: 20;
         margin-right: 20px;
+        margin-top: -5px;
         transition: 0.25s ease-in;
 
         @media (max-width: $phone) {
