@@ -76,8 +76,6 @@ const Login = () => {
             // add user in the user context
 
             handleLogin(newClient);
-
-
       })
   }
 
