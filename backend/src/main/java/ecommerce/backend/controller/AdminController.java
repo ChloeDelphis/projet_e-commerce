@@ -1,8 +1,13 @@
 package ecommerce.backend.controller;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.Id;
+import javax.persistence.Version;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,10 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import ecommerce.backend.model.Admin;
+import ecommerce.backend.model.Adresse;
 import ecommerce.backend.model.Article;
 import ecommerce.backend.model.Categorie;
+import ecommerce.backend.model.Client;
+import ecommerce.backend.model.ClientDTO;
 import ecommerce.backend.model.Commande;
+import ecommerce.backend.model.JsonViews;
+import ecommerce.backend.model.Panier;
 import ecommerce.backend.repository.AdminRepository;
 import ecommerce.backend.repository.ArticleRepository;
 import ecommerce.backend.repository.CategorieRepository;
@@ -47,7 +59,13 @@ public class AdminController {
 	
     @RequestMapping("/test")
     public String getTest() {
-        return "/test";
+        return "/test2";
+    }
+    
+    @RequestMapping("/action")
+    public String votreMethodePost() {
+        // Votre logique de traitement
+    	return "/test2"; // Redirection vers une page de résultat
     }
     
   //ACCES PAGES 
@@ -229,19 +247,71 @@ public class AdminController {
 
     
     //CRUD Clients ----------------------------------------------------------------------
+
+    
     @RequestMapping("/findallclients")
-    public ModelAndView findallClients(HttpSession session) {        
+    public ModelAndView findallClients(HttpSession session) {
+    	
     	ModelAndView modelAndView = new ModelAndView("/login");
     	if(session.getAttribute("admin") != null){
-    		modelAndView = new ModelAndView("/findall", "liste", clientRepo.findAll());
+    		
+            List<Client> clients = clientRepo.findAll();
+            List<ClientDTO> clientDTOs = new ArrayList<>();
+            for (Client client : clients) {
+
+                ClientDTO clientDTO = new ClientDTO();
+                clientDTO.setEmail(client.getEmail());
+                clientDTO.setMdp(client.getMdp());
+                clientDTO.setPrenom(client.getPrenom());
+                clientDTO.setNom(client.getNom());
+                clientDTO.setTel(client.getTel());
+                clientDTO.setAdresse(client.getAdresse());
+//                clientDTO.setPanier(client.getPanier().getId());            
+                clientDTOs.add(clientDTO);
+
+            }
+
+
+            modelAndView = new ModelAndView("/findall", "liste", clientDTOs);
+    	
             modelAndView.addObject("type", "Client");
             modelAndView.addObject("createMethod", "createclient");
-            modelAndView.addObject("removeMethod", "removeclient");
+            modelAndView.addObject("removeMethod", "removecclient");
             modelAndView.addObject("updateMethod", "updateclient");
 		}
-	    return modelAndView;	
+        return modelAndView;
     }
     
+    @PostMapping("/createclient")
+    public String createClient(@ModelAttribute(name = "client") Client client) {
+
+        clientRepo.save(client);
+        
+        return "redirect:/admin/findallclients";
+    }
+    
+    @PostMapping("removecclient")
+    public String removecClient(@ModelAttribute(name = "email") String email, Model model) {        
+        clientRepo.deleteById(email);
+        
+        return "redirect:/admin/findallclients";
+    }
+    
+    @PostMapping("updateclient")
+    public String updateClient(@ModelAttribute(name = "client") Client client, Model model) {
+    	Client c = clientRepo.findById(client.getEmail()).get();
+
+    	
+    	
+    	client.setVersion(c.getVersion());
+    	clientRepo.save(client);
+        
+        return "redirect:/admin/findallclients";
+    }
+    
+    
+    
+
     //CRUD Commandes ----------------------------------------------------------------------
     @RequestMapping("/findallcommandes")
     public ModelAndView findallCommandes(HttpSession session) {

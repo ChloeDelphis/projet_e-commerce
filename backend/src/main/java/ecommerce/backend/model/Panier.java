@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -23,6 +25,7 @@ public class Panier {
 
 	@Id
 	@JsonView(JsonViews.Common.class)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@JsonView(JsonViews.Common.class)
@@ -37,7 +40,7 @@ public class Panier {
 	
 	@OneToOne
 	@JoinColumn(name = "email_client")
-	@JsonView(JsonViews.PanierWithLigneAndClient.class)
+//	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	private Client client;
 	
 	@Version
