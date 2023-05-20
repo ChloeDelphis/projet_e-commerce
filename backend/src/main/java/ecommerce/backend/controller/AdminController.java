@@ -63,9 +63,16 @@ public class AdminController {
     }
     
     @RequestMapping("/action")
-    public String votreMethodePost() {
-        // Votre logique de traitement
-    	return "/test2"; // Redirection vers une page de résultat
+    public ModelAndView findallClientAdresse(HttpSession session) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+	        modelAndView = new ModelAndView("/findall", "liste", adminRepo.findAll());
+	        modelAndView.addObject("type", "Admin");
+	        modelAndView.addObject("createMethod", "createadmin");
+	        modelAndView.addObject("removeMethod", "removeadmin");
+	        modelAndView.addObject("updateMethod", "updateadmin");
+		}
+	    return modelAndView;	
     }
     
   //ACCES PAGES 

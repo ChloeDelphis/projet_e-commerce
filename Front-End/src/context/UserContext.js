@@ -2,18 +2,39 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
 
-export function UserProvider({ children }) {
+export function UserProvider({children }) {
     const [user, setUser] = useState(null);
     const [panier, setPanier] = useState(null);
+    const [isPanierUpdate, setIsPanierUpdate] = useState(false);
     const [cartQuantity, setCartQuantity] = useState(0);
 
+
     useEffect(() => {
-        console.log(user);
-        const newUser = JSON.parse(sessionStorage.getItem("client")) ?
+
+        const sessionUser = JSON.parse(sessionStorage.getItem("client")) ?
             JSON.parse(sessionStorage.getItem("client")) : null;
 
-        setUser(newUser);
-    }, []);
+        if (sessionUser != null) {
+            fetch(`http://localhost:8080/site/client/findbyemailandmdp/${sessionUser.email}/${sessionUser.mdp}`)
+            .then((res) => res.json())
+            .then(data => {
+                setUser(data);
+            })   
+            }
+
+    }, [isPanierUpdate]);
+
+    useEffect(() => {
+
+        // if (user != null) {
+        //     fetch(`http://localhost:8080/site/findbyemailandmdp/${user.email}/${user.mdp}`)
+        //     .then((res) => res.json())
+        //     .then(data => {
+        //         setUser(data);
+        //     })   
+        //     }
+
+    }, [isPanierUpdate]);
 
     useEffect(() => {
         if (user != null) {
@@ -27,8 +48,6 @@ export function UserProvider({ children }) {
                     }
                     setCartQuantity(quantity);
                 });
-    
-                
             }
     }, [user])
 
@@ -54,7 +73,7 @@ export function UserProvider({ children }) {
     };
 
     return (
-        <UserContext.Provider value={{ user, handleLogin, handleLogout, cartQuantity, addQuantity, removeQuantity, emptyCart }}>
+        <UserContext.Provider value={{ user, handleLogin, handleLogout, cartQuantity, addQuantity, removeQuantity, emptyCart, isPanierUpdate, setIsPanierUpdate }}>
             {children}
         </UserContext.Provider>
     );

@@ -28,7 +28,7 @@ public class Ligne {
 	@ManyToOne
 	@JoinColumn(name = "article_id")
 //	@JsonView({JsonViews.ArticleWithCategorie.class})
-	@JsonView({JsonViews.PanierWithLigneAndClient.class})	
+	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ClientWithAdresseAndPanier.class})	
 	private Article article;
 	
 	@JsonView(JsonViews.Common.class)

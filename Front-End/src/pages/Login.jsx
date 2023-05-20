@@ -84,12 +84,14 @@ const Login = () => {
 
     const email = event.target.email.value;
     const mdp = event.target.password.value;
+    console.log(email, mdp);
+    
 
     fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`)
       .then((res) => res.json()).then(data => {
 
       console.log("Logged in");
-      console.log(data);
+      console.log({...data, "lignes":[]});
       setClient(data);
       setIsClientLogged(true);
 
@@ -103,7 +105,7 @@ const Login = () => {
         sessionStorage.setItem("client", JSON.stringify(client));
   
         // add user in the user context
-        // handleLogin(client);
+        handleLogin(client);
   
         // setMsgErreurC("");
         navigate("/");

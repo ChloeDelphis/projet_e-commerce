@@ -35,7 +35,7 @@ public class Panier {
 	private double total;
 	
 	@OneToMany(mappedBy = "panier", cascade = CascadeType.REMOVE)
-	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class})
+	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class, JsonViews.ClientWithAdresseAndPanier.class})
 	private List<Ligne> lignes;
 	
 	@OneToOne
