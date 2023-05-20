@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 
 // Le component du Footer
 const Footer = () => {
+  const [showInput, setShowInput] = useState(true);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowInput(false);
+  }
+
   return (
     <footer className="footer">
 
@@ -12,11 +19,17 @@ const Footer = () => {
         <p>
           <span>(Vous pouvez vous DÉSABONNER à tout moment).</span>
         </p>
+        {
+          showInput &&
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <input className='input' type="email" placeholder="Entrez votre e-mail" />
+            <button type='submit'>Sign up</button>
+          </form>
+        }
+        {
+          !showInput && <div>À bientôt dans votre boite e-mail !</div>
+        }
 
-        <form>
-          <input className='input' type="email" placeholder="Entrez votre e-mail" />
-          <button>Sign up</button>
-        </form>
       </div>
 
       <div className="top">

@@ -278,10 +278,9 @@
                             padding: 10px 15px;
                             cursor: pointer;
                             border: 0.5px solid $borderGray;
-                            border-bottom: 3px solid $borderGray;
+                            border-bottom: 2px solid $borderGray;
                             border-top-left-radius: 10px;
                             border-top-right-radius: 10px;
-                            // background-color: rgba(128, 128, 128, 0.425);
                             background-color: $white;
 
                             &:hover {
@@ -308,12 +307,12 @@
                         flex-direction: column;
                         gap: 30px;
 
-                        hr {
-                            margin-top: 10px;
+                        thead {
+                            border-bottom: 1px solid $borderGray;
                         }
 
                         .commande {
-                            margin-bottom: 15px;
+                            margin-bottom: 20px;
                             text-align: left;
                             display: flex;
                             flex-direction: row;
@@ -328,7 +327,9 @@
                                 font-size: 17px;
                             }
 
-                            .date {}
+                            .date {
+                                font-weight: 500;
+                            }
 
                             .nbArticles {}
 

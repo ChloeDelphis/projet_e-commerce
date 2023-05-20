@@ -35,15 +35,12 @@ const CardInfo = ({ data, type }) => {
 }
 
 const CardClient = ({ client, nbArticles }) => {
-    // const { numero, rue, cp, ville } = client.adresse;
-
     const [showEditForm, setShowEditForm] = useState(false);
     const [passwordErrorMsg, setPasswordErrorMsg] = useState(false);
 
     const [editedClient, setEditedClient] = useState(client);
     const [displayedClient, setDisplayedClient] = useState(client);
 
-    // const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState(client.mdp);
 
     const requestUpdateClient = {
@@ -83,10 +80,6 @@ const CardClient = ({ client, nbArticles }) => {
 
     };
 
-    // useEffect(() => {
-    //     console.log(displayedClient);
-    // }, [displayedClient])
-
     return (
         <div className="card_client_container">
             <div className='card_client card'>
@@ -113,8 +106,7 @@ const CardClient = ({ client, nbArticles }) => {
                         </>
                     }
                     <p className='nomPrenom'>{displayedClient.nom} {displayedClient.prenom}</p>
-                    {/* <p className='status'>Client {client.status}</p> */}
-                    {/* <p className='status'>Client gold</p> */}
+
                 </div>
                 <div className="center">
                     <div className="dataStyle">
@@ -318,14 +310,7 @@ const Profil = () => {
             fetchData();
     }, [client])
 
-    // useEffect(() => {
-    //     if (client) {
-    //         console.log(client);
-    //     }
-    //     if (commandes)
-    //         console.log(commandes);
-    // }, [client, commandes]);
-
+    // Nombre total d'articles toutes commandes
     const getNbArticlesTotal = () => {
         let nbArticles = 0;
         for (let i = 0; i < commandes.length; i++) {
