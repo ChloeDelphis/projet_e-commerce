@@ -69,20 +69,20 @@ const NewNavbar = () => {
                                         to="/productcategories"
                                     >
                                         Products
-                                        <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
-                                            <ul className="sub-menu-products__container">
-                                                {categories && categories.map((item, index) => (
-                                                    <li key={index}>
-                                                        <Link to={`/category/${item.id}`}>
-                                                            {item.name}
-                                                        </Link>
-                                                    </li>
-                                                ))
-                                                }
-
-                                            </ul>
-                                        </div>
                                     </NavLink>
+                                    <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
+                                        <ul className="sub-menu-products__container">
+                                            {categories && categories.map((item, index) => (
+                                                <li key={index}>
+                                                    <Link to={`/category/${item.id}`}>
+                                                        {item.name}
+                                                    </Link>
+                                                </li>
+                                            ))
+                                            }
+
+                                        </ul>
+                                    </div>
                                 </div>
                             </li>
                             <li onClick={() => setIsActive(false)}>

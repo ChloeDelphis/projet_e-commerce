@@ -15,13 +15,13 @@ const CardInfo = ({ data, type }) => {
             {type === 1 &&
                 <>
                     <div className="dataNb">{data}</div>
-                    <div className="dataInfo">Commandes Passées</div>
+                    <div className="dataInfo"> {data > 1 ? "Commandes Passées" : "Commande Passée"}</div>
                 </>
             }
             {type === 2 &&
                 <>
                     <div className="dataNb">{data}</div>
-                    <div className="dataInfo">Articles Commandés</div>
+                    <div className="dataInfo">{data > 1 ? "Articles Commandés" : "Article Commandé"}</div>
                 </>
             }
             {type === 3 &&
@@ -92,21 +92,21 @@ const CardClient = ({ client, nbArticles }) => {
             <div className='card_client card'>
                 <div className="top">
                     {
-                        nbArticles && nbArticles < 5 &&
+                        (nbArticles >= 0 && nbArticles < 5) &&
                         <>
                             <img src="./assets/pages/profil/silver.png" alt="image_status_client" />
                             <p className='status'>Client Silver</p>
                         </>
                     }
                     {
-                        nbArticles && nbArticles >= 5 && nbArticles <= 10 &&
+                        (nbArticles >= 5 && nbArticles <= 10) &&
                         <>
                             <img src="./assets/pages/profil/gold.png" alt="image_status_client" />
                             <p className='status'>Client Gold</p>
                         </>
                     }
                     {
-                        nbArticles && nbArticles > 10 &&
+                        (nbArticles > 10) &&
                         <>
                             <img src="./assets/pages/profil/platinum.png" alt="image_status_client" />
                             <p className='status'>Client Platinum</p>
@@ -326,26 +326,25 @@ const Profil = () => {
     //         console.log(commandes);
     // }, [client, commandes]);
 
-    const dataPoints = {
-        nbCommandes: 5,
-        nbArticlesCommande: 25,
-        nbArticlesPaniers: 8
-    }
-
     const getNbArticlesTotal = () => {
         let nbArticles = 0;
-
         for (let i = 0; i < commandes.length; i++) {
             if (commandes[i].detail) {
                 const articles = commandes[i].detail.split('/');
                 for (let article of articles) {
-                    const [, quantity] = article.split('-');
-                    nbArticles += parseInt(quantity);
+                    const articleDetails = article.split('-');
+                    if (articleDetails.length === 2) {
+                        const quantity = articleDetails[1];
+                        if (!isNaN(quantity)) {
+                            nbArticles += parseInt(quantity);
+                        }
+                    }
                 }
             }
         }
         return nbArticles;
     };
+
 
     return (
         <div className='profil_client'>
@@ -361,7 +360,7 @@ const Profil = () => {
                         {client && <CardInfo data={commandes ? getNbArticlesTotal() : 0} type={2} />}
                         {client && <CardInfo data={commandes ? getNbArticlesTotal() : 0} type={3} />}
                     </div>
-                    <div className="bottom card">
+                    <div className="bottom">
                         {client && <CommandesClient email={client.email} />}
                     </div>
                 </div>
