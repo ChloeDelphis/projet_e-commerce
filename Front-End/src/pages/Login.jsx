@@ -9,6 +9,7 @@ const Login = () => {
 
   const [client, setClient] = useState({});
   const [isClientLogged, setIsClientLogged] = useState(false);
+  const { user, handleLogin } = useUser();
   const navigate = useNavigate();
 
   const CreateClient = async (event) => {
@@ -60,22 +61,24 @@ const Login = () => {
               "email": email
             }
           }
-      }
+        }
     
-      const requestOptionsClient = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newClient)
-      };
+        const requestOptionsClient = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newClient)
+        };
     
+        fetch('http://localhost:8080/site/client', requestOptionsClient)
+            setClient(newClient);
+            setIsClientLogged(true);
+      
+            // add user in the user context
 
-        fetch('http://localhost:8080/site/client', requestOptionsClient);
+            handleLogin(newClient);
+
 
       })
-      .catch(error => {
-        // Gérer les erreurs ici
-        
-      });
   }
 
   const loginClient = async (event) => {
@@ -88,11 +91,12 @@ const Login = () => {
       .then((res) => res.json()).then(data => {
 
       console.log("Logged in");
+      console.log(data);
       setClient(data);
       setIsClientLogged(true);
 
       // add user in the user context
-      // handleLogin(data);
+      handleLogin(data);
       })
     }
 

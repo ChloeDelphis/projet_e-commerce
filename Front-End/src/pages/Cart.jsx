@@ -129,7 +129,8 @@ const Cart = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(panier)
       };
-      fetch(`http://localhost:8080/site/panier/`, requestOptions);
+      console.log("Panier avant put",panier);
+      // fetch(`http://localhost:8080/site/panier/`, requestOptions);
     }
   }, [panier]);
 
@@ -138,6 +139,7 @@ const Cart = () => {
       .then((res) => res.json())
       .then(data => {
         // sessionStorage.setItem('panier', JSON.stringify(data));
+        console.log("les datas pour le panier :",data);
         setPanier(data);
       });
   }, []);
@@ -209,7 +211,6 @@ const Cart = () => {
           <h2>Résumé de votre commande</h2>
           <div className="total">
             <h4>Total : </h4>
-            {console.log("Le panier actuel : ", panier.total)}
             <h3>{panier.total}€</h3>
           </div>
           <button onClick={() => handleCommandClick()}>Passer à la caisse</button>
