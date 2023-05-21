@@ -24,16 +24,29 @@ const Cart = () => {
     }
 }, [navigate]);
 
-  useEffect(() => {
-    if (user && user.panier) {
-      setPanier({ ...user.panier, "client": { "email": user.email } });
-    }
-  }, [user, isPanierUpdate])
+  // useEffect(() => {
+  //   if (user && user.panier) {
+  //     setPanier({ ...user.panier, "client": { "email": user.email } });
+  //   }
+  // }, [user, isPanierUpdate])
+
+  // useEffect(() => {
+  //   if (panier !== null) {
+  //   }
+  // }, [panier]);
 
   useEffect(() => {
-    if (panier !== null) {
+    if (user && user.panier) {
+      const updatedPanier = { ...user.panier, "client": { "email": user.email } };
+      // Mettre à jour les quantités dans le panier
+      updatedPanier.lignes.forEach((ligne) => {
+        ligne.quantite = parseInt(ligne.quantite);
+        ligne.total = ligne.quantite * ligne.article.prix;
+      });
+      setPanier(updatedPanier);
     }
-  }, [panier]);
+  }, [user, isPanierUpdate]);
+  
 
   const supprimerLigne = (index) => {
 
@@ -106,52 +119,56 @@ const Cart = () => {
   const handleQuantityChange = (event, index) => {
     let quantity = parseInt(event.target.value);
     if (!isNaN(quantity) && quantity >= 1) {
-      const newPanier = { ...panier };
-      newPanier.lignes[index].quantite = quantity;
-      newPanier.lignes[index].total = quantity * newPanier.lignes[index].article.prix;
-      setPanier(newPanier);
-
-      const nouvelleLigne = {
-        ...newPanier.lignes[index],
-        "panier": { "id": newPanier.id },
-      };
-
-      addQuantity(cartQuantity - cartQuantity);
-      updateLigne(nouvelleLigne);
+      setPanier(prevPanier => {
+        const newPanier = { ...prevPanier };
+        newPanier.lignes[index].quantite = quantity;
+        newPanier.lignes[index].total = quantity * newPanier.lignes[index].article.prix;
+        const nouvelleLigne = {
+          ...newPanier.lignes[index],
+          "panier": { "id": newPanier.id },
+        };
+        addQuantity(quantity - prevPanier.lignes[index].quantite);
+        updateLigne(nouvelleLigne);
+        return newPanier;
+      });
     }
   };
+  
 
   function handleMinusClick(index) {
     if (!isNaN(panier.lignes[index].quantite) && panier.lignes[index].quantite > 1) {
-      const newPanier = { ...panier };
-      newPanier.lignes[index].quantite = newPanier.lignes[index].quantite - 1;
+      setPanier(prevPanier => {
+        const newPanier = { ...prevPanier };
+        newPanier.lignes[index].quantite = newPanier.lignes[index].quantite - 1;
+        newPanier.lignes[index].total = newPanier.lignes[index].quantite * newPanier.lignes[index].article.prix;
+        const nouvelleLigne = {
+          ...newPanier.lignes[index],
+          "panier": { "id": newPanier.id },
+        };
+        removeQuantity(1);
+        updateLigne(nouvelleLigne);
+        return newPanier;
+      });
+    }
+  }
+  
+  function handlePlusClick(index) {
+    setPanier(prevPanier => {
+      const newPanier = { ...prevPanier };
+      newPanier.lignes[index].quantite = newPanier.lignes[index].quantite + 1;
       newPanier.lignes[index].total = newPanier.lignes[index].quantite * newPanier.lignes[index].article.prix;
-      setPanier(newPanier);
-
       const nouvelleLigne = {
         ...newPanier.lignes[index],
         "panier": { "id": newPanier.id },
       };
-      removeQuantity(1);
+      addQuantity(1);
       updateLigne(nouvelleLigne);
-    }
-  }
-
-  function handlePlusClick(index) {
-    const newPanier = { ...panier };
-    newPanier.lignes[index].quantite = newPanier.lignes[index].quantite + 1;
-    newPanier.lignes[index].total = newPanier.lignes[index].quantite * newPanier.lignes[index].article.prix;
-    setPanier(newPanier);
-    const nouvelleLigne = {
-      ...newPanier.lignes[index],
-      "panier": { "id": newPanier.id },
-    };
-
-    addQuantity(1);
-    updateLigne(nouvelleLigne);
+      return newPanier;
+    });
   }
 
   const updateLigne = async (nouvelleLigne) => {
+    console.log("On m'appelle ici ");
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
