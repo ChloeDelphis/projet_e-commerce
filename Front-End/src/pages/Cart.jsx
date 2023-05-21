@@ -63,7 +63,7 @@ const Cart = () => {
 
     panier.lignes && panier.lignes.map((ligne, index) => {
 
-      detail += ligne.quantite + "/" + ligne.article.ref + " ";
+      detail += ligne.article.ref + "-" + ligne.quantite + "/";
       supprimerLigne(ligne.id);
     })
 
