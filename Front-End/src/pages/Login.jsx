@@ -12,6 +12,9 @@ const Login = () => {
   const { user, handleLogin } = useUser();
   const navigate = useNavigate();
 
+  const [msgErreurI, setMsgErreurI] = useState("");
+  const [msgErreurC, setMsgErreurC] = useState("");
+
   const CreateClient = async (event) => {
     event.preventDefault();
 
@@ -69,13 +72,35 @@ const Login = () => {
           body: JSON.stringify(newClient)
         };
     
-        fetch('http://localhost:8080/site/client', requestOptionsClient)
-            setClient(newClient);
-            setIsClientLogged(true);
-      
-            // add user in the user context
+        fetch('http://localhost:8080/site/client', requestOptionsClient).then(async response => {
 
-            handleLogin(newClient);
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const data = isJson && await response.json();
+
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response status
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+        }
+        else{
+          setMsgErreurI("");
+          setClient(newClient);
+          setIsClientLogged(true);
+    
+          // add user in the user context
+  
+          handleLogin(newClient);
+        }
+
+      }).catch(error => {
+ 
+        console.error('There was an error!', error);
+        setMsgErreurI("Il existe déjà un compte avec cette adresse mail");
+ 
+      });
+
+        
       })
   }
 
@@ -97,7 +122,23 @@ const Login = () => {
 
       // add user in the user context
       handleLogin(data);
-      })
+      }).then(async response => {
+
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const data = isJson && await response.json();
+  
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response status
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+        }
+  
+      }).catch(error => {
+        // this.setState({ errorMessage: error.toString() });
+        console.error('There was an error!', error);
+        setMsgErreurC("Adresse mail ou mot de passe invalide");
+      });
     }
 
     useEffect(() => {
@@ -131,7 +172,7 @@ const Login = () => {
 
                 <h2>Login</h2>
 
-                <p className='msgError'>message</p>
+                <p className='msgError'>{msgErreurC}</p>
                 <div className="inputbox">
                   <IonIcon icon={mailOutline} />
                   <input type="email" name="email" required ></input>
@@ -160,7 +201,7 @@ const Login = () => {
 
               <h2>Sign in</h2>
 
-              <p className='msgError'>msgErreurI</p>
+              <p className='msgError'>{msgErreurI}</p>
               <div className="inputbox">
                 <IonIcon icon={mailOutline} />
                 <input type="email" name="email" required pattern="^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\..[a-z]{1,}$" title="exemple : lorem@ispum.fr"></input>
