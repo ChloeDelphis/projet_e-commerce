@@ -239,7 +239,7 @@ const Buy = ({ data }) => {
                 Quantité
                 </label>
                 <br />
-                <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" max={stock} onChangeCapture={(event) => handleQuantityChange(event)}></input>
+                <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" max={stock.qte} onChangeCapture={(event) => handleQuantityChange(event)}></input>
               </div>
             )}
             </div>
@@ -250,7 +250,7 @@ const Buy = ({ data }) => {
             if (clientJSON == null) {
               navigate("/login");
             }
-            else if (document.querySelector('.shopping__buy__quantity__input').value > 0) {
+            else if (stock.qte > 0 && document.querySelector('.shopping__buy__quantity__input').value > 0) {
               handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
             }
         }
@@ -260,7 +260,7 @@ const Buy = ({ data }) => {
             if (clientJSON == null) {
               navigate("/login");
             }
-            else if (document.querySelector('.shopping__buy__quantity__input').value > 0) {
+            else if (stock.qte && document.querySelector('.shopping__buy__quantity__input').value > 0) {
               handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
               navigate("/cart");
             }          
