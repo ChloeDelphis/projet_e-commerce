@@ -113,11 +113,11 @@ const Buy = ({ data }) => {
         .then((res) => res.json())
         .then(data => {
             setStock(data);
-            if(data.stock < 1){
+            if(data.qte < 1){
               setMessageStock("Désolé, l'article n'est plus disponible dans cette taille");
             }
-            else if(data.stock < 10){
-              setMessageStock(`Vite !!! Il ne reste plus que ${data.stock} articles dans cette taille.`);
+            else if(data.qte < 10){
+              setMessageStock(`Vite !!! Il ne reste plus que ${data.qte} articles dans cette taille.`);
             }
             else{
               setMessageStock("");
@@ -168,10 +168,10 @@ const Buy = ({ data }) => {
 
   const handleAjout = (quantity) => {
     
-    if (stock.stock > quantity && quantity > 0) {
+    if (stock.qte >= quantity && quantity > 0) {
 
       let newStock = stock;
-      newStock.stock = stock.stock - quantity;
+      newStock.qte = stock.qte - quantity;
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -213,7 +213,7 @@ const Buy = ({ data }) => {
       }
     }
     else{
-      setMessageAjout(`Impossible, il ne reste que ${stock.stock} articles en stock`);
+      setMessageAjout(`Impossible, il ne reste que ${stock.qte} articles en stock`);
     }
   };
 
@@ -233,9 +233,7 @@ const Buy = ({ data }) => {
             onChange={handleSizeChange}
           >
             <option value="S">S</option>
-            <option value="M" selected>
-              M
-            </option>
+            <option value="M" selected>M</option>
             <option value="L">L</option>
           </select>
           <br></br>
@@ -244,7 +242,7 @@ const Buy = ({ data }) => {
         </div>
         
 
-          {stock.stock > 0 && (
+          {stock.qte > 0 && (
             <div className="shopping__buy__quantity">
               <label className="shopping__buy__quantity__label" htmlFor="quantity">
               Quantité

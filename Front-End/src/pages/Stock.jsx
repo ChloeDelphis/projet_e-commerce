@@ -16,7 +16,7 @@ const Stock = () => {
                 const newStockS = {
                     "refArticle": article.ref,
                     "taille": "S",
-                    "stock": "50"
+                    "qte": "50"
                 }
 
                 const requestOptionsStockS = {
@@ -30,7 +30,7 @@ const Stock = () => {
                 const newStockM = {
                     "refArticle": article.ref,
                     "taille": "M",
-                    "stock": "50"
+                    "qte": "50"
                 }
 
                 const requestOptionsStockM = {
@@ -44,7 +44,7 @@ const Stock = () => {
                 const newStockL = {
                     "refArticle": article.ref,
                     "taille": "L",
-                    "stock": "50"
+                    "qte": "50"
                 }
 
                 const requestOptionsStockL = {

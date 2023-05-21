@@ -34,7 +34,7 @@ const Cart = () => {
         .then(data => {
 
             let newStock = data;
-            newStock.stock = data.stock + ligne.quantite;
+            newStock.qte = data.qte + ligne.quantite;
             const requestOptionsStock = {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },

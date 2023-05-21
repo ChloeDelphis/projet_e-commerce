@@ -13,7 +13,7 @@ public class Stock {
 	private int id;
 	private int refArticle;
 	private String taille;
-	private int stock;
+	private int qte;
 	@Version
 	private int version;
 
@@ -41,12 +41,12 @@ public class Stock {
 		this.taille = taille;
 	}
 
-	public int getStock() {
-		return stock;
+	public int getQte() {
+		return qte;
 	}
 
-	public void setStock(int stock) {
-		this.stock = stock;
+	public void setQte(int qte) {
+		this.qte = qte;
 	}
 
 	public int getVersion() {
@@ -57,12 +57,12 @@ public class Stock {
 		this.version = version;
 	}
 
-	public Stock(int id, int refArticle, String taille, int stock) {
+	public Stock(int id, int refArticle, String taille, int qte) {
 		super();
 		this.id = id;
 		this.refArticle = refArticle;
 		this.taille = taille;
-		this.stock = stock;
+		this.qte = qte;
 	}
 
 	public Stock() {
@@ -71,7 +71,8 @@ public class Stock {
 
 	@Override
 	public String toString() {
-		return "Stock [id=" + id + ", refArticle=" + refArticle + ", taille=" + taille + ", stock=" + stock + "]";
+		return "Stock [id=" + id + ", refArticle=" + refArticle + ", taille=" + taille + ", qte=" + qte + ", version="
+				+ version + "]";
 	}
 
 }

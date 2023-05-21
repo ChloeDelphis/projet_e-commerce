@@ -17,30 +17,63 @@
 	<c:if test="${not empty object['class'].declaredFields}">
 	    <div class="mt-5 m-3">
 		    <div class="row">
-	        	<div class="col">
-					<h2>
-						Ajouter <em>${type}</em>
-					</h2>
-					<form action= ${createMethod} method="post">
-					
-						<input type="hidden" id="version" name=${type } value="4" />
-						<ul>
-							<c:forEach var="field" items="${object['class'].declaredFields}">
-								<c:if test="${field.name != 'articles' && field.name != 'version' && field.name != 'date'}">
-									<c:catch>
-										<li>
-											<span style="font-weight: bold"> 
-											<label for=${field.name}>${field.name}:</label> 
-											<input type="text" id=${field.name } name=${field.name }>
-										</li>
-									</c:catch>
-								</c:if>
-							</c:forEach>
-						</ul>
-						<input type="submit" class="btn btn-success" value="Ajouter">
+		    	<c:if test="${type != 'Stock' && type != 'Commande'}">
+		        	<div class="col">
+						<h2>
+							Ajouter <em>${type}</em>
+						</h2>
+						<form action= ${createMethod} method="post">
+						
+							<input type="hidden" id="version" name=${type } value="4" />
+							<ul>
+								<c:forEach var="field" items="${object['class'].declaredFields}">
+									<c:if test="${field.name != 'articles' && field.name != 'version' && field.name != 'date'}">
+										<c:catch>
+											<li>
+												<span style="font-weight: bold"> 
+												<label for=${field.name}>${field.name}:</label> 
+												<input type="text" id=${field.name } name=${field.name }>
+											</li>
+										</c:catch>
+									</c:if>
+								</c:forEach>
+							</ul>
+							<input type="submit" class="btn btn-success" value="Ajouter">
+						</form>
+					</div>
+				</c:if>
+				<c:if test="${type == 'Stock'}">
+					<form action="lowStock" method="post">
+						<span style="font-weight: bold"> 
+						<label for="quantitesLow"}>Articles dont le stock est inférieur à :</label> 
+						<input type="number" id="quantitesLow" name="quantitesLow">
+						<input type="submit" class="btn btn-success" value="Filtrer">
 					</form>
-				</div>
-				
+				</c:if>
+				<c:if test="${type == 'Commande'}">
+				<h2>
+							Filtrer par :
+						</h2>
+					<form action="commandfilterid" method="post">
+						<span style="font-weight: bold"> 
+						<label for="idcommande"}>idcommande :</label> 
+						<input type="number" id="idcommande" name="idcommande">
+						<input type="submit" class="btn btn-success" value="chercher">
+					</form>
+					<form action="commandfilteremail" method="post">
+						<span style="font-weight: bold"> 
+						<label for="email"}>email client :</label> 
+						<input type="text" id="email" name="email">
+						<input type="submit" class="btn btn-success" value="Filtrer">
+					</form>
+					<form action="commandfilterprice" method="post">
+						<span style="font-weight: bold"> 
+						<label for="prix"}>Prix compris entre:</label> 
+						<input type="number" id="prixMin" name="prixMin">
+						<input type="number" id="prixMax" name="prixMax">
+						<input type="submit" class="btn btn-success" value="Filtrer">
+					</form>
+				</c:if>
 				<c:if test="${isAdresse == true}">
 					<div class="col">
 						<h2>
@@ -112,8 +145,8 @@
 											<td> ${object[field.name]}</td>
 										</c:if>
 										<c:if test="${field.name == 'adresse' }">
-											<%-- <td> ${object[field.name]}</td> --%>
-											<td><a href="<c:url value='/admin/action'/>">Test</a></td>
+											<td> ${object[field.name]}</td>
+											<%-- <td><a href="<c:url value='/admin/action'/>">Test</a></td> --%>
 										</c:if>
 										<c:if test="${field.name != 'categorie' && field.name != 'date' && field.name != 'adresse'}">
 											<td> <input type="text" id="${field.name }" name="${field.name }" value ="${object[field.name]}" style="border:none; text-align:center;" ></input></td>

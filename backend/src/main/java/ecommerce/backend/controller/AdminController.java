@@ -32,11 +32,13 @@ import ecommerce.backend.model.ClientDTO;
 import ecommerce.backend.model.Commande;
 import ecommerce.backend.model.JsonViews;
 import ecommerce.backend.model.Panier;
+import ecommerce.backend.model.Stock;
 import ecommerce.backend.repository.AdminRepository;
 import ecommerce.backend.repository.ArticleRepository;
 import ecommerce.backend.repository.CategorieRepository;
 import ecommerce.backend.repository.ClientRepository;
 import ecommerce.backend.repository.CommandeRepository;
+import ecommerce.backend.repository.StockRepository;
 
 @Controller
 @RequestMapping("/admin")
@@ -56,6 +58,9 @@ public class AdminController {
 	
 	@Autowired
 	private CommandeRepository commandeRepo;
+	
+	@Autowired
+	private StockRepository stockRepo;
 	
     @RequestMapping("/test")
     public String getTest() {
@@ -319,7 +324,7 @@ public class AdminController {
     
     
 
-    //CRUD Commandes ----------------------------------------------------------------------
+    //CRUD+ Commandes ----------------------------------------------------------------------
     @RequestMapping("/findallcommandes")
     public ModelAndView findallCommandes(HttpSession session) {
 
@@ -344,6 +349,120 @@ public class AdminController {
     	commandeRepo.deleteById(idCommande);
         
         return "redirect:/admin/findallcommandes";
+    }
+    
+    @PostMapping("commandfilterid")
+    public ModelAndView commandfilterid(HttpSession session, @RequestParam("idcommande") int idcommande) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+    		
+    		Commande commande = commandeRepo.findById(idcommande).orElse(null);
+
+    		List<Commande> commandeList = new ArrayList<>();
+    		if (commande != null) {
+    		    commandeList.add(commande);
+    		}
+    		
+	        modelAndView = new ModelAndView("/findall", "liste", commandeList);
+	        modelAndView.addObject("type", "Commande");
+	        modelAndView.addObject("type", "Commande");
+            modelAndView.addObject("createMethod", "createcommande");
+            modelAndView.addObject("removeMethod", "removecommande");
+		}
+	    return modelAndView;	
+    }
+    
+    @PostMapping("commandfilteremail")
+    public ModelAndView commandfilteremail(HttpSession session, @RequestParam("email") String email) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+    		
+	        modelAndView = new ModelAndView("/findall", "liste", commandeRepo.findByEmailClient(email));
+	        modelAndView.addObject("type", "Commande");
+	        modelAndView.addObject("type", "Commande");
+            modelAndView.addObject("createMethod", "createcommande");
+            modelAndView.addObject("removeMethod", "removecommande");
+		}
+	    return modelAndView;	
+    }
+    
+    @PostMapping("commandfilterprice")
+    public ModelAndView commandfilterprice(HttpSession session, @RequestParam("prixMin") Double prixMin, @RequestParam("prixMax") Double prixMax) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+    		
+	        modelAndView = new ModelAndView("/findall", "liste", commandeRepo.findByTotalBetween(prixMin, prixMax));
+	        modelAndView.addObject("type", "Commande");
+	        modelAndView.addObject("type", "Commande");
+            modelAndView.addObject("createMethod", "createcommande");
+            modelAndView.addObject("removeMethod", "removecommande");
+		}
+	    return modelAndView;	
+    }
+    
+    
+    
+    
+//CRUD+ Stock ----------------------------------------------------------------------
+    
+    @RequestMapping("/findallstock")
+    public ModelAndView findallStock(HttpSession session) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+	        modelAndView = new ModelAndView("/findall", "liste", stockRepo.findAll());
+	        modelAndView.addObject("type", "Stock");
+	        modelAndView.addObject("createMethod", "createstock");
+	        modelAndView.addObject("removeMethod", "removestock");
+	        modelAndView.addObject("updateMethod", "updatestock");
+		}
+	    return modelAndView;	
+    }
+//    
+//    @PostMapping("/findadminbyid")
+//    public ModelAndView findAdminById(@RequestParam(name = "email") String email) {
+//        ModelAndView modelAndView = new ModelAndView("/findbyid", "item", adminRepo.findById(email).get());
+//
+//        return modelAndView;
+//    }
+//    
+//    @PostMapping("/createadmin")
+//    public String createAdmin(@ModelAttribute(name = "admin") Admin admin) {
+//        adminRepo.save(admin);
+//        
+//        return "redirect:/admin/findalladmin";
+//    }
+//    
+//    @PostMapping("removeadmin")
+//    public String removeAdmin(@ModelAttribute(name = "email") String email, Model model) {        
+//        adminRepo.deleteById(email);
+//        
+//        return "redirect:/admin/findalladmin";
+//    }
+//    
+    
+    @PostMapping("lowStock")
+    public ModelAndView filterStock(HttpSession session, @RequestParam("quantitesLow") int quantitesLow) {
+    	ModelAndView modelAndView = new ModelAndView("/login");
+    	if(session.getAttribute("admin") != null){
+	        modelAndView = new ModelAndView("/findall", "liste", stockRepo.findByQteLessThan(quantitesLow));
+	        modelAndView.addObject("type", "Stock");
+	        modelAndView.addObject("createMethod", "createstock");
+	        modelAndView.addObject("removeMethod", "removestock");
+	        modelAndView.addObject("updateMethod", "updatestock");
+		}
+	    return modelAndView;	
+    }
+    
+    @PostMapping("updatestock")
+    public String updatestock(@ModelAttribute(name = "stock") Stock stock, Model model) {
+    	Stock s = stockRepo.findById(stock.getId()).get();
+    	stock.setVersion(s.getVersion());
+    	System.out.println(stock);
+    	System.out.println("HERE ------------------------------------" + stock.getVersion());
+    	System.out.println(s);
+    	stockRepo.save(stock);
+        
+        return "redirect:/admin/findallstock";
     }
 
 }
