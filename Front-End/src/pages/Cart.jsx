@@ -11,6 +11,18 @@ const Cart = () => {
   const { user, handleLogin, isPanierUpdate, setIsPanierUpdate, removeQuantity, addQuantity, cartQuantity } = useUser();
   const [panier, setPanier] = useState(null);
   const [stock, setStock] = useState({});
+  const [client, setClient] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedClient = JSON.parse(sessionStorage.getItem("client"));
+    // on redirige le user vers la page de login s'il n'est pas en session
+    if (!storedClient) {
+        navigate('/login');
+    } else {
+        setClient(storedClient);
+    }
+}, [navigate]);
 
   useEffect(() => {
     if (user && user.panier) {
@@ -150,19 +162,19 @@ const Cart = () => {
             {
               user.panier.lignes && panier.lignes.map((ligne, index) => {
 
-                let linkProduct = "/productpage/" + ligne.article.ref;
-                return (
-                  <div key={ligne.id} className="article">
-                    <img src={ligne.article.img} alt="Image" />
-                    <div className="description">
-                      <h3>
-                        <Link to={linkProduct}>
-                          {ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}
-                        </Link>
-                      </h3>
-
-                      <div className="detail">
-                        <label>Taille : {ligne.taille}</label>
+              let linkProduct = "/productpage/" + ligne.article.ref;
+              return(
+                <div key={ligne.id} className="article">
+                  <img src={ligne.article.img} alt="Image" />
+                  <div className="description">
+                    <h3>
+                      <Link to={linkProduct}>
+                      {ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}
+                      </Link>
+                    </h3>
+                    {ligne.article.categorie.name != 'Occasion' &&(
+                    <div className="detail">
+                      <label>Taille : {ligne.taille}</label>
 
                         <h4>Prix : {ligne.article.prix} €</h4>
 
@@ -175,9 +187,16 @@ const Cart = () => {
 
                         <h4>Total : {panier.lignes[index].total}€</h4>
                       </div>
-                      <h5 onClick={() => supprimerLigne(ligne.id)}>Supprimer</h5>
+                    )}
+                    {ligne.article.categorie.name == 'Occasion' &&(
+                    <div className="detail">
+                      <label></label>
+                      <h4>Total : {panier.lignes[index].total}€</h4>
                     </div>
+                    )}
+                    <h5 onClick={() => supprimerLigne(ligne.id)}>Supprimer</h5>
                   </div>
+                </div>
                 )
               })
             }

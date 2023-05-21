@@ -28,6 +28,15 @@ public class ArticleRestController {
 
 	@Autowired
 	ArticleRepository repo;
+	
+	//GET FIND MAX REF
+	@CrossOrigin
+	@GetMapping("/findmaxref")
+	@JsonView(JsonViews.ArticleWithCategorie.class)
+	public String findmaxref() {
+		return repo.findMaxRef();
+	}
+	
 
 	// (GET) FIND ALL
 	@CrossOrigin
