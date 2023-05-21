@@ -10,6 +10,7 @@ const Cart = () => {
   
   const { user, handleLogin, isPanierUpdate, setIsPanierUpdate,removeQuantity, addQuantity, cartQuantity } = useUser();
   const [panier, setPanier] = useState(null);
+  const [stock, setStock] = useState({});
 
   useEffect(()=> {
     if (user && user.panier){
@@ -17,19 +18,68 @@ const Cart = () => {
     }
   }, [user,isPanierUpdate])
 
-  useEffect(()=> {
-    console.log("LE PANIER:",panier);
-  }, [panier])
+  useEffect(() => {
+    if (panier !== null) {
+    }
+  }, [panier]);
 
   const supprimerLigne = (index) => {
+
+
+    user.panier.lignes && panier.lignes.map((ligne, indexLignePanier) => {
+      if(ligne.id == index){
+
+        fetch(`http://localhost:8080/site/stock/findbyrefandtaille/${ligne.article.ref}/${ligne.taille}`)
+        .then((res) => res.json())
+        .then(data => {
+
+            let newStock = data;
+            newStock.stock = data.stock + ligne.quantite;
+            const requestOptionsStock = {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(newStock)
+            };
+            fetch(`http://localhost:8080/site/stock/`, requestOptionsStock);
+            
+        })
+      }
+    })
     
     const requestOptions = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch(`http://localhost:8080/site/ligne/${index}`, requestOptions);
+    fetch(`http://localhost:8080/site/ligne/${index}`, requestOptions)
+    .then(setIsPanierUpdate(!isPanierUpdate))
+    
+  }
 
-    setIsPanierUpdate(!isPanierUpdate);
+  function handleCommandClick() {
+    const currentDate = new Date().toISOString();
+
+    let detail = "";
+
+    panier.lignes && panier.lignes.map((ligne, index) => {
+
+      detail += ligne.quantite + "/" + ligne.article.ref + " ";
+      supprimerLigne(ligne.id);
+    })
+
+    const maCommande = {
+      "emailClient": panier.client.email,
+      "date": currentDate,
+      "total": panier.total,
+      "detail": detail
+    };
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(maCommande)
+    };
+    fetch(`http://localhost:8080/site/commandes/`, requestOptions);
+
   }
 
   const handleQuantityChange = (event, index) => {
@@ -86,9 +136,10 @@ const Cart = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(nouvelleLigne)
     };
-    fetch(`http://localhost:8080/site/ligne/`, requestOptions);
+    fetch(`http://localhost:8080/site/ligne/`, requestOptions).then(
+      setIsPanierUpdate(!isPanierUpdate)
+    )
 
-    setIsPanierUpdate(!isPanierUpdate);
   }
     return(
       <>
@@ -98,7 +149,7 @@ const Cart = () => {
           {
             user.panier.lignes && panier.lignes.map((ligne, index) => {
 
-              let linkProduct = "productpage/" + ligne.article.ref;
+              let linkProduct = "/productpage/" + ligne.article.ref;
               return(
                 <div key={ligne.id} className="article">
                   <img src={ligne.article.img} alt="Image" />
@@ -110,12 +161,7 @@ const Cart = () => {
                     </h3>
 
                     <div className="detail">
-                      <label>Taille : </label>
-                      <select name="taille" id="taille">
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                      </select>
+                      <label>Taille : {ligne.taille}</label>
 
                       <h4>Prix : {ligne.article.prix} €</h4>
 
@@ -141,7 +187,7 @@ const Cart = () => {
               <h4>Total : </h4>
               <h3>{panier.total}€</h3>
             </div>
-            <button >Passer à la caisse</button>
+            <button onClick={() => handleCommandClick()}>Passer à la caisse</button>
           </div>
 
       </div> 

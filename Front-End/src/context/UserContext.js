@@ -10,7 +10,6 @@ export function UserProvider({children }) {
 
 
     useEffect(() => {
-
         const sessionUser = JSON.parse(sessionStorage.getItem("client")) ?
             JSON.parse(sessionStorage.getItem("client")) : null;
 
@@ -25,26 +24,15 @@ export function UserProvider({children }) {
     }, [isPanierUpdate]);
 
     useEffect(() => {
-
-        // if (user != null) {
-        //     fetch(`http://localhost:8080/site/findbyemailandmdp/${user.email}/${user.mdp}`)
-        //     .then((res) => res.json())
-        //     .then(data => {
-        //         setUser(data);
-        //     })   
-        //     }
-
-    }, [isPanierUpdate]);
-
-    useEffect(() => {
         if (user != null) {
-
             fetch(`http://localhost:8080/site/panier/${user.panier.id}`)
                 .then((res) => res.json())
                 .then(data => {
                     let quantity = 0;
-                    for (let i = 0; i < data.lignes.length; i++) {
-                        quantity += data.lignes[i].quantite;
+                    if(data.lignes){
+                        for (let i = 0; i < data.lignes.length; i++) {
+                            quantity += data.lignes[i].quantite;
+                        }
                     }
                     setCartQuantity(quantity);
                 });

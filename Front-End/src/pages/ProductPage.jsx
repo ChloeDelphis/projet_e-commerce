@@ -6,9 +6,9 @@ import { useUser } from "../context/UserContext";
 
 // La page du detail d'un produit
 const ProductPage = () => {
-  // id du produit à afficher
-  const { addQuantity } = useUser();
 
+  const { addQuantity } = useUser();
+  // id du produit à afficher
   const { id } = useParams();
   const [article, setArticle] = useState();
 
@@ -90,8 +90,8 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const Buy = ({ data, addQuantity }) => {
-
+const Buy = ({ data }) => {
+  const { id } = useParams();
   const clientJSON = JSON.parse(sessionStorage.getItem("client"));
   // const idPanier = clientJSON.panier.id;
   const idPanier = clientJSON ? clientJSON.panier.id : "nolog";
@@ -99,56 +99,85 @@ const Buy = ({ data, addQuantity }) => {
   const [quantite, setQuantite] = useState(1);
   const [isUpdate, setIsUpdate] = useState(false);
   const [panier, setPanier] = useState({});
+  const { user, handleLogin, isPanierUpdate, setIsPanierUpdate,removeQuantity, addQuantity, cartQuantity } = useUser();
+  const [size, setSize] = useState("M");
+  const [stock, setStock] = useState({});
+  const [messageStock, setMessageStock] = useState("");
+  const [messageAjout, setMessageAjout] = useState("");
+  
+  useEffect(()=> {
+    if (user && user.panier){
+      setPanier({...user.panier, "client": {"email": user.email}});
+      setMessageAjout("");
+        fetch(`http://localhost:8080/site/stock/findbyrefandtaille/${id}/${size}`)
+        .then((res) => res.json())
+        .then(data => {
+            setStock(data);
+            if(data.stock < 1){
+              setMessageStock("Désolé, l'article n'est plus disponible dans cette taille");
+            }
+            else if(data.stock < 10){
+              setMessageStock(`Vite !!! Il ne reste plus que ${data.stock} articles dans cette taille.`);
+            }
+            else{
+              setMessageStock("");
+            }
+        })
+    }
+  }, [user,isPanierUpdate,size])
+
+  const handleSizeChange = (event) => {
+    const selectedSize = event.target.value;
+    setSize(selectedSize);
+  };
 
   const handleQuantityChange = (event) => {
     let quantity = parseInt(event.target.value);
-
     if (!isNaN(quantity) && quantity >= 1) {
-      // console.log("Bonjour",event.target.value)
-      console.log("clientJSON", clientJSON);
 
-      // console.log(article.ref)
-
-      // const newPanier = { ...panier };
-      // newPanier.lignes[index].quantite = quantity;
-      // newPanier.lignes[index].total = quantity * newPanier.lignes[index].article.prix;
-      // setPanier(newPanier);
-
-      // const nouvelleLigne = {
-      //   ...panier.lignes[index],
-      //   "panier": {"id": panier.id},
-      // };
-      // updateLigne(nouvelleLigne);
     }
   };
 
   const updateLigne = async (nouvelleLigne) => {
+    nouvelleLigne.panier = panier;
+    nouvelleLigne.taille = size;
+
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(nouvelleLigne)
     };
+
     fetch(`http://localhost:8080/site/ligne/`, requestOptions);
-    setIsUpdate(!isUpdate);
+    setIsPanierUpdate(!isPanierUpdate);
   }
 
   const createLigne = async (nouvelleLigne) => {
+    nouvelleLigne.panier = panier;
+    nouvelleLigne.taille = size;
+
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(nouvelleLigne)
     };
+
     fetch(`http://localhost:8080/site/ligne/`, requestOptions);
-    setIsUpdate(!isUpdate);
+    setIsPanierUpdate(!isPanierUpdate);
   }
 
   const handleAjout = (quantity) => {
+    
+    if (stock.stock > quantity && quantity > 0) {
 
-
-    if (quantity != 0) {
-      // console.log("Panier : ", panier);
-      // console.log("la Quantite", quantity);
-      // console.log("l'article", JSON.stringify(data.article));
+      let newStock = stock;
+      newStock.stock = stock.stock - quantity;
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newStock)
+      };
+      fetch(`http://localhost:8080/site/stock/`, requestOptions);
 
       addQuantity(Number(quantity));
 
@@ -157,16 +186,11 @@ const Buy = ({ data, addQuantity }) => {
         for (let i = 0; i < panier.lignes.length; i++) {
           const ligne = panier.lignes[i];
 
-          // console.log("LIGNE : ",JSON.stringify(ligne));
-          console.log("LIGNE : ", data.article.ref);
-          console.log("LIGNE : ", ligne.article.ref);
           if (data.article.ref == ligne.article.ref) {
-            console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
             isDouble = true;
             const nouvelleLigne = { ...ligne, "panier": { "id": idPanier } };
             nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
             nouvelleLigne.total = nouvelleLigne.quantite * nouvelleLigne.article.prix;
-            console.log("NOUVELLE LIGNE : ", JSON.stringify(nouvelleLigne), "QUANTITEEEE : ", quantity);
             updateLigne(nouvelleLigne);
             break;
           }
@@ -178,62 +202,22 @@ const Buy = ({ data, addQuantity }) => {
             "panier": {
               "id": idPanier,
             },
+            "taille": size,
             "article": data.article,
             "quantite": quantity,
             "total": data.article.prix * quantity,
           }
-          console.log("La ligne a creer", data.article.ref)
           createLigne(nouvelleLigne);
         }
+        setIsPanierUpdate(!isPanierUpdate);
       }
     }
-
-
-    // panier.lignes && panier.lignes.map((ligne, index) => {
-
-    //   console.log("LIGNE : ",JSON.stringify(ligne));
-
-    //   if(data.article.ref === ligne.article.ref){
-    //     console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
-    //   }
-    //   else{
-    //     const nouvelleLigne = {
-    //       "id": 0,
-    //       "panier": {
-    //         "id": 1,
-    //       },
-    //       "article": data.article,
-    //       "quantite": quantity,
-    //       "total": data.article.prix*quantity,
-    //     }
-    //     console.log("La ligne a creer",data.article.ref)
-    //     createLigne(nouvelleLigne);
-    //     break;
-
-    //   }
-
-    // })
-
-
-
+    else{
+      setMessageAjout(`Impossible, il ne reste que ${stock.stock} articles en stock`);
+    }
   };
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/site/panier/${idPanier}`)
-      .then((res) => res.json())
-      .then(data => {
-        setPanier(data);
-        console.log(data);
-      });
-  }, []);
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/site/panier/${idPanier}`)
-      .then((res) => res.json())
-      .then(data => {
-        setPanier(data);
-      });
-  }, [isUpdate]);
   return (
     <>
       <form className="shopping__buy" action="">
@@ -246,28 +230,36 @@ const Buy = ({ data, addQuantity }) => {
             name="size"
             id="size"
             className="shopping__buy__size__choices"
+            onChange={handleSizeChange}
           >
-            <option value="s">S</option>
-            <option value="m" selected>
+            <option value="S">S</option>
+            <option value="M" selected>
               M
             </option>
-            <option value="l">L</option>
+            <option value="L">L</option>
           </select>
-        </div>
-        <div className="shopping__buy__quantity">
-          <label className="shopping__buy__quantity__label" htmlFor="quantity">
-            Quantité
-          </label>
-          <br />
+          <br></br>
+          <p className="message-Stock">{messageStock}</p>
 
-          <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" onChangeCapture={(event) => handleQuantityChange(event)}></input>
         </div>
+        
 
+          {stock.stock > 0 && (
+            <div className="shopping__buy__quantity">
+              <label className="shopping__buy__quantity__label" htmlFor="quantity">
+              Quantité
+              </label>
+              <br />
+              <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" max={stock} onChangeCapture={(event) => handleQuantityChange(event)}></input>
+            </div>
+          )}
+        
+        <p className="message-Stock">{messageAjout}</p>
         <button type="button" className="shopping__buy__cart" onClick={() => {
           if (clientJSON == null) {
             navigate("/login");
           }
-          else {
+          else if (document.querySelector('.shopping__buy__quantity__input').value > 0) {
             handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
           }
         }
@@ -277,7 +269,7 @@ const Buy = ({ data, addQuantity }) => {
           if (clientJSON == null) {
             navigate("/login");
           }
-          else if (document.querySelector('.shopping__buy__quantity__input').value != 0) {
+          else if (document.querySelector('.shopping__buy__quantity__input').value > 0) {
             handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
             navigate("/cart");
           }
