@@ -27,7 +27,6 @@ const Cart = () => {
   useEffect(() => {
     if (user && user.panier) {
       setPanier({ ...user.panier, "client": { "email": user.email } });
-      console.log('TEST');
     }
   }, [user, isPanierUpdate])
 
@@ -41,7 +40,8 @@ const Cart = () => {
 
     user.panier.lignes && panier.lignes.map((ligne, indexLignePanier) => {
       if (ligne.id == index) {
-
+        if (ligne.article.categorie.name != 'Occasion'){
+        console.log(ligne.article.categorie.name);
         fetch(`http://localhost:8080/site/stock/findbyrefandtaille/${ligne.article.ref}/${ligne.taille}`)
           .then((res) => res.json())
           .then(data => {
@@ -54,8 +54,8 @@ const Cart = () => {
               body: JSON.stringify(newStock)
             };
             fetch(`http://localhost:8080/site/stock/`, requestOptionsStock);
-
           })
+        }
       }
     })
 
@@ -64,7 +64,15 @@ const Cart = () => {
       headers: { 'Content-Type': 'application/json' },
     };
     fetch(`http://localhost:8080/site/ligne/${index}`, requestOptions)
-      .then(setIsPanierUpdate(!isPanierUpdate))
+    .then(() => {
+      // Mise à jour de l'état du panier après suppression
+      const updatedPanier = {
+        ...panier,
+        lignes: panier.lignes.filter((ligne) => ligne.id !== index),
+      };
+      setPanier(updatedPanier);
+      setIsPanierUpdate(!isPanierUpdate);
+    });
 
   }
 
