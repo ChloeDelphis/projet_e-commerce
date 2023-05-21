@@ -43,6 +43,12 @@ const CardClient = ({ client, nbArticles }) => {
 
     const [confirmNewPassword, setConfirmNewPassword] = useState(client.mdp);
 
+    useEffect(() => {
+        const updatedClient = { ...editedClient };
+        delete updatedClient.panier;
+        setEditedClient(updatedClient);
+    }, []);
+
     const requestUpdateClient = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -55,11 +61,13 @@ const CardClient = ({ client, nbArticles }) => {
         body: JSON.stringify(editedClient.adresse)
     };
 
+
     const handleSave = (e) => {
         e.preventDefault();
 
         if (editedClient.mdp === confirmNewPassword) {
             // update client
+            console.log(editedClient);
             fetch('http://localhost:8080/site/client', requestUpdateClient);
 
             // update adresse
@@ -69,7 +77,15 @@ const CardClient = ({ client, nbArticles }) => {
             setDisplayedClient(editedClient);
 
             // update localSession
-            sessionStorage.setItem("client", JSON.stringify(editedClient));
+            // sessionStorage.setItem("client", JSON.stringify(editedClient));
+            const updatedEditedClient = {
+                ...editedClient,
+                panier: client.panier
+            };
+
+            sessionStorage.setItem("client", JSON.stringify(updatedEditedClient));
+
+
 
             setShowEditForm(false);
 
@@ -138,7 +154,7 @@ const CardClient = ({ client, nbArticles }) => {
                     </div>
                 </div>
                 <div className="bottom">
-                    <button onClick={() => setShowEditForm(!showEditForm)}>Modifier mes informations</button>
+                    <button onClick={() => setShowEditForm(!showEditForm)}>{!showEditForm ? "Modifier mes informations" : "Annuler"}</button>
                 </div>
             </div>
 
@@ -150,7 +166,7 @@ const CardClient = ({ client, nbArticles }) => {
                             <input
                                 type="text"
                                 value={editedClient.nom}
-                                onChange={(e) => setEditedClient({ ...client, ['nom']: e.target.value })}
+                                onChange={(e) => setEditedClient({ ...editedClient, ['nom']: e.target.value })}
                                 required
                             />
                         </div>
@@ -159,19 +175,19 @@ const CardClient = ({ client, nbArticles }) => {
                             <input
                                 type="text"
                                 value={editedClient.prenom}
-                                onChange={(e) => setEditedClient({ ...client, ['prenom']: e.target.value })}
+                                onChange={(e) => setEditedClient({ ...editedClient, ['prenom']: e.target.value })}
                                 required
                             />
                         </div>
-                        <div>
+                        {/* <div>
                             <span>E-mail</span>
                             <input
                                 type="email"
                                 value={editedClient.email}
-                                onChange={(e) => setEditedClient({ ...client, ['email']: e.target.value })}
+                                onChange={(e) => setEditedClient({ ...editedClient, ['email']: e.target.value })}
                                 required
                             />
-                        </div>
+                        </div> */}
                         <div>
                             <span>Nouveau mot de passe</span>
                             <input
@@ -180,7 +196,7 @@ const CardClient = ({ client, nbArticles }) => {
                                 value={editedClient.mdp}
                                 onChange={(e) => {
                                     // setNewPassword(e.target.value);
-                                    setEditedClient({ ...client, ['mdp']: e.target.value });
+                                    setEditedClient({ ...editedClient, ['mdp']: e.target.value });
                                     setPasswordErrorMsg(false);
                                 }}
                             />
@@ -267,7 +283,7 @@ const CardClient = ({ client, nbArticles }) => {
                             <input
                                 type="tel"
                                 value={editedClient.tel}
-                                onChange={(e) => setEditedClient({ ...client, ['tel']: e.target.value })}
+                                onChange={(e) => setEditedClient({ ...editedClient, ['tel']: e.target.value })}
                             />
                         </div>
                         <button type="submit">Sauvegarder</button>
