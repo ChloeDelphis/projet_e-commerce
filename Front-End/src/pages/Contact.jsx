@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 
 const Contact = () => {
-    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -45,7 +43,7 @@ const Contact = () => {
                         onChange={(e) => setMessage(e.target.value)}
                         required
                     ></textarea>
-                    <button type="submit">Submit</button>
+                    <button type="submit">Envoyer</button>
                 </form>
             )}
         </div>

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import CommentairesProduit from "../components/CommentairesProduit";
 
 // La page du detail d'un produit
 const ProductPage = () => {
@@ -25,6 +26,7 @@ const ProductPage = () => {
         <ProductPhoto data={article} />
         <Shopping data={article} addQuantity={addQuantity} />
       </div>
+      <CommentairesProduit itemID={id} />
     </div>
   );
 };
@@ -99,32 +101,32 @@ const Buy = ({ data }) => {
   const [quantite, setQuantite] = useState(1);
   const [isUpdate, setIsUpdate] = useState(false);
   const [panier, setPanier] = useState({});
-  const { user, handleLogin, isPanierUpdate, setIsPanierUpdate,removeQuantity, addQuantity, cartQuantity } = useUser();
+  const { user, handleLogin, isPanierUpdate, setIsPanierUpdate, removeQuantity, addQuantity, cartQuantity } = useUser();
   const [size, setSize] = useState("M");
   const [stock, setStock] = useState({});
   const [messageStock, setMessageStock] = useState("");
   const [messageAjout, setMessageAjout] = useState("");
-  
-  useEffect(()=> {
-    if (user && user.panier){
-      setPanier({...user.panier, "client": {"email": user.email}});
+
+  useEffect(() => {
+    if (user && user.panier) {
+      setPanier({ ...user.panier, "client": { "email": user.email } });
       setMessageAjout("");
-        fetch(`http://localhost:8080/site/stock/findbyrefandtaille/${id}/${size}`)
+      fetch(`http://localhost:8080/site/stock/findbyrefandtaille/${id}/${size}`)
         .then((res) => res.json())
         .then(data => {
-            setStock(data);
-            if(data.qte < 1){
-              setMessageStock("Désolé, l'article n'est plus disponible dans cette taille");
-            }
-            else if(data.qte < 10){
-              setMessageStock(`Vite !!! Il ne reste plus que ${data.qte} articles dans cette taille.`);
-            }
-            else{
-              setMessageStock("");
-            }
+          setStock(data);
+          if (data.qte < 1) {
+            setMessageStock("Désolé, l'article n'est plus disponible dans cette taille");
+          }
+          else if (data.qte < 10) {
+            setMessageStock(`Vite !!! Il ne reste plus que ${data.qte} articles dans cette taille.`);
+          }
+          else {
+            setMessageStock("");
+          }
         })
     }
-  }, [user,isPanierUpdate,size])
+  }, [user, isPanierUpdate, size])
 
   const handleSizeChange = (event) => {
     const selectedSize = event.target.value;
@@ -167,7 +169,7 @@ const Buy = ({ data }) => {
   }
 
   const handleAjout = (quantity) => {
-    
+
     if (stock.qte >= quantity && quantity > 0) {
 
       let newStock = stock;
@@ -212,7 +214,7 @@ const Buy = ({ data }) => {
         setIsPanierUpdate(!isPanierUpdate);
       }
     }
-    else{
+    else {
       setMessageAjout(`Impossible, il ne reste que ${stock.qte} articles en stock`);
     }
   };
@@ -240,18 +242,18 @@ const Buy = ({ data }) => {
           <p className="message-Stock">{messageStock}</p>
 
         </div>
-        
 
-          {stock.qte > 0 && (
-            <div className="shopping__buy__quantity">
-              <label className="shopping__buy__quantity__label" htmlFor="quantity">
+
+        {stock.qte > 0 && (
+          <div className="shopping__buy__quantity">
+            <label className="shopping__buy__quantity__label" htmlFor="quantity">
               Quantité
-              </label>
-              <br />
-              <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" max={stock} onChangeCapture={(event) => handleQuantityChange(event)}></input>
-            </div>
-          )}
-        
+            </label>
+            <br />
+            <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" max={stock} onChangeCapture={(event) => handleQuantityChange(event)}></input>
+          </div>
+        )}
+
         <p className="message-Stock">{messageAjout}</p>
         <button type="button" className="shopping__buy__cart" onClick={() => {
           if (clientJSON == null) {

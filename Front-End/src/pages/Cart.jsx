@@ -101,7 +101,7 @@ const Cart = () => {
     }
   };
 
-  function handleMinusClick(index: Number) {
+  function handleMinusClick(index) {
     if (!isNaN(panier.lignes[index].quantite) && panier.lignes[index].quantite > 1) {
       const newPanier = { ...panier };
       newPanier.lignes[index].quantite = newPanier.lignes[index].quantite - 1;
