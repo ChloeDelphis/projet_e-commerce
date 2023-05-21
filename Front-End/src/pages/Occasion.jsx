@@ -22,12 +22,12 @@ const Occasion = () => {
             setClient(storedClient);
         }
     }, [navigate]);
-    
-    useEffect(() => {
-      }, [isUpdate]);
 
-    return(
-        <div className="occas">
+    useEffect(() => {
+    }, [isUpdate]);
+
+    return (
+        <div className="occasion-container">
             <Formulaire />
         </div>
 
@@ -52,11 +52,11 @@ const Formulaire = () => {
         const image = event.target.image.value;
         const description = event.target.description.value;
 
-        console.log(nom,marque,prix,image,description);
+        console.log(nom, marque, prix, image, description);
 
         const newArticle = {
-            "ref": maxRef+1,
-            "categorie" : {"id":12},
+            "ref": maxRef + 1,
+            "categorie": { "id": 12 },
             "nom": nom,
             "marque": marque,
             "description": description,
@@ -69,65 +69,65 @@ const Formulaire = () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newArticle)
-          };
+        };
 
         fetch('http://localhost:8080/site/articles', requestOptionsArticleOcas)
-        .then(response => {
-            setMessage("Article mis en vente avec succès !");
-            setNom("");
-            setMarque("");
-            setPrix("");
-            setImage("");
-            setDescription("");
+            .then(response => {
+                setMessage("Article mis en vente avec succès !");
+                setNom("");
+                setMarque("");
+                setPrix("");
+                setImage("");
+                setDescription("");
 
-        setIsUpdated(!isUpdated);
-      })
-      .catch(error => {
-        // Gérer les erreurs du fetch
-        // ...
-      });
+                setIsUpdated(!isUpdated);
+            })
+            .catch(error => {
+                // Gérer les erreurs du fetch
+                // ...
+            });
     }
 
     useEffect(() => {
         fetch(`http://localhost:8080/site/articles/findmaxref`)
-          .then((res) => res.json())
-          .then((data) => setMaxRef(data));
-      }, [isUpdated]);
+            .then((res) => res.json())
+            .then((data) => setMaxRef(data));
+    }, [isUpdated]);
 
     console.log(maxRef);
-    return(
+    return (
         <>
-         <h2>Mettre en vente un nouvel article</h2>
-         {message && <p>{message}</p>}
+            <h2>Mettre en vente un nouvel article</h2>
+            {message && <p>{message}</p>}
             <form onSubmit={miseEnVente}>
 
-            <div className="inputbox">
-                  <input type="text" name="nom" value={nom} onChange={(e) => setNom(e.target.value)} required ></input>
-                  <label>Nom</label>
-            </div>
+                <div className="inputbox">
+                    <label>Nom</label>
+                    <input type="text" name="nom" placeholder="Nom de l'article" value={nom} onChange={(e) => setNom(e.target.value)} required ></input>
+                </div>
 
-            <div className="inputbox">
-                  <input type="text" name="marque" value={marque} onChange={(e) => setMarque(e.target.value)} required ></input>
-                  <label>Marque</label>
-            </div>
+                <div className="inputbox">
+                    <label>Marque</label>
+                    <input type="text" name="marque" placeholder="Marque de l'article" value={marque} onChange={(e) => setMarque(e.target.value)} required ></input>
+                </div>
 
-            <div className="inputbox">
-                  <input type="number" name="prix" value={prix} onChange={(e) => setPrix(e.target.value)} required ></input>
-                  <label>Prix</label>
-            </div>
+                <div className="inputbox">
+                    <label>Prix</label>
+                    <input type="number" name="prix" placeholder="Prix (€)" value={prix} onChange={(e) => setPrix(e.target.value)} required ></input>
+                </div>
 
-            <div className="inputbox">
-                  <input type="text" name="image" value={image} onChange={(e) => setImage(e.target.value)} required ></input>
-                  <label>Lien de l'image</label>
-            </div>
+                <div className="inputbox">
+                    <label>Lien de l'image</label>
+                    <input type="text" name="image" placeholder="Le lien de l'image" value={image} onChange={(e) => setImage(e.target.value)} required ></input>
+                </div>
 
-            <div className="inputbox">
-                  <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} ></textarea>
-                  <label>Description</label>
-            </div>
+                <div className="inputbox">
+                    <label>Description</label>
+                    <textarea name="description" placeholder="Description de l'article" value={description} onChange={(e) => setDescription(e.target.value)} ></textarea>
+                </div>
 
-            <button type="submit">Mettre en vente</button>
-            </form> 
+                <button type="submit">Mettre en vente</button>
+            </form>
         </>
     )
 }
