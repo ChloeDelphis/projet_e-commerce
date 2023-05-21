@@ -1,6 +1,6 @@
 .navbar-container {
-  height: 65px;
-  padding-top: 5px;
+  height: 70px;
+  padding-top: 8px;
   border-bottom: 0.5px solid $borderGray;
 
   @media only screen and (max-width: $phone) {
@@ -27,8 +27,8 @@
         .logo-navlink {
           color: $darkGray !important;
           font-family: "Berkshire Swash", cursive;
-          font-size: 30px;
-          font-weight: 5700;
+          font-size: 32px;
+          font-weight: 700;
           letter-spacing: 2px;
         }
       }
@@ -46,6 +46,7 @@
         cursor: pointer;
         z-index: 20;
         margin-right: 20px;
+        margin-top: -5px;
         transition: 0.25s ease-in;
 
         @media (max-width: $phone) {
@@ -109,63 +110,41 @@
               overflow: hidden;
               position: absolute;
               top: 35px;
-              left: -418px;
+              left: -380px;
               z-index: 100;
               border-radius: 5px;
               box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
               background-color: $white;
-              width: 1000px;
-              height: 110px;
+              width: 900px;
+              height: 100px;
 
               &__container {
+
                 height: 100%;
                 width: 100%;
-                padding: 10px;
+                padding: 15px 10px;
                 display: flex;
-                justify-content: space-between;
+                flex-wrap: wrap;
                 align-items: center;
+                margin-left: 50px;
 
-                .sub-container {
-                  width: 33%;
-                  height: 100%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  text-align: center;
+                li {
+                  flex-basis: 33%;
+                  box-sizing: border-box;
+                  padding: 5px;
+                  font-family: "Quicksand", "Russo One", Arial, sans-serif !important;
+                  cursor: pointer;
 
-                  ul {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 3px;
+                  a {
+                    letter-spacing: 0.5px !important;
+                    font-size: 16px !important;
+                    font-weight: 500 !important;
+                    color: $darkGray !important;
+                    font-size: 18px;
 
-                    li {
-                      font-family: "Quicksand", "Russo One", Arial, sans-serif !important;
-                      cursor: pointer;
-
-                      a {
-                        letter-spacing: 0.5px !important;
-                        font-size: 16px !important;
-                        font-weight: 400 !important;
-                        color: $darkGray !important;
-
-                        &:hover {
-                          color: $orange !important;
-                        }
-                      }
-
+                    &:hover {
+                      color: $orange !important;
                     }
-
-                    li:nth-child(1) {
-                      letter-spacing: 1px !important;
-                      font-weight: 700 !important;
-                      font-size: 19px !important;
-                      cursor: auto !important;
-
-                      &:hover {
-                        color: $darkGray !important;
-                      }
-                    }
-
                   }
 
                 }

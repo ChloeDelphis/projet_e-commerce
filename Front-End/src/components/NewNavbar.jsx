@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
+import { useUser } from "../context/UserContext";
+
 const NewNavbar = () => {
+    const { user, handleLogout, cartQuantity, emptyCart } = useUser();
+
     const navigate = useNavigate();
     const [isActive, setIsActive] = useState(false);
+    const [categories, setCategories] = useState(null);
 
     // open/close side menu when hamburger is clicked
     const handleToggle = () => {
@@ -12,8 +17,15 @@ const NewNavbar = () => {
 
     const deleteUserFromSessionStorage = () => {
         sessionStorage.removeItem('client');
+        handleLogout();
+        emptyCart();
     };
 
+    useEffect(() => {
+        fetch(`http://localhost:8080/site/categories`)
+            .then((res) => res.json())
+            .then((data) => setCategories(data));
+    }, []);
 
     return (
         <>
@@ -57,52 +69,20 @@ const NewNavbar = () => {
                                         to="/productcategories"
                                     >
                                         Products
-                                        <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
-                                            <ul className="sub-menu-products__container">
-                                                <li className="sub-container">
-                                                    <ul>
-                                                        <li>Les hauts</li>
-                                                        <li>
-                                                            <Link to={"/category/1"}>
-                                                                T-Shirts
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link to={"category/2"}>
-                                                                Pulls
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li className="sub-container">
-                                                    <ul>
-                                                        <li>Les bas</li>
-                                                        <li>
-                                                            <Link to={"/category/3"}>
-                                                                Pantalons
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link to={"/category/4"}>
-                                                                Jupes
-                                                            </Link>
-                                                        </li>
-
-                                                    </ul>
-                                                </li>
-                                                <li className="sub-container">
-                                                    <ul>
-                                                        <li>Habillée de haut en bas !</li>
-                                                        <li>
-                                                            <Link to={"/category/5"}>
-                                                                Robes
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </NavLink>
+                                    <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
+                                        <ul className="sub-menu-products__container">
+                                            {categories && categories.map((item, index) => (
+                                                <li key={index}>
+                                                    <Link to={`/category/${item.id}`}>
+                                                        {item.name}
+                                                    </Link>
+                                                </li>
+                                            ))
+                                            }
+
+                                        </ul>
+                                    </div>
                                 </div>
                             </li>
                             <li onClick={() => setIsActive(false)}>
@@ -137,7 +117,7 @@ const NewNavbar = () => {
                                             ? "menu-list-item"
                                             : "menu-list-item"
                                     }
-                                    to={`${JSON.parse(sessionStorage.getItem("client")) ? "/cart" : "/login"}`}
+                                    to={`${user != null ? "/cart" : "/login"}`}
                                 >
 
                                     <span>
@@ -145,7 +125,7 @@ const NewNavbar = () => {
                                     </span>
                                     <img src="../../../assets/components/navbar/shopping-cart.png"
                                         alt="cart" />
-                                    <div className="nb-items-cart">{0}</div>
+                                    <div className="nb-items-cart">{cartQuantity}</div>
                                 </NavLink>
                             </li>
                             <li onClick={() => setIsActive(false)}>
@@ -155,7 +135,7 @@ const NewNavbar = () => {
                                             ? "nav-active menu-list-item"
                                             : "menu-list-item"
                                     }
-                                    to={`${JSON.parse(sessionStorage.getItem("client")) ? "/profil" : "/login"}`}
+                                    to={`${user != null ? "/profil" : "/login"}`}
                                 >
                                     <div className="user-icon-container">
                                         <img src="../../../assets/components/navbar/icon-user.png"
@@ -165,7 +145,7 @@ const NewNavbar = () => {
                             </li>
 
                             {
-                                JSON.parse(sessionStorage.getItem("client")) != null &&
+                                user != null &&
                                 <li onClick={() => {
                                     deleteUserFromSessionStorage();
                                     navigate("/");

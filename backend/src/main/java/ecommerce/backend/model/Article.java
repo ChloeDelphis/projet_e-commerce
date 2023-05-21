@@ -27,7 +27,7 @@ public class Article {
 	@ManyToOne
 	@JoinColumn(name = "categorie")
 //	@JsonView(JsonViews.ArticleWithCategorie.class)
-	@JsonView(JsonViews.PanierWithLigneAndClient.class)
+	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ClientWithAdresseAndPanier.class})
 	private Categorie categorie;
 	
 	@JsonView(JsonViews.Common.class)

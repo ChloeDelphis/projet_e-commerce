@@ -13,7 +13,7 @@ const ProductCategories = () => {
       .then((data) => setCategories(data));
   }, []);
 
-  console.log(categories);
+
   const navigate = useNavigate();
   const handleClick = (id) => {
     navigate(`/category/${id}`);

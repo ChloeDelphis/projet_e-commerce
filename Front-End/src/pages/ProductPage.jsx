@@ -2,14 +2,15 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 // La page du detail d'un produit
 const ProductPage = () => {
-  // id du produit à afficher
 
+  const { addQuantity } = useUser();
+  // id du produit à afficher
   const { id } = useParams();
   const [article, setArticle] = useState();
-  
 
   useEffect(() => {
     fetch(`http://localhost:8080/site/articles/${id}`)
@@ -22,7 +23,7 @@ const ProductPage = () => {
       <Nav data={article} />
       <div className="shop">
         <ProductPhoto data={article} />
-        <Shopping data={article} />
+        <Shopping data={article} addQuantity={addQuantity} />
       </div>
     </div>
   );
@@ -43,7 +44,7 @@ const Nav = ({ data }) => {
       >
         {data && data.categorie.name}
       </a>
-      <div className=" nav__link">></div>
+      <div className=" nav__link">&gt;</div>
       <a className=" nav__product" href="">
         {data && data.nom}
       </a>
@@ -63,12 +64,12 @@ const ProductPhoto = ({ data }) => {
   );
 };
 
-const Shopping = ({ data }) => {
+const Shopping = ({ data, addQuantity }) => {
   dataOne.article = data;
   return (
     <section className="shopping">
       <ProductDetails data={data} />
-      <Buy data={dataOne} />
+      <Buy data={dataOne} addQuantity={addQuantity} />
       <BuyingDetails data={dataOne} />
     </section>
   );
@@ -90,143 +91,133 @@ const ProductDetails = ({ data }) => {
 };
 
 const Buy = ({ data }) => {
-
+  const { id } = useParams();
   const clientJSON = JSON.parse(sessionStorage.getItem("client"));
-  const idPanier = clientJSON.panier.id;
-
+  // const idPanier = clientJSON.panier.id;
+  const idPanier = clientJSON ? clientJSON.panier.id : "nolog";
+  const navigate = useNavigate();
   const [quantite, setQuantite] = useState(1);
   const [isUpdate, setIsUpdate] = useState(false);
   const [panier, setPanier] = useState({});
+  const { user, handleLogin, isPanierUpdate, setIsPanierUpdate,removeQuantity, addQuantity, cartQuantity } = useUser();
+  const [size, setSize] = useState("M");
+  const [stock, setStock] = useState({});
+  const [messageStock, setMessageStock] = useState("");
+  const [messageAjout, setMessageAjout] = useState("");
+  
+  useEffect(()=> {
+    if (user && user.panier){
+      setPanier({...user.panier, "client": {"email": user.email}});
+      setMessageAjout("");
+        fetch(`http://localhost:8080/site/stock/findbyrefandtaille/${id}/${size}`)
+        .then((res) => res.json())
+        .then(data => {
+            setStock(data);
+            if(data.qte < 1){
+              setMessageStock("Désolé, l'article n'est plus disponible dans cette taille");
+            }
+            else if(data.qte < 10){
+              setMessageStock(`Vite !!! Il ne reste plus que ${data.qte} articles dans cette taille.`);
+            }
+            else{
+              setMessageStock("");
+            }
+        })
+    }
+  }, [user,isPanierUpdate,size])
+
+  const handleSizeChange = (event) => {
+    const selectedSize = event.target.value;
+    setSize(selectedSize);
+  };
 
   const handleQuantityChange = (event) => {
     let quantity = parseInt(event.target.value);
-    
     if (!isNaN(quantity) && quantity >= 1) {
-      // console.log("Bonjour",event.target.value)
-      console.log("clientJSON", clientJSON);
-      
-      // console.log(article.ref)
 
-      // const newPanier = { ...panier };
-      // newPanier.lignes[index].quantite = quantity;
-      // newPanier.lignes[index].total = quantity * newPanier.lignes[index].article.prix;
-      // setPanier(newPanier);
-
-      // const nouvelleLigne = {
-      //   ...panier.lignes[index],
-      //   "panier": {"id": panier.id},
-      // };
-      // updateLigne(nouvelleLigne);
     }
   };
 
   const updateLigne = async (nouvelleLigne) => {
+    nouvelleLigne.panier = panier;
+    nouvelleLigne.taille = size;
+
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(nouvelleLigne)
     };
+
     fetch(`http://localhost:8080/site/ligne/`, requestOptions);
-    setIsUpdate(!isUpdate);
+    setIsPanierUpdate(!isPanierUpdate);
   }
 
   const createLigne = async (nouvelleLigne) => {
+    nouvelleLigne.panier = panier;
+    nouvelleLigne.taille = size;
+
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(nouvelleLigne)
     };
+
     fetch(`http://localhost:8080/site/ligne/`, requestOptions);
-    setIsUpdate(!isUpdate);
+    setIsPanierUpdate(!isPanierUpdate);
   }
 
   const handleAjout = (quantity) => {
-    console.log("la Quantite",quantity);
-    console.log("l'article",JSON.stringify(data.article));
-
     
+    if (stock.qte >= quantity && quantity > 0) {
 
-    let isDouble = false;
-    if (panier.lignes) {
-      for (let i = 0; i < panier.lignes.length; i++) {
-        const ligne = panier.lignes[i];
-    
-        // console.log("LIGNE : ",JSON.stringify(ligne));
-        console.log("LIGNE : ",data.article.ref);
-        console.log("LIGNE : ",ligne.article.ref);
-        if (data.article.ref == ligne.article.ref) {
-          console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
-          isDouble = true;
-          const nouvelleLigne = {...ligne, "panier":{"id":idPanier}};
-          nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
-          console.log("NOUVELLE LIGNE : ", JSON.stringify(nouvelleLigne), "QUANTITEEEE : ", quantity);
-          updateLigne(nouvelleLigne);
-          break;
-        }
-      }
+      let newStock = stock;
+      newStock.qte = stock.qte - quantity;
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newStock)
+      };
+      fetch(`http://localhost:8080/site/stock/`, requestOptions);
 
-      if(!isDouble){
-        const nouvelleLigne = {
-          "id": 0,
-          "panier": {
-            "id": idPanier,
-          },
-          "article": data.article,
-          "quantite": quantity,
-          "total": data.article.prix*quantity,
+      addQuantity(Number(quantity));
+
+      let isDouble = false;
+      if (panier.lignes) {
+        for (let i = 0; i < panier.lignes.length; i++) {
+          const ligne = panier.lignes[i];
+
+          if (data.article.ref == ligne.article.ref) {
+            isDouble = true;
+            const nouvelleLigne = { ...ligne, "panier": { "id": idPanier } };
+            nouvelleLigne.quantite = parseInt(nouvelleLigne.quantite) + parseInt(quantity);
+            nouvelleLigne.total = nouvelleLigne.quantite * nouvelleLigne.article.prix;
+            updateLigne(nouvelleLigne);
+            break;
+          }
         }
-        console.log("La ligne a creer",data.article.ref)
-        createLigne(nouvelleLigne);
+
+        if (!isDouble) {
+          const nouvelleLigne = {
+            "id": 0,
+            "panier": {
+              "id": idPanier,
+            },
+            "taille": size,
+            "article": data.article,
+            "quantite": quantity,
+            "total": data.article.prix * quantity,
+          }
+          createLigne(nouvelleLigne);
+        }
+        setIsPanierUpdate(!isPanierUpdate);
       }
     }
-    
-
-    // panier.lignes && panier.lignes.map((ligne, index) => {
-      
-    //   console.log("LIGNE : ",JSON.stringify(ligne));
-
-    //   if(data.article.ref === ligne.article.ref){
-    //     console.log("OUI L ARTICLE EN DOUBLE EST : ", ligne.article.ref);
-    //   }
-    //   else{
-    //     const nouvelleLigne = {
-    //       "id": 0,
-    //       "panier": {
-    //         "id": 1,
-    //       },
-    //       "article": data.article,
-    //       "quantite": quantity,
-    //       "total": data.article.prix*quantity,
-    //     }
-    //     console.log("La ligne a creer",data.article.ref)
-    //     createLigne(nouvelleLigne);
-    //     break;
-
-    //   }
-
-    // })
-    
-
-
+    else{
+      setMessageAjout(`Impossible, il ne reste que ${stock.qte} articles en stock`);
+    }
   };
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/site/panier/${idPanier}`)
-      .then((res) => res.json())
-      .then(data => {
-        setPanier(data);
-        console.log(data);
-      }); 
-  }, []);
 
-  useEffect(() => {  
-    fetch(`http://localhost:8080/site/panier/${idPanier}`)
-      .then((res) => res.json())
-      .then(data => {
-        sessionStorage.setItem('panier', JSON.stringify(data));
-        setPanier(data);
-      });   
-  }, [isUpdate]);
   return (
     <>
       <form className="shopping__buy" action="">
@@ -239,26 +230,49 @@ const Buy = ({ data }) => {
             name="size"
             id="size"
             className="shopping__buy__size__choices"
+            onChange={handleSizeChange}
           >
-            <option value="s">S</option>
-            <option value="m" selected>
-              M
-            </option>
-            <option value="l">L</option>
+            <option value="S">S</option>
+            <option value="M" selected>M</option>
+            <option value="L">L</option>
           </select>
-        </div>
-        <div className="shopping__buy__quantity">
-          <label className="shopping__buy__quantity__label" htmlFor="quantity">
-            Quantité
-          </label>
-          <br />
-          
-          <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" onChangeCapture={(event) => handleQuantityChange(event)}></input>
+          <br></br>
+          <p className="message-Stock">{messageStock}</p>
+
         </div>
         
-        <button type="button" className="shopping__buy__cart" onClick={() => handleAjout(document.querySelector('.shopping__buy__quantity__input').value)}>Ajouter au panier</button>
+
+          {stock.qte > 0 && (
+            <div className="shopping__buy__quantity">
+              <label className="shopping__buy__quantity__label" htmlFor="quantity">
+              Quantité
+              </label>
+              <br />
+              <input className="shopping__buy__quantity__input" type="number" id="quantity" name="quantity" min="1" max={stock} onChangeCapture={(event) => handleQuantityChange(event)}></input>
+            </div>
+          )}
+        
+        <p className="message-Stock">{messageAjout}</p>
+        <button type="button" className="shopping__buy__cart" onClick={() => {
+          if (clientJSON == null) {
+            navigate("/login");
+          }
+          else if (document.querySelector('.shopping__buy__quantity__input').value > 0) {
+            handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
+          }
+        }
+        }>Ajouter au panier</button>
         <br />
-        <button type="button" className="shopping__buy__buynow">Acheter maintenant</button>
+        <button type="button" className="shopping__buy__buynow" onClick={() => {
+          if (clientJSON == null) {
+            navigate("/login");
+          }
+          else if (document.querySelector('.shopping__buy__quantity__input').value > 0) {
+            handleAjout(document.querySelector('.shopping__buy__quantity__input').value);
+            navigate("/cart");
+          }
+        }
+        }>Acheter maintenant</button>
         <div className="shopping__buy__shipping">
           Livraison gratuite à partir de {data.shipping.freeShipping} € d'achat.
         </div>
@@ -268,15 +282,29 @@ const Buy = ({ data }) => {
 };
 
 const BuyingDetails = ({ data }) => {
+  const [openIndex, setOpenIndex] = useState(-1);
+
+  const toggleRotation = (index) => {
+    setOpenIndex((prevIndex) => (prevIndex === index ? -1 : index));
+  };
+
   return (
     <div className="buyingdetails">
       {data.shoppingInfo.list.map((item, index) => (
-        <details className="buyingdetails__details" key={index}>
-          <summary className="buyingdetails__details__summary">
-            <span className="buyingdetails__details__summary__name">
-              {item.name}{" "}
-            </span>{" "}
-            <span className="buyingdetails__details__summary__v">V</span>
+        <details
+          className={`buyingdetails__details${openIndex === index ? ' open' : ''}`}
+          key={index}
+        >
+          <summary
+            className="buyingdetails__details__summary"
+            onClick={() => toggleRotation(index)}
+          >
+            <span className="buyingdetails__details__summary__name">{item.name}</span>
+            <img
+              src="../../../assets/pages/productpage/arrow_orange.png"
+              alt="arrow_down"
+              className={openIndex === index ? 'rotated' : ''}
+            />
           </summary>
           <p>{item.details}</p>
         </details>
@@ -295,17 +323,17 @@ const dataOne = {
       {
         name: "Détails",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Découvrez tous les détails de cet article de vêtement. Vous trouverez des informations sur les matériaux utilisés, les mesures et les instructions d'entretien. Profitez d'une qualité exceptionnelle et d'un confort optimal avec cet article.",
       },
       {
         name: "Livraison",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Nous offrons une livraison rapide et fiable pour tous nos produits. Vous recevrez votre commande à votre porte dans les plus brefs délais. Pour plus d'informations sur nos options de livraison, veuillez consulter notre page de livraison.",
       },
       {
         name: "Retours",
         details:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam veniam maxime minus iure, amet placeat quo quidem ducimus quam cumque hic sapiente? Id, eius quia.",
+          "Si vous n'êtes pas entièrement satisfait de votre achat, nous acceptons les retours dans les 30 jours suivant la réception de votre commande. Veuillez consulter notre politique de retour pour plus de détails sur la procédure de retour et les conditions applicables.",
       },
     ],
   },

@@ -19,24 +19,27 @@ public class Ligne {
 	@JsonView(JsonViews.Common.class)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "panier_id")
 	@JsonView(JsonViews.LigneWithPanierAndArticle.class)
 	private Panier panier;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "article_id")
-//	@JsonView({JsonViews.ArticleWithCategorie.class})
-	@JsonView({JsonViews.PanierWithLigneAndClient.class})	
+	// @JsonView({JsonViews.ArticleWithCategorie.class})
+	@JsonView({ JsonViews.PanierWithLigneAndClient.class, JsonViews.ClientWithAdresseAndPanier.class })
 	private Article article;
-	
+
 	@JsonView(JsonViews.Common.class)
 	private int quantite;
-	
+
 	@JsonView(JsonViews.Common.class)
-    private double total;
-	
+	private double total;
+
+	@JsonView(JsonViews.Common.class)
+	private String taille;
+
 	@Version
 	private int version;
 
@@ -74,13 +77,21 @@ public class Ligne {
 	}
 
 	public double getTotal() {
-	    return total;
+		return total;
 	}
-	
+
 	public void setTotal(double total) {
-	    this.total = total;
+		this.total = total;
 	}
-	
+
+	public String getTaille() {
+		return taille;
+	}
+
+	public void setTaille(String taille) {
+		this.taille = taille;
+	}
+
 	public int getVersion() {
 		return version;
 	}
@@ -88,21 +99,24 @@ public class Ligne {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	
-	 @JsonIgnore
-    private void calculateTotal() {
-        this.total = this.quantite * this.article.getPrix();
-    }
 
-	 public Ligne(int id, Panier panier, Article article, int quantite) {
-	        this.id = id;
-	        this.panier = panier;
-	        this.article = article;
-	        this.quantite = quantite;
-	        calculateTotal();
-	    }
+	@JsonIgnore
+	private void calculateTotal() {
+		this.total = this.quantite * this.article.getPrix();
+	}
 
-	    public Ligne() {
-	    }
+	public Ligne(int id, Panier panier, Article article, int quantite, double total, String taille) {
+		super();
+		this.id = id;
+		this.panier = panier;
+		this.article = article;
+		this.quantite = quantite;
+		this.total = total;
+		this.taille = taille;
+		calculateTotal();
+	}
+
+	public Ligne() {
+	}
 
 }

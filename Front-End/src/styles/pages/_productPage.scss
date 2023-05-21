@@ -5,6 +5,11 @@
   margin-top: 10vh;
   padding: 2vmin;
 
+  .message-Stock{
+    color:red;
+    text-align: center;
+  }
+
   .nav {
     display: flex;
     flex-direction: row;
@@ -31,17 +36,20 @@
   .shopping {
     &__details {
       &__name {
-        font-size: 25px;
+        font-size: 28px;
       }
+
       &__brand {
-        font-size: 20px;
+        font-size: 24px;
         color: $orange;
       }
+
       &__price {
-        font-size: 20px;
+        font-size: 22px;
       }
+
       &__description {
-        font-size: 15px;
+        font-size: 18px;
         margin: 3vmin 0;
       }
     }
@@ -50,22 +58,48 @@
       &__size {
         margin-bottom: 4vmin;
 
+        label {
+          font-size: 18px;
+        }
+
         &__choices {
-          width: 100%;
-          padding-left: 3vw;
+          cursor: pointer;
+          font-size: 20px;
+          width: 20%;
+          padding-left: 2vw;
+          margin-top: 5px;
           height: 5vh;
-          border: solid black 1px;
+          border: 1px solid $borderGrayDarker;
           border-radius: 2vmin;
+
+          &:focus {
+            outline: none;
+            border: 1px solid $borderGray;
+          }
         }
       }
+
       &__quantity {
         margin-bottom: 4vmin;
+
+        label {
+          font-size: 18px;
+        }
+
         &__input {
-          width: 12%;
+          cursor: pointer;
+          font-size: 20px;
+          width: 20%;
           height: 5vh;
-          border: solid black 1px;
+          border: 1px solid $borderGrayDarker;
           border-radius: 2vmin;
+          margin-top: 5px;
           text-align: center;
+
+          &:focus {
+            outline: none;
+            border: 1px solid $borderGray;
+          }
         }
       }
 
@@ -82,15 +116,27 @@
 
       &__cart {
         background-color: antiquewhite;
+        font-size: 20px;
+        transition: 0.25s ease-out;
+
+        &:hover {
+          transform: scale(1.025);
+        }
       }
 
       &__buynow {
         background-color: black;
         color: white;
+        font-size: 20px;
+        transition: 0.25s ease-out;
+
+        &:hover {
+          transform: scale(1.025);
+        }
       }
 
       &__shipping {
-        font-size: 10px;
+        font-size: 18px;
         text-align: center;
       }
     }
@@ -118,7 +164,8 @@
 
         &__name {
           font-weight: bold;
-          padding: 2vw 0;
+          padding: 1vw 0;
+          font-size: 18px;
         }
 
         &__v {
@@ -126,6 +173,20 @@
           color: $orange;
           padding-right: 5vw;
         }
+
+        img {
+          width: 20px;
+          height: auto;
+          transition: 0.2s ease;
+        }
+
+        .rotated {
+          transform: rotate(180deg);
+        }
+      }
+
+      p {
+        letter-spacing: 0.5px;
       }
     }
   }
@@ -135,6 +196,7 @@
   .productPage {
     margin-top: 2vmin;
     padding: 8vmin;
+
     .nav {
       margin: 2vh 0;
     }

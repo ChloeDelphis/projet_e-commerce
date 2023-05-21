@@ -25,6 +25,9 @@
             <a class="nav-link" href="/site/admin/findallarticles">Produits</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/site/admin/findallstock">Stocks</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/site/admin/findallclients">Clients</a>
           </li>
           <li class="nav-item">

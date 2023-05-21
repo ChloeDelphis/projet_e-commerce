@@ -21,6 +21,7 @@ import ecommerce.backend.model.JsonViews;
 import ecommerce.backend.repository.ClientRepository;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/client")
 public class ClientRestController {
 
@@ -41,14 +42,14 @@ public class ClientRestController {
 //		return repo.findByEmail(email);
 //	}
 	
-	@CrossOrigin
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/findbyemail/{email}")
 	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
 	public Client findByEmail(@PathVariable(name = "email") String email) {
 		return repo.findByEmail(email);
 	}
 
-	@CrossOrigin
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/findbyemailandmdp/{email}/{mdp}")
 //	@JsonView(JsonViews.ClientWithAdresse.class)
 	@JsonView(JsonViews.ClientWithAdresseAndPanier.class)
@@ -57,13 +58,13 @@ public class ClientRestController {
 		return repo.findByEmailAndMdp(email, mdp);
 	}
 
-	@CrossOrigin
+	
 	@DeleteMapping("{email}")
 	public void delete(@PathVariable(name = "email") String email) {
 		repo.deleteById(email);
 	}
 
-	@CrossOrigin
+	
 	@PutMapping("")
 	@JsonView(JsonViews.Common.class)
 	public void update(@RequestBody Client p) {

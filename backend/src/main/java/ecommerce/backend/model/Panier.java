@@ -6,20 +6,26 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email_client"))
 public class Panier {
 
 	@Id
 	@JsonView(JsonViews.Common.class)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@JsonView(JsonViews.Common.class)
@@ -29,12 +35,12 @@ public class Panier {
 	private double total;
 	
 	@OneToMany(mappedBy = "panier", cascade = CascadeType.REMOVE)
-	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class})
+	@JsonView({JsonViews.PanierWithLigneAndClient.class, JsonViews.ArticleWithCategorie.class, JsonViews.ClientWithAdresseAndPanier.class})
 	private List<Ligne> lignes;
 	
 	@OneToOne
 	@JoinColumn(name = "email_client")
-	@JsonView(JsonViews.PanierWithLigneAndClient.class)
+//	@JsonView(JsonViews.PanierWithLigneAndClient.class)
 	private Client client;
 	
 	@Version

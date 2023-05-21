@@ -8,6 +8,7 @@ import ecommerce.backend.model.Commande;
 
 
 public interface CommandeRepository extends JpaRepository<Commande, Integer> {
-	public List<Commande> findByEmailClient(String x);
+	public List<Commande> findByEmailClient(String email);
+	public List<Commande> findByTotalBetween(Double prixMin, Double prixMax);
 
 }
