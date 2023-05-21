@@ -1,5 +1,5 @@
 // Le CSS page Login (connexion)
-.loginpage{
+.loginpage {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -7,47 +7,65 @@
     margin-top: 15vh;
     margin-bottom: 15vh;
 
-    .login{
-        width: 50%;
+    @media only screen and (max-width: $phone) {
+        flex-direction: column;
+        gap: 50px;
+    }
 
+    .login {
+        width: 50%;
         display: flex;
         flex-direction: row;
         justify-content: center;
+
+        @media only screen and (max-width: $phone) {
+            width: 80%;
+        }
     }
 
-    .signup{
+    .signup {
         width: 50%;
         border-left: solid;
         border-width: 1px;
         display: flex;
         flex-direction: row;
         justify-content: center;
+
+        @media only screen and (max-width: $phone) {
+            width: 80%;
+            border-left: none;
+        }
     }
 
-    .form-box{
-        width: 75%;
+    .form-box {
+        width: 90%;
     }
 
-    form{
+    form {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    h2{
+    h2 {
         font-size: 2em;
         text-align: center;
+        font-family: "Roboto", sans-serif;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
     }
 
-    .inputbox{
+    .inputbox {
         position: relative;
-        margin: 20px 0;
+        margin: 25px 0;
+        padding: 3px 0px;
         width: 310px;
         border-bottom: 2px solid;
         width: 75%;
+        font-size: 16px;
     }
 
-    .inputbox label{
+    .inputbox label {
         position: absolute;
         top: 50%;
         left: 5px;
@@ -57,11 +75,12 @@
         transition: .5s;
     }
 
-    input:focus ~ label, input:valid ~ label{
+    input:focus~label,
+    input:valid~label {
         top: -15px;
-    } 
+    }
 
-    .inputbox input{
+    .inputbox input {
         width: 100%;
         height: 50 px;
         background: transparent;
@@ -72,7 +91,7 @@
         // color: #fff;
     }
 
-    .inputbox ion-icon{
+    .inputbox ion-icon {
         position: absolute;
         right: 8px;
         // color: #fff;
@@ -80,7 +99,7 @@
         /* top: 20px; */
     }
 
-    .ligne{
+    .ligne {
         width: 75%;
         margin: -15px 0 15 px;
         font-size: .9em;
@@ -91,73 +110,78 @@
         margin-bottom: 1vh;
     }
 
-    .ligne label input{
+    .ligne label input {
         margin-right: 3px;
     }
 
-    .ligne a{
+    .ligne a {
         color: black;
         text-decoration: none;
     }
 
-    .ligne a:hover{
+    .ligne a:hover {
         text-decoration: underline;
     }
 
-    button{
-        width: 75%;
-        height: 40px;
-        background-color: black;
-        color:#fff;
+    button {
+        margin-top: 20px;
+        color: white;
+        width: 185px;
+        height: 39px;
         border: none;
-        outline: none;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 150%;
+        letter-spacing: 10%;
+        color: $white;
         cursor: pointer;
-        font-size: 1em;
-        font-weight: 600;
+        background: linear-gradient(264.91deg, #f47726 2.91%, #ffb483 98.68%);
+        box-shadow: 0px 24px 48px rgba(0, 0, 0, 0.18);
+        border-radius: 100px;
     }
 
-    button:hover{
+    button:hover {
         background-color: rgba(63, 63, 63, 0.637);
     }
 
-    .register{
+    .register {
         font-size: .9em;
         color: #fff;
         text-align: center;
         margin: 25px 0 10px;
     }
 
-    .register p a{
+    .register p a {
         text-decoration: none;
         color: #fff;
         font-weight: 600;
     }
 
-    .register p a:hover{
+    .register p a:hover {
         text-decoration: underline;
     }
 
     .msgError {
-        color : red;
+        color: red;
         font-size: small;
     }
 }
 
-@media screen and (max-width:600px){
+@media screen and (max-width:600px) {
 
-    .loginpage{
+    .loginpage {
         display: flex;
         flex-direction: column;
         margin-top: 15vh;
         margin-bottom: 15vh;
         gap: 20px;
 
-    
-        .login{
+
+        .login {
             width: 90%;
         }
 
-        .signup{
+        .signup {
             padding-top: 20px;
             width: 90%;
             border-top: solid;
@@ -165,7 +189,7 @@
             border-width: 1px;
         }
 
-        .form-box{
+        .form-box {
             width: 100%;
         }
     }

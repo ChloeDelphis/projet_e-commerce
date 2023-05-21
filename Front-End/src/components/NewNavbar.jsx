@@ -125,7 +125,7 @@ const NewNavbar = () => {
                                     </span>
                                     <img src="../../../assets/components/navbar/shopping-cart.png"
                                         alt="cart" />
-                                    <div className="nb-items-cart">{cartQuantity}</div>
+                                    <div className={`nb-items-cart ${cartQuantity > 0 ? "nb-items-cart-orange" : ""}`}>{cartQuantity}</div>
                                 </NavLink>
                             </li>
                             <li onClick={() => setIsActive(false)}>
