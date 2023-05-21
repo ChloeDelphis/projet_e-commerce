@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import CommandesClient from '../components/CommandesClient';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const CardInfo = ({ data, type }) => {
 
@@ -363,6 +363,11 @@ const Profil = () => {
                     </div>
                     <div className="bottom">
                         {client && <CommandesClient email={client.email} />}
+                        <button className='btn-vendreArticle'>
+                            <Link to={"/occas"}>
+                                Vendez vos articles
+                            </Link>
+                        </button>
                     </div>
                 </div>
 
