@@ -26,11 +26,11 @@ const Login = () => {
     const tel = event.target.phone.value;
 
     const newAdresse = {
-          "numero": numrue,
-          "rue": nomrue,
-          "complement": null,
-          "cp": cp,
-          "ville": ville
+      "numero": numrue,
+      "rue": nomrue,
+      "complement": null,
+      "cp": cp,
+      "ville": ville
     }
 
     const requestOptionsAdresse = {
@@ -51,7 +51,7 @@ const Login = () => {
           "nom": nom,
           "tel": tel,
           "adresse": {
-              "id":adresseId
+            "id": adresseId
           },
           "panier": {
             "date": new Date().toISOString(),
@@ -62,20 +62,20 @@ const Login = () => {
             }
           }
         }
-    
+
         const requestOptionsClient = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newClient)
         };
-    
-        fetch('http://localhost:8080/site/client', requestOptionsClient)
-            setClient(newClient);
-            setIsClientLogged(true);
-      
-            // add user in the user context
 
-            handleLogin(newClient);
+        fetch('http://localhost:8080/site/client', requestOptionsClient)
+        setClient(newClient);
+        setIsClientLogged(true);
+
+        // add user in the user context
+
+        handleLogin(newClient);
       })
   }
 
@@ -85,73 +85,73 @@ const Login = () => {
     const email = event.target.email.value;
     const mdp = event.target.password.value;
     console.log(email, mdp);
-    
+
 
     fetch(`http://localhost:8080/site/client/findbyemailandmdp/${email}/${mdp}`)
       .then((res) => res.json()).then(data => {
 
-      console.log("Logged in");
-      console.log({...data, "lignes":[]});
-      setClient(data);
-      setIsClientLogged(true);
+        console.log("Logged in");
+        console.log({ ...data, "lignes": [] });
+        setClient(data);
+        setIsClientLogged(true);
+
+        // add user in the user context
+        handleLogin(data);
+      })
+  }
+
+  useEffect(() => {
+    if (isClientLogged) {
+      sessionStorage.setItem("client", JSON.stringify(client));
 
       // add user in the user context
-      handleLogin(data);
-      })
+      handleLogin(client);
+
+      // setMsgErreurC("");
+      navigate("/");
     }
+  }, [isClientLogged])
 
-    useEffect(() => {
-      if (isClientLogged) {
-        sessionStorage.setItem("client", JSON.stringify(client));
-  
-        // add user in the user context
-        handleLogin(client);
-  
-        // setMsgErreurC("");
-        navigate("/");
-      }
-    }, [isClientLogged])
-
-    useEffect(() => {
-      if (sessionStorage.getItem("client") != null) {
-        console.log("Vous êtes déja log");
-        navigate("/");
-      }
-    }, [isClientLogged])
+  useEffect(() => {
+    if (sessionStorage.getItem("client") != null) {
+      console.log("Vous êtes déja log");
+      navigate("/");
+    }
+  }, [isClientLogged])
 
 
 
-  return(
-  <>
-    <div className="loginpage">
-      
-      <div className="login">
-            <div className="form-box">
-              <form onSubmit={loginClient}>
+  return (
+    <>
+      <div className="loginpage">
 
-                <h2>Login</h2>
+        <div className="login">
+          <div className="form-box">
+            <form onSubmit={loginClient}>
 
-                <p className='msgError'>message</p>
-                <div className="inputbox">
-                  <IonIcon icon={mailOutline} />
-                  <input type="email" name="email" required ></input>
-                  <label htmlFor="">Email</label>
-                </div>
+              <h2>Login</h2>
 
-                <div className="inputbox">
-                  <IonIcon icon={lockClosedOutline} />
-                  <input type="password" name="password" required ></input>
-                  <label htmlFor="">Password</label>
-                </div>
+              <p className='msgError'>message</p>
+              <div className="inputbox">
+                <IonIcon icon={mailOutline} />
+                <input type="email" name="email" required ></input>
+                <label htmlFor="">Email</label>
+              </div>
 
-                <div className="ligne">
-                  {/* <label htmlFor=""><input type="checkbox"></input>Remember Me </label>
+              <div className="inputbox">
+                <IonIcon icon={lockClosedOutline} />
+                <input type="password" name="password" required ></input>
+                <label htmlFor="">Password</label>
+              </div>
+
+              <div className="ligne">
+                {/* <label htmlFor=""><input type="checkbox"></input>Remember Me </label>
                   <a href="">Forget Password</a> */}
-                </div>
+              </div>
 
-                <button type="submit">Log in</button>
-              </form>
-            </div>
+              <button type="submit">Log in</button>
+            </form>
+          </div>
         </div>
 
         <div className="signup">
@@ -176,12 +176,12 @@ const Login = () => {
               <div className="ligne">
                 <div className="inputbox">
                   <IonIcon icon={personOutline} />
-                  <input type="text" name="nom" required  pattern="^[a-zA-Z\-']{2,}$" title=""></input>
+                  <input type="text" name="nom" required pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Nom</label>
                 </div>
                 <div className="inputbox">
                   <IonIcon icon={personOutline} />
-                  <input type="text" name="prenom" required  pattern="^[a-zA-Z\-']{2,}$" title=""></input>
+                  <input type="text" name="prenom" required pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Prenom</label>
                 </div>
               </div>
@@ -200,12 +200,12 @@ const Login = () => {
               <div className="ligne">
                 <div className="inputbox">
                   <IonIcon icon={locationOutline} />
-                  <input type="text"  name="cp" pattern="^[0-9]+$" title=""></input>
+                  <input type="text" name="cp" pattern="^[0-9]+$" title=""></input>
                   <label htmlFor="">Code Postal</label>
                 </div>
                 <div className="inputbox">
                   <IonIcon icon={locationOutline} />
-                  <input type="text" name="ville" required  pattern="^[a-zA-Z\-']{2,}$" title=""></input>
+                  <input type="text" name="ville" required pattern="^[a-zA-Z\-']{2,}$" title=""></input>
                   <label htmlFor="">Ville</label>
                 </div>
               </div>
@@ -220,9 +220,9 @@ const Login = () => {
           </div>
         </div>
 
-      
-    </div>
-  </>
+
+      </div>
+    </>
   )
 };
 export default Login;
