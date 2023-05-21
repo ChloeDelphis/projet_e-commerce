@@ -11,6 +11,18 @@ const Cart = () => {
   const { user, handleLogin, isPanierUpdate, setIsPanierUpdate,removeQuantity, addQuantity, cartQuantity } = useUser();
   const [panier, setPanier] = useState(null);
   const [stock, setStock] = useState({});
+  const [client, setClient] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedClient = JSON.parse(sessionStorage.getItem("client"));
+    // on redirige le user vers la page de login s'il n'est pas en session
+    if (!storedClient) {
+        navigate('/login');
+    } else {
+        setClient(storedClient);
+    }
+}, [navigate]);
 
   useEffect(()=> {
     if (user && user.panier){
@@ -62,7 +74,7 @@ const Cart = () => {
 
     panier.lignes && panier.lignes.map((ligne, index) => {
 
-      detail += ligne.quantite + "/" + ligne.article.ref + " ";
+      detail += ligne.quantite + "-" + ligne.article.ref + "/";
       supprimerLigne(ligne.id);
     })
 
@@ -159,7 +171,7 @@ const Cart = () => {
                       {ligne.article.categorie.name} {ligne.article.marque} {ligne.article.nom}
                       </Link>
                     </h3>
-
+                    {ligne.article.categorie.name != 'Occasion' &&(
                     <div className="detail">
                       <label>Taille : {ligne.taille}</label>
 
@@ -174,6 +186,13 @@ const Cart = () => {
 
                       <h4>Total : {panier.lignes[index].total}€</h4>
                     </div>
+                    )}
+                    {ligne.article.categorie.name == 'Occasion' &&(
+                    <div className="detail">
+                      <label></label>
+                      <h4>Total : {panier.lignes[index].total}€</h4>
+                    </div>
+                    )}
                     <h5 onClick={() => supprimerLigne(ligne.id)}>Supprimer</h5>
                   </div>
                 </div>
