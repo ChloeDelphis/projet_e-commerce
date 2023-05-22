@@ -175,6 +175,10 @@
             margin-left: -30px;
             cursor: pointer;
 
+            @media (max-width: $phone) {
+              margin-left: 0;
+            }
+
             img {
               width: 20px;
               height: auto;
@@ -235,6 +239,7 @@
             justify-items: center;
             gap: 4px;
             position: relative;
+            transition: 0.2s ease;
 
             img {
               transition: 0.3s ease;
@@ -247,6 +252,10 @@
               top: -3px;
               right: -10px;
               font-size: 11px;
+            }
+
+            .nb-items-cart-orange {
+              color: $orange;
             }
           }
         }
