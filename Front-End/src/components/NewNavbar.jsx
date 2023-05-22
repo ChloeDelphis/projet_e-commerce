@@ -68,7 +68,7 @@ const NewNavbar = () => {
                                         }
                                         to="/productcategories"
                                     >
-                                        Products
+                                        Produits
                                     </NavLink>
                                     <div className={`sub-menu-products ${isActive ? "hide-dropdown" : ""}`}>
                                         <ul className="sub-menu-products__container">
