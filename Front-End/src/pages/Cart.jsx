@@ -46,6 +46,18 @@ const Cart = () => {
       setPanier(updatedPanier);
     }
   }, [user, isPanierUpdate]);
+
+  useEffect(() => {
+    if (user && user.panier) {
+      const updatedPanier = { ...user.panier, "client": { "email": user.email } };
+      // Mettre à jour les quantités dans le panier
+      updatedPanier.lignes.forEach((ligne) => {
+        ligne.quantite = parseInt(ligne.quantite);
+        ligne.total = ligne.quantite * ligne.article.prix;
+      });
+      setPanier(updatedPanier);
+    }
+  }, []);
   
 
   const supprimerLigne = (index) => {

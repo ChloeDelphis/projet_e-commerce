@@ -59,6 +59,7 @@ const Formulaire = () => {
             "categorie": { "id": 12 },
             "nom": nom,
             "marque": marque,
+            "date": "2022-01-01",
             "description": description,
             "prix": prix,
             "img": image,
